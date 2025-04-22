@@ -790,8 +790,7 @@ section h2 {
   gap: 15px;
 }
 
-button#btnLimparCarrinho,
-button#btnImprimir {
+button#btnLimparCarrinho {
   flex: 1;
   padding: 12px;
   border: none;
@@ -800,15 +799,7 @@ button#btnImprimir {
   font-weight: 600;
   min-height: 50px;
   font-size: 1rem;
-}
-
-button#btnLimparCarrinho {
   background-color: #f44336;
-  color: #fff;
-}
-
-button#btnImprimir {
-  background-color: #ff5722;
   color: #fff;
 }
 
@@ -975,17 +966,12 @@ button#btnImprimir {
     flex-direction: column;
   }
 
-  button#btnLimparCarrinho,
-  button#btnImprimir {
+  button#btnLimparCarrinho {
     width: 100%;
   }
 
   button#btnLimparCarrinho::before {
     content: "🗑️ ";
-  }
-
-  button#btnImprimir::before {
-    content: "🖨️ ";
   }
 
   /* Ajustes na pergunta de adicionais */

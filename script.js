@@ -1349,118 +1349,6 @@ function mostrarNotificacao(mensagem) {
   }, 3000);
 }
 
-// Função para imprimir o pedido
-function imprimirPedido() {
-  // Salvar o nome do cliente para uso futuro
-  if (carrinho.nomeCliente) {
-    localStorage.setItem("nomeCliente", carrinho.nomeCliente);
-  }
-
-  // Salvar o endereço do cliente para uso futuro
-  if (carrinho.enderecoCliente) {
-    localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
-  }
-
-  const printWindow = window.open("", "", "height=600,width=800");
-
-  // Criar conteúdo HTML para impressão
-  let conteudo = `
-    <html>
-    <head>
-      <title>Imprimir Pedido</title>
-      <meta charset="UTF-8">
-      <style>
-        body { font-family: 'Arial', sans-serif; padding: 20px; }
-        h1 { color: #FF5722; text-align: center; margin-bottom: 20px; }
-        h2 { color: #FF5722; margin-top: 30px; border-bottom: 1px solid #FF5722; padding-bottom: 5px; }
-        .cliente { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; padding: 10px; background-color: #f8f8f8; border-left: 4px solid #FF5722; }
-        .endereco { font-size: 1.1em; margin-bottom: 20px; padding: 10px; background-color: #f8f8f8; border-left: 4px solid #4CAF50; }
-        .item { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-        .item-nome { font-weight: bold; }
-        .adicional { font-size: 0.9em; color: #666; margin-left: 20px; }
-        .observacao { font-size: 0.9em; color: #1e88e5; margin-left: 20px; font-style: italic; }
-        .total { margin-top: 30px; font-weight: bold; text-align: right; font-size: 1.2em; }
-        .data { margin-top: 40px; font-size: 0.8em; color: #666; text-align: center; }
-      </style>
-    </head>
-    <body>
-      <h1>Pedido Hamburgueria</h1>
-  `;
-
-  // Adicionar nome do cliente se existir
-  if (carrinho.nomeCliente) {
-    conteudo += `<div class="cliente">Cliente: ${carrinho.nomeCliente}</div>`;
-  }
-
-  // Adicionar endereço do cliente se existir
-  if (carrinho.enderecoCliente) {
-    conteudo += `<div class="endereco">Endereço: ${carrinho.enderecoCliente}</div>`;
-  }
-
-  conteudo += `
-      <div class="pedido">
-        <h2>Itens do Pedido</h2>
-  `;
-
-  // Adicionar itens ao conteúdo
-  for (const itemKey in carrinho.itens) {
-    const item = carrinho.itens[itemKey];
-    const valorItem = item.valor;
-    const valorAdicionais = item.adicionaisTotal || 0;
-    const subtotal = valorItem + valorAdicionais;
-
-    conteudo += `<div class="item">`;
-    conteudo += `<div class="item-nome">${item.nome}`;
-
-    if (item.adicionais && item.adicionais.length > 0) {
-      // Criar um mapa para contar ocorrências de cada adicional
-      const adicionaisContagem = {};
-
-      item.adicionais.forEach((adicional) => {
-        if (!adicionaisContagem[adicional.id]) {
-          adicionaisContagem[adicional.id] = {
-            nome: adicional.nome,
-            preco: adicional.preco,
-            quantidade: 1,
-          };
-        } else {
-          adicionaisContagem[adicional.id].quantidade++;
-        }
-      });
-
-      // Adicionar cada adicional com sua contagem
-      for (const [id, info] of Object.entries(adicionaisContagem)) {
-        conteudo += `<div class="adicional">${info.quantidade}x ${
-          info.nome
-        } (R$ ${(info.preco * info.quantidade).toFixed(2)})</div>`;
-      }
-    }
-
-    // Adicionar observações se existirem
-    if (item.observacoes) {
-      conteudo += `<div class="observacao">Obs: ${item.observacoes}</div>`;
-    }
-
-    conteudo += `</div>`;
-    conteudo += `<div class="item-preco">R$ ${subtotal.toFixed(2)}</div>`;
-    conteudo += `</div>`;
-  }
-
-  // Adicionar total e data
-  const data = new Date().toLocaleString("pt-BR");
-  conteudo += `
-        <div class="total">Total: R$ ${carrinho.total.toFixed(2)}</div>
-        <div class="data">Pedido realizado em: ${data}</div>
-      </div>
-    </body>
-    </html>
-  `;
-
-  printWindow.document.write(conteudo);
-  printWindow.document.close();
-  printWindow.print();
-}
-
 // Função para alternar entre modo claro e escuro
 function configurarAlternadorTema() {
   const botaoTema = document.getElementById("theme-toggle-btn");
@@ -1662,7 +1550,7 @@ function enviarPedidoWhatsApp() {
   }
 
   // Número do WhatsApp da hamburgueria
-  const numeroWhatsApp = "5543988267566";
+  const numeroWhatsApp = "5543996114268";
 
   // Construir a mensagem
   let mensagem = `*NOVO PEDIDO - SPACE BURGUER*\n\n`;
