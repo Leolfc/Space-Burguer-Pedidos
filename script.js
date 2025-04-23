@@ -24,6 +24,173 @@ const carrinho = {
   formaPagamento: "", // Forma de pagamento
 };
 
+// Tornar a função de remoção de itens acessível globalmente
+window.removerItemDoCarrinho = function (uniqueId) {
+  if (carrinho.itens[uniqueId]) {
+    const item = carrinho.itens[uniqueId];
+    const id = item.id;
+    const nome = item.nome;
+
+    // Decrementar a quantidade exibida na interface
+    const itemDivs = document.querySelectorAll(`.item[data-id="${id}"]`);
+    itemDivs.forEach((itemDiv) => {
+      const qtySpan = itemDiv.querySelector(".item-qty");
+      let quantidade = parseInt(qtySpan.textContent);
+      if (quantidade > 0) {
+        quantidade -= 1;
+        qtySpan.textContent = quantidade;
+      }
+    });
+
+    // Remover item do carrinho
+    delete carrinho.itens[uniqueId];
+
+    // Mostrar notificação de item removido
+    window.mostrarNotificacao(`${nome} removido do carrinho`);
+
+    // Atualizar carrinho
+    window.atualizarCarrinho();
+  }
+};
+
+// Também tornar a função de notificação acessível globalmente
+window.mostrarNotificacao = function (mensagem) {
+  // Remover notificação anterior se existir
+  const notificacaoAnterior = document.querySelector(".notificacao");
+  if (notificacaoAnterior) {
+    notificacaoAnterior.remove();
+  }
+
+  // Criar elemento de notificação
+  const notificacaoDiv = document.createElement("div");
+  notificacaoDiv.className = "notificacao";
+  notificacaoDiv.textContent = mensagem;
+
+  // Adicionar ao body
+  document.body.appendChild(notificacaoDiv);
+
+  // Adicionar classe para animar a entrada
+  setTimeout(() => {
+    notificacaoDiv.classList.add("mostrar");
+  }, 10);
+
+  // Remover após alguns segundos
+  setTimeout(() => {
+    notificacaoDiv.classList.remove("mostrar");
+    setTimeout(() => {
+      notificacaoDiv.remove();
+    }, 500);
+  }, 3000);
+};
+
+// Tornar a função atualizarCarrinho acessível globalmente
+window.atualizarCarrinho = function () {
+  console.log("Atualizando carrinho:", carrinho);
+
+  const itensCarrinho = document.getElementById("itens-carrinho");
+  const valorTotal = document.getElementById("valorTotal");
+
+  if (!itensCarrinho || !valorTotal) {
+    console.error("Elementos do carrinho não encontrados");
+    return;
+  }
+
+  // Limpar o conteúdo atual do carrinho
+  itensCarrinho.innerHTML = "";
+
+  // Calcular novo total
+  let total = 0;
+  let temItens = false;
+
+  for (const itemKey in carrinho.itens) {
+    const item = carrinho.itens[itemKey];
+    temItens = true;
+
+    // Calcular subtotal do item
+    const valorItem = item.valor;
+    const valorAdicionais = item.adicionaisTotal || 0;
+    const subtotal = valorItem + valorAdicionais;
+
+    // Adicionar ao total
+    total += subtotal;
+
+    // Criar elemento de item no carrinho
+    const divItem = document.createElement("div");
+    divItem.className = "cart-item";
+    divItem.dataset.uniqueId = item.uniqueId;
+
+    // Texto do item (com ou sem adicional)
+    let itemNome = `${item.nome}`;
+    let adicionaisHtml = "";
+    let observacoesHtml = "";
+
+    if (item.adicionais && item.adicionais.length > 0) {
+      adicionaisHtml = '<div class="adicionais-list">';
+
+      // Criar um mapa para contar ocorrências de cada adicional
+      const adicionaisContagem = {};
+
+      item.adicionais.forEach((adicional) => {
+        if (!adicionaisContagem[adicional.id]) {
+          adicionaisContagem[adicional.id] = {
+            nome: adicional.nome,
+            preco: adicional.preco,
+            quantidade: 1,
+          };
+        } else {
+          adicionaisContagem[adicional.id].quantidade++;
+        }
+      });
+
+      // Gerar HTML para cada adicional com sua contagem
+      for (const [id, info] of Object.entries(adicionaisContagem)) {
+        adicionaisHtml += `<small class="adicional-item">
+          <span class="adicional-badge">${info.quantidade}x</span> 
+          ${info.nome} 
+          <span class="adicional-preco">(R$ ${(
+            info.preco * info.quantidade
+          ).toFixed(2)})</span>
+        </small>`;
+      }
+
+      adicionaisHtml += "</div>";
+    }
+
+    // Adicionar observações se existirem
+    if (item.observacoes) {
+      observacoesHtml = `<div class="observacoes-list">
+        <small class="observacao"><span class="observacao-badge">Obs:</span> ${item.observacoes}</small>
+      </div>`;
+    }
+
+    divItem.innerHTML = `
+      <div class="cart-item-name">
+        ${itemNome}
+        ${adicionaisHtml}
+        ${observacoesHtml}
+      </div>
+      <div class="cart-item-actions">
+        <div class="cart-item-price">R$ ${subtotal.toFixed(2)}</div>
+        <button type="button" class="btn-remove-item" onclick="removerItemDoCarrinho('${
+          item.uniqueId
+        }')">×</button>
+      </div>
+    `;
+
+    itensCarrinho.appendChild(divItem);
+  }
+
+  // Mostrar mensagem se não houver itens
+  if (!temItens) {
+    itensCarrinho.innerHTML =
+      '<p class="empty-cart">Seu carrinho está vazio</p>';
+  }
+
+  // Atualizar total
+  carrinho.total = total;
+  valorTotal.textContent = `R$ ${total.toFixed(2)}`;
+};
+
 // Inicialização
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Documento carregado!");
@@ -969,7 +1136,7 @@ function confirmarAdicionais() {
     );
 
     // Exibir notificação
-    mostrarNotificacao(`${nome} adicionado ao carrinho!`);
+    window.mostrarNotificacao(`${nome} adicionado ao carrinho!`);
 
     // Fechar o modal - Garantindo que ele seja realmente fechado
     modalOverlay.classList.remove("show");
@@ -1115,10 +1282,10 @@ function adicionarItemAoCarrinho(
   };
 
   // Atualizar carrinho e total
-  atualizarCarrinho();
+  window.atualizarCarrinho();
 
   // Mostrar notificação de item adicionado
-  mostrarNotificacao(`${nome} adicionado ao carrinho!`);
+  window.mostrarNotificacao(`${nome} adicionado ao carrinho!`);
 }
 
 // Função para remover um item do carrinho
@@ -1150,40 +1317,11 @@ function removerItem(event) {
       delete carrinho.itens[itemToRemove];
 
       // Mostrar notificação de remoção
-      mostrarNotificacao(`${itemNome} removido do carrinho`);
+      window.mostrarNotificacao(`${itemNome} removido do carrinho`);
     }
 
     // Atualizar carrinho e total
-    atualizarCarrinho();
-  }
-}
-
-// Função para remover um item específico do carrinho (pelo botão X no carrinho)
-function removerItemDoCarrinho(uniqueId) {
-  if (carrinho.itens[uniqueId]) {
-    const item = carrinho.itens[uniqueId];
-    const id = item.id;
-    const nome = item.nome;
-
-    // Decrementar a quantidade exibida na interface
-    const itemDivs = document.querySelectorAll(`.item[data-id="${id}"]`);
-    itemDivs.forEach((itemDiv) => {
-      const qtySpan = itemDiv.querySelector(".item-qty");
-      let quantidade = parseInt(qtySpan.textContent);
-      if (quantidade > 0) {
-        quantidade -= 1;
-        qtySpan.textContent = quantidade;
-      }
-    });
-
-    // Remover item do carrinho
-    delete carrinho.itens[uniqueId];
-
-    // Mostrar notificação de item removido
-    mostrarNotificacao(`${nome} removido do carrinho`);
-
-    // Atualizar carrinho
-    atualizarCarrinho();
+    window.atualizarCarrinho();
   }
 }
 
@@ -1202,151 +1340,13 @@ function limparCarrinho() {
     });
 
     // Mostrar notificação
-    mostrarNotificacao("Carrinho limpo com sucesso!");
+    window.mostrarNotificacao("Carrinho limpo com sucesso!");
 
     // Atualizar a interface do carrinho
-    atualizarCarrinho();
+    window.atualizarCarrinho();
 
     // Não limpa o nome do cliente ao limpar o carrinho
   }
-}
-
-// Função para atualizar o carrinho e o total
-function atualizarCarrinho() {
-  console.log("Atualizando carrinho:", carrinho);
-
-  const itensCarrinho = document.getElementById("itens-carrinho");
-  const valorTotal = document.getElementById("valorTotal");
-
-  if (!itensCarrinho || !valorTotal) {
-    console.error("Elementos do carrinho não encontrados");
-    return;
-  }
-
-  // Limpar o conteúdo atual do carrinho
-  itensCarrinho.innerHTML = "";
-
-  // Calcular novo total
-  let total = 0;
-  let temItens = false;
-
-  for (const itemKey in carrinho.itens) {
-    const item = carrinho.itens[itemKey];
-    temItens = true;
-
-    // Calcular subtotal do item
-    const valorItem = item.valor;
-    const valorAdicionais = item.adicionaisTotal || 0;
-    const subtotal = valorItem + valorAdicionais;
-
-    // Adicionar ao total
-    total += subtotal;
-
-    // Criar elemento de item no carrinho
-    const divItem = document.createElement("div");
-    divItem.className = "cart-item";
-    divItem.dataset.uniqueId = item.uniqueId;
-
-    // Texto do item (com ou sem adicional)
-    let itemNome = `${item.nome}`;
-    let adicionaisHtml = "";
-    let observacoesHtml = "";
-
-    if (item.adicionais && item.adicionais.length > 0) {
-      adicionaisHtml = '<div class="adicionais-list">';
-
-      // Criar um mapa para contar ocorrências de cada adicional
-      const adicionaisContagem = {};
-
-      item.adicionais.forEach((adicional) => {
-        if (!adicionaisContagem[adicional.id]) {
-          adicionaisContagem[adicional.id] = {
-            nome: adicional.nome,
-            preco: adicional.preco,
-            quantidade: 1,
-          };
-        } else {
-          adicionaisContagem[adicional.id].quantidade++;
-        }
-      });
-
-      // Gerar HTML para cada adicional com sua contagem
-      for (const [id, info] of Object.entries(adicionaisContagem)) {
-        adicionaisHtml += `<small class="adicional-item">
-          <span class="adicional-badge">${info.quantidade}x</span> 
-          ${info.nome} 
-          <span class="adicional-preco">(R$ ${(
-            info.preco * info.quantidade
-          ).toFixed(2)})</span>
-        </small>`;
-      }
-
-      adicionaisHtml += "</div>";
-    }
-
-    // Adicionar observações se existirem
-    if (item.observacoes) {
-      observacoesHtml = `<div class="observacoes-list">
-        <small class="observacao"><span class="observacao-badge">Obs:</span> ${item.observacoes}</small>
-      </div>`;
-    }
-
-    divItem.innerHTML = `
-      <div class="cart-item-name">
-        ${itemNome}
-        ${adicionaisHtml}
-        ${observacoesHtml}
-      </div>
-      <div class="cart-item-actions">
-        <div class="cart-item-price">R$ ${subtotal.toFixed(2)}</div>
-        <button type="button" class="btn-remove-item" onclick="removerItemDoCarrinho('${
-          item.uniqueId
-        }')">×</button>
-      </div>
-    `;
-
-    itensCarrinho.appendChild(divItem);
-  }
-
-  // Mostrar mensagem se não houver itens
-  if (!temItens) {
-    itensCarrinho.innerHTML =
-      '<p class="empty-cart">Seu carrinho está vazio</p>';
-  }
-
-  // Atualizar total
-  carrinho.total = total;
-  valorTotal.textContent = `R$ ${total.toFixed(2)}`;
-}
-
-// Função para mostrar notificação
-function mostrarNotificacao(mensagem) {
-  // Remover notificação anterior se existir
-  const notificacaoAnterior = document.querySelector(".notificacao");
-  if (notificacaoAnterior) {
-    notificacaoAnterior.remove();
-  }
-
-  // Criar elemento de notificação
-  const notificacaoDiv = document.createElement("div");
-  notificacaoDiv.className = "notificacao";
-  notificacaoDiv.textContent = mensagem;
-
-  // Adicionar ao body
-  document.body.appendChild(notificacaoDiv);
-
-  // Adicionar classe para animar a entrada
-  setTimeout(() => {
-    notificacaoDiv.classList.add("mostrar");
-  }, 10);
-
-  // Remover após alguns segundos
-  setTimeout(() => {
-    notificacaoDiv.classList.remove("mostrar");
-    setTimeout(() => {
-      notificacaoDiv.remove();
-    }, 500);
-  }, 3000);
 }
 
 // Função para alternar entre modo claro e escuro
@@ -1513,7 +1513,7 @@ function configurarBotaoWhatsApp() {
 function enviarPedidoWhatsApp() {
   // Verificar se o carrinho tem itens
   if (Object.keys(carrinho.itens).length === 0) {
-    mostrarNotificacao(
+    window.mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
     );
     return;
@@ -1521,7 +1521,7 @@ function enviarPedidoWhatsApp() {
 
   // Verificar se o nome do cliente foi preenchido
   if (!carrinho.nomeCliente) {
-    mostrarNotificacao("Por favor, informe seu nome");
+    window.mostrarNotificacao("Por favor, informe seu nome");
     const nomeCliente = document.getElementById("nomeCliente");
     if (nomeCliente) {
       nomeCliente.focus();
@@ -1531,7 +1531,7 @@ function enviarPedidoWhatsApp() {
 
   // Verificar se o endereço foi preenchido
   if (!carrinho.enderecoCliente) {
-    mostrarNotificacao("Por favor, informe seu endereço de entrega");
+    window.mostrarNotificacao("Por favor, informe seu endereço de entrega");
     const enderecoCliente = document.getElementById("enderecoCliente");
     if (enderecoCliente) {
       enderecoCliente.focus();
@@ -1541,7 +1541,7 @@ function enviarPedidoWhatsApp() {
 
   // Verificar se a forma de pagamento foi selecionada
   if (!carrinho.formaPagamento) {
-    mostrarNotificacao("Por favor, selecione uma forma de pagamento");
+    window.mostrarNotificacao("Por favor, selecione uma forma de pagamento");
     const formaPagamento = document.getElementById("formaPagamento");
     if (formaPagamento) {
       formaPagamento.focus();
@@ -1620,5 +1620,5 @@ function enviarPedidoWhatsApp() {
   window.open(urlWhatsApp, "_blank");
 
   // Mostrar notificação de sucesso
-  mostrarNotificacao("Redirecionando para o WhatsApp...");
+  window.mostrarNotificacao("Redirecionando para o WhatsApp...");
 }
