@@ -1461,15 +1461,40 @@ button {
 
 /* Estilo do botão de aumentar no modo escuro */
 .dark-mode .btn-increase {
-  background: linear-gradient(45deg, #8b0000, #b30000);
+  background: linear-gradient(45deg, #e74c3c, #ff5722);
   color: white;
-  box-shadow: 0 2px 4px rgba(139, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 87, 34, 0.5);
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .btn-increase:hover {
-  background: linear-gradient(45deg, #a00000, #c00000);
+  background: linear-gradient(45deg, #ff5722, #ff7043);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.6);
+}
+
+/* Estilo do contador no modo escuro */
+.dark-mode .item-qty {
+  color: #ffffff;
+  background-color: #444444;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo do botão de diminuir no modo escuro */
+.dark-mode .btn-decrease {
+  background-color: #333333;
+  color: #ff5722;
+  font-weight: bold;
+  border: 1px solid #ff5722;
+}
+
+.dark-mode .btn-decrease:hover {
+  background-color: #444444;
+  box-shadow: 0 0 8px rgba(255, 87, 34, 0.4);
 }
 
 /* Botões flutuantes para navegação */
@@ -1603,6 +1628,51 @@ button {
   box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
 }
 
+/* Estilo para o botão de imprimir pedido */
+.btn-imprimir-pedido {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-imprimir-pedido::before {
+  content: "🖨️ ";
+}
+
+.btn-imprimir-pedido:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.dark-mode .btn-imprimir-pedido {
+  background-color: #2980b9;
+}
+
+.dark-mode .btn-imprimir-pedido:hover {
+  background-color: #1c638d;
+}
+
+@media (max-width: 576px) {
+  .btn-imprimir-pedido {
+    min-height: 50px;
+    font-size: 0.9rem;
+  }
+}
+
 .dark-mode .btn-finalizar-whatsapp {
   background-color: #128c7e;
 }
@@ -1616,4 +1686,125 @@ button {
     min-height: 50px;
     font-size: 0.9rem;
   }
+}
+
+.subcategoria {
+  font-size: 1.1rem;
+  color: #444;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 4px solid #3498db;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.dark-mode .subcategoria {
+  color: #e0e0e0;
+  background-color: #2c3e50;
+  border-left: 4px solid #3498db;
+}
+
+@media (max-width: 576px) {
+  .subcategoria {
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+}
+
+/* Estilos dark mode para botões de adicionais e quantidade */
+.dark-mode .btn-increase-adicional {
+  background-color: #ff5722; /* Cor mais vibrante */
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 87, 34, 0.6); /* Brilho mais intenso */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.dark-mode .btn-decrease-adicional {
+  background-color: #333333; /* Cor mais escura para o botão de diminuir */
+  color: #ff5722; /* Mantém a cor do texto visível */
+  border: 1px solid #ff5722; /* Adiciona uma borda para destacar */
+  font-weight: bold;
+}
+
+.dark-mode .adicional-qty {
+  color: #ffffff; /* Texto branco para o contador no modo escuro */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Adiciona um brilho mais forte */
+  background-color: #444444; /* Fundo escuro leve para destacar */
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #ff5722;
+  box-shadow: 0 0 8px rgba(255, 87, 34, 0.4);
+}
+
+/* Mais styles para a seção de adicionais no modo escuro */
+.dark-mode .adicionais-selecionados {
+  background-color: #ffffff;
+  border-color: #ff5722;
+  box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);
+}
+
+.dark-mode .adicionais-selecionados p {
+  color: #ff5722;
+  text-shadow: none;
+}
+
+.dark-mode .adicionais-selecionados li {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+}
+
+.dark-mode .adicionais-container {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.dark-mode .adicional-item {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #333333;
+}
+
+.dark-mode .adicional-nome {
+  color: #333333;
+}
+
+/* Mantenha apenas o contador com estilo destacado no modo escuro */
+.dark-mode .adicional-qty {
+  color: #ffffff;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+  background-color: #444444;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #ff5722;
+  box-shadow: 0 0 8px rgba(255, 87, 34, 0.4);
+  font-weight: bold;
+}
+
+/* Restante dos estilos permanecem inalterados */
+.dark-mode .adicional-badge {
+  background-color: #ffebee;
+  color: #e53935;
+  box-shadow: none;
+}
+
+.dark-mode .adicional-preco {
+  color: #ff5722;
+  font-weight: normal;
+}
+
+.dark-mode .adicional-resumo-quantidade {
+  background-color: #ffebee;
+  color: #e53935;
+  box-shadow: none;
+}
+
+.dark-mode .adicionais-total {
+  color: #ff5722;
+  border-top-color: #ffccbc;
+  text-shadow: none;
 }

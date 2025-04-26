@@ -6,6 +6,7 @@
     <title>Space Burguer</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="img/imagemFavicon.png" type="image/x-icon">
 </head>
 <body>
     <header>
@@ -435,6 +436,37 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
+                            <div class="item" data-id="comboKids" data-nome="Combo Kids" data-valor="26.90" data-tipo="combo">
+                                <div class="item-info">
+                                    <span class="item-name">Combo Kids</span>
+                                    <span class="item-price">R$ 26,90</span>
+                                </div>
+                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, tomate e molho da casa. Suco Kapo + fritas 100g.</div>
+                                <div class="item-actions">
+                                    <button type="button" class="btn-decrease">-</button>
+                                    <span class="item-qty">0</span>
+                                    <button type="button" class="btn-increase">+</button>
+                                </div>
+                            </div>
+                            <div class="item" data-id="comboCasal" data-nome="Combo Casal" data-valor="68.00" data-tipo="combo">
+                                <div class="item-info">
+                                    <span class="item-name">Combo Casal</span>
+                                    <span class="item-price">R$ 68,00</span>
+                                </div>
+                                <div class="item-desc">
+                                    <span style="color: #ff5722; font-weight: bold;">Space Classic:</span>
+                                    Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, tomate e molho da casa<br/>
+                                    <span style="color: #2196F3; font-weight: bold;">Space Salad:</span>
+                                    Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, alface americana, tomate e molho da casa<br/>
+                                    <span style="font-weight: bold;">+ 2 Fritas P + Coca 600ml</span>
+                                </div>
+                                <div class="item-actions">
+                                    <button type="button" class="btn-decrease">-</button>
+                                    <span class="item-qty">0</span>
+                                    <button type="button" class="btn-increase">+</button>
+                                </div>
+                            </div>
+                            
                         </div>
                     </section>
                     <section>
@@ -516,19 +548,9 @@
                     </section>
                     <section>
                         <h2>Bebidas</h2>
+                        
+                        <h3 class="subcategoria">Águas</h3>
                         <div class="item-container">
-                            <!-- Águas -->
-                            <div class="item" data-id="aguaSemGas" data-nome="Água sem Gás" data-valor="3.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Água sem Gás</span>
-                                    <span class="item-price">R$ 3,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
                             <div class="item" data-id="aguaComGas" data-nome="Água com Gás" data-valor="3.50" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Água com Gás</span>
@@ -540,8 +562,32 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            
-                            <!-- Refrigerantes 350ml -->
+                            <div class="item" data-id="aguaSemGas" data-nome="Água sem Gás" data-valor="3.00" data-tipo="bebida">
+                                <div class="item-info">
+                                    <span class="item-name">Água sem Gás</span>
+                                    <span class="item-price">R$ 3,00</span>
+                                </div>
+                                <div class="item-actions">
+                                    <button type="button" class="btn-decrease">-</button>
+                                    <span class="item-qty">0</span>
+                                    <button type="button" class="btn-increase">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="subcategoria">Refrigerantes 350ml</h3>
+                        <div class="item-container">
+                            <div class="item" data-id="guaranaAntartica" data-nome="Guaraná Antartica 350ml" data-valor="6.00" data-tipo="bebida">
+                                <div class="item-info">
+                                    <span class="item-name">Guaraná Antartica 350ml</span>
+                                    <span class="item-price">R$ 6,00</span>
+                                </div>
+                                <div class="item-actions">
+                                    <button type="button" class="btn-decrease">-</button>
+                                    <span class="item-qty">0</span>
+                                    <button type="button" class="btn-increase">+</button>
+                                </div>
+                            </div>
                             <div class="item" data-id="cocaCola350" data-nome="Coca-Cola Original 350ml" data-valor="6.50" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Original 350ml</span>
@@ -553,21 +599,10 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            <div class="item" data-id="cocaZero350" data-nome="Coca-Cola Zero 350ml" data-valor="6.50" data-tipo="bebida">
+                            <div class="item" data-id="cocaCola350Zero" data-nome="Coca-Cola Zero 350ml" data-valor="6.50" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Zero 350ml</span>
                                     <span class="item-price">R$ 6,50</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="guaranaAntartica" data-nome="Guaraná Antartica 350ml" data-valor="6.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Guaraná Antartica 350ml</span>
-                                    <span class="item-price">R$ 6,00</span>
                                 </div>
                                 <div class="item-actions">
                                     <button type="button" class="btn-decrease">-</button>
@@ -597,8 +632,10 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            
-                            <!-- Refrigerantes 600ml -->
+                        </div>
+                        
+                        <h3 class="subcategoria">Refrigerantes 600ml</h3>
+                        <div class="item-container">
                             <div class="item" data-id="cocaCola600" data-nome="Coca-Cola Original 600ml" data-valor="9.00" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Original 600ml</span>
@@ -610,7 +647,7 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            <div class="item" data-id="cocaZero600" data-nome="Coca-Cola Zero 600ml" data-valor="9.00" data-tipo="bebida">
+                            <div class="item" data-id="cocaColaZero600" data-nome="Coca-Cola Zero 600ml" data-valor="9.00" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Zero 600ml</span>
                                     <span class="item-price">R$ 9,00</span>
@@ -621,9 +658,11 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            
-                            <!-- Refrigerantes 1L -->
-                            <div class="item" data-id="guaranaAntartica1L" data-nome="Guaraná Antarctica 1L" data-valor="8.00" data-tipo="bebida">
+                        </div>
+                        
+                        <h3 class="subcategoria">Refrigerantes 1L</h3>
+                        <div class="item-container">
+                            <div class="item" data-id="guaranaAntartica1L" data-nome="Guaraná Antarctica 1L" data-valor="10.00" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Guaraná Antarctica 1L</span>
                                     <span class="item-price">R$ 8,00</span>
@@ -634,8 +673,10 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            
-                            <!-- Refrigerantes 2L -->
+                        </div>
+                        
+                        <h3 class="subcategoria">Refrigerantes 2L</h3>
+                        <div class="item-container">
                             <div class="item" data-id="cocaCola2L" data-nome="Coca-Cola Original 2L" data-valor="14.50" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Original 2L</span>
@@ -647,7 +688,7 @@
                                     <button type="button" class="btn-increase">+</button>
                                 </div>
                             </div>
-                            <div class="item" data-id="cocaZero2L" data-nome="Coca-Cola Zero 2L" data-valor="14.50" data-tipo="bebida">
+                            <div class="item" data-id="cocaColaZero2L" data-nome="Coca-Cola Zero 2L" data-valor="14.50" data-tipo="bebida">
                                 <div class="item-info">
                                     <span class="item-name">Coca-Cola Zero 2L</span>
                                     <span class="item-price">R$ 14,50</span>
@@ -659,9 +700,6 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    <section>
-                        
                     </section>
                 </form>
             </div>
@@ -701,7 +739,7 @@
         </div>
     </main>
     
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
 
     <!-- Botões flutuantes para navegação -->
     <button id="btn-ir-carrinho" class="btn-flutuante" title="Ir para finalização do pedido">
