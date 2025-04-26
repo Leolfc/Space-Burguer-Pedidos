@@ -710,7 +710,7 @@
                         <input type="text" id="nomeCliente" placeholder="Nome do cliente" autocomplete="off">
                     </div>
                     <div class="cliente-info">
-                        <textarea id="enderecoCliente" placeholder="Endereço de entrega" rows="2"></textarea>
+                        <textarea id="enderecoCliente" placeholder="Endereço de entrega ou Retirada " rows="2"></textarea>
                     </div>
                     <div class="cliente-info">
                         <select id="formaPagamento" class="forma-pagamento">
@@ -743,6 +743,7 @@
 
     <!-- Botões flutuantes para navegação -->
     <button id="btn-ir-carrinho" class="btn-flutuante" title="Ir para finalização do pedido">
+        <span id="carrinho-contador" class="carrinho-notificacao">0</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.9 2.9a1 1 0 0 0 .7 1.7H17"></path>
             <circle cx="9" cy="19" r="2"></circle>

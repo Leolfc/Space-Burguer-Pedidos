@@ -1808,3 +1808,26 @@ button {
   border-top-color: #ffccbc;
   text-shadow: none;
 }
+
+.carrinho-notificacao {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff5722;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.carrinho-notificacao.mostrar {
+  opacity: 1;
+}

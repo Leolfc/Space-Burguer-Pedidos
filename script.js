@@ -1211,6 +1211,25 @@ function limparCarrinho() {
   }
 }
 
+// Função para atualizar o contador do carrinho flutuante
+function atualizarContadorCarrinho() {
+  const contador = document.getElementById("carrinho-contador");
+  if (!contador) return;
+
+  // Contar quantos itens existem no carrinho
+  const quantidadeItens = Object.keys(carrinho.itens).length;
+
+  // Atualizar o texto do contador
+  contador.textContent = quantidadeItens;
+
+  // Mostrar ou esconder o contador baseado na quantidade
+  if (quantidadeItens > 0) {
+    contador.classList.add("mostrar");
+  } else {
+    contador.classList.remove("mostrar");
+  }
+}
+
 // Função para atualizar o carrinho e o total
 function atualizarCarrinho() {
   console.log("Atualizando carrinho:", carrinho);
@@ -1327,6 +1346,9 @@ function atualizarCarrinho() {
   // Atualizar total
   carrinho.total = total;
   valorTotal.textContent = `R$ ${total.toFixed(2)}`;
+
+  // Atualizar contador do carrinho flutuante
+  atualizarContadorCarrinho();
 }
 
 // Função para mostrar notificação
