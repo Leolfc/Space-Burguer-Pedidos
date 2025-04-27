@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Criar o modal de adicionais
   criarModalAdicionais();
 
+  // Configurar campos de observação para combos
+  configurarCamposObservacao();
+
   // Adicionar botões de observação a todos os itens
   adicionarBotoesObservacao();
 
@@ -688,14 +691,29 @@ function mostrarPerguntaAdicionais(
     perguntaAnterior.remove();
   }
 
+  // Texto da pergunta baseado no tipo de item
+  let perguntaTexto = "";
+  let btnNaoTexto = "";
+  let btnSimTexto = "";
+
+  if (tipo === "combo") {
+    perguntaTexto = "Deseja personalizar ou adicionar observações ao combo?";
+    btnNaoTexto = "Sem personalização";
+    btnSimTexto = "Personalizar combo";
+  } else {
+    perguntaTexto = "Deseja adicionais ou alguma observação?";
+    btnNaoTexto = "Sem adicionais/observações";
+    btnSimTexto = "Adicionar adicionais/observações";
+  }
+
   // Criar elemento da pergunta
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
   perguntaDiv.innerHTML = `
-    <p>Deseja adicionais ou alguma observação?</p>
+    <p>${perguntaTexto}</p>
     <div class="pergunta-botoes">
-      <button type="button" class="btn-nao">Sem adicionais/observações</button>
-      <button type="button" class="btn-sim">Adicionar adicionais/observações</button>
+      <button type="button" class="btn-nao">${btnNaoTexto}</button>
+      <button type="button" class="btn-sim">${btnSimTexto}</button>
     </div>
   `;
 
@@ -766,10 +784,23 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
     selecionadosDiv.style.display = "none";
   }
 
+  // Definir textos baseados no tipo de item
+  let tituloTexto, observacaoTexto, btnTexto;
+
+  if (tipo === "combo") {
+    tituloTexto = `Personalizar Combo: ${nome}`;
+    observacaoTexto = "Deseja adicionar alguma observação ao combo?";
+    btnTexto = "Confirmar Personalização";
+  } else {
+    tituloTexto = `Adicionais e Observações: ${nome}`;
+    observacaoTexto = "Deseja adicionar alguma observação?";
+    btnTexto = "Confirmar e Adicionar ao Carrinho";
+  }
+
   // Atualizar o título do modal para destacar que pode adicionar adicionais e observações
   const tituloModal = modalOverlay.querySelector("h3");
   if (tituloModal) {
-    tituloModal.textContent = `Adicionais e Observações: ${nome}`;
+    tituloModal.textContent = tituloTexto;
     tituloModal.style.color = "#ff5722";
     tituloModal.style.fontSize = "18px";
     tituloModal.style.fontWeight = "bold";
@@ -785,7 +816,7 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
     ".observacoes-container h4"
   );
   if (observacoesContainer) {
-    observacoesContainer.textContent = "Deseja adicionar alguma observação?";
+    observacoesContainer.textContent = observacaoTexto;
     observacoesContainer.style.fontSize = "16px";
     observacoesContainer.style.fontWeight = "bold";
     observacoesContainer.style.marginBottom = "10px";
@@ -794,7 +825,7 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
   // Atualizar texto do botão confirmar
   const btnConfirmar = modalOverlay.querySelector(".btn-confirmar-adicionais");
   if (btnConfirmar) {
-    btnConfirmar.textContent = "Confirmar e Adicionar ao Carrinho";
+    btnConfirmar.textContent = btnTexto;
     btnConfirmar.style.backgroundColor = "#ff5722";
     btnConfirmar.style.color = "#fff";
     btnConfirmar.style.padding = "15px";
@@ -1069,14 +1100,14 @@ function adicionarItem(event) {
   let quantidade = parseInt(qtySpan.textContent) + 1;
   qtySpan.textContent = quantidade;
 
-  // Se for hambúrguer, perguntar se deseja adicionar adicionais
-  if (tipo === "hamburguer") {
+  // Se for hambúrguer ou combo, perguntar se deseja adicionar adicionais
+  if (tipo === "hamburguer" || tipo === "combo") {
     // Mostrar a pergunta sobre adicionais dentro do item
     mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo, observacao);
     return;
   }
 
-  // Para itens que não são hambúrgueres, adicionar diretamente ao carrinho
+  // Para itens que não são hambúrgueres ou combos, adicionar diretamente ao carrinho
   adicionarItemAoCarrinho(id, nome, valor, tipo, [], observacao);
 }
 
@@ -1648,4 +1679,63 @@ function enviarPedidoWhatsApp() {
 
   // Mostrar notificação de sucesso
   mostrarNotificacao("Redirecionando para o WhatsApp...");
+}
+
+// Função para configurar os campos de observação para todos os itens (hamburgueres e combos)
+function configurarCamposObservacao() {
+  // Obter todos os itens do tipo hamburger e combo
+  const itemsParaObservacao = document.querySelectorAll(
+    '.item[data-tipo="hamburguer"], .item[data-tipo="combo"]'
+  );
+
+  itemsParaObservacao.forEach((item) => {
+    // Verificar se já tem campo de observação
+    let observacaoDiv = item.querySelector(".item-observacao");
+    if (!observacaoDiv) {
+      // Se não existe, criar o campo de observação
+      observacaoDiv = document.createElement("div");
+      observacaoDiv.className = "item-observacao";
+      observacaoDiv.style.display = "none";
+      observacaoDiv.innerHTML = `
+        <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
+        <div class="observacao-botoes">
+          <button type="button" class="btn-confirmar-obs">Confirmar</button>
+          <button type="button" class="btn-cancelar-obs">Cancelar</button>
+        </div>
+      `;
+
+      // Adicionar ao item após os botões de ação
+      const itemActions = item.querySelector(".item-actions");
+      if (itemActions) {
+        itemActions.insertAdjacentElement("afterend", observacaoDiv);
+      }
+    }
+
+    // Verificar se tem seletor de adicionais
+    let adicionalSelector = item.querySelector(".adicional-selector");
+    if (!adicionalSelector) {
+      // Se não existe, criar o seletor de adicionais
+      adicionalSelector = document.createElement("div");
+      adicionalSelector.className = "adicional-selector";
+      adicionalSelector.style.display = "none";
+      adicionalSelector.innerHTML = `
+        <select>
+          <option value="">Selecione um adicional (opcional)</option>
+        </select>
+      `;
+
+      // Adicionar ao item após o campo de observação ou após os botões de ação
+      if (observacaoDiv) {
+        observacaoDiv.insertAdjacentElement("afterend", adicionalSelector);
+      } else {
+        const itemActions = item.querySelector(".item-actions");
+        if (itemActions) {
+          itemActions.insertAdjacentElement("afterend", adicionalSelector);
+        }
+      }
+    }
+  });
+
+  // Configurar os botões de observação após criar os elementos
+  adicionarBotoesObservacao();
 }
