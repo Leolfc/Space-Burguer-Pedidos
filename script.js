@@ -1,6 +1,7 @@
 // Preços dos adicionais
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 8.5 },
+  hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.0 },
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
@@ -150,6 +151,9 @@ function adicionarBotoesObservacao() {
           <button type="button" class="opcao-rapida" data-texto="Sem cebola">Sem cebola</button>
           <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
           <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
+          <button type="button" class="opcao-rapida" data-texto="Trocar queijo cheddar por mussarela">Trocar queijo cheddar por mussarela</button>
+              
+
         </div>
         
         <div class="observacao-botoes">
