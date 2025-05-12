@@ -1093,26 +1093,33 @@ function cancelarObservacao(event) {
 // Função para adicionar um item ao carrinho
 function adicionarItem(event) {
   const itemDiv = event.target.closest(".item");
+
+  if (!itemDiv) return;
+
   const id = itemDiv.dataset.id;
   const nome = itemDiv.dataset.nome;
   const valor = parseFloat(itemDiv.dataset.valor);
   const tipo = itemDiv.dataset.tipo;
-  const observacao = itemDiv.dataset.observacao || "";
 
-  // Atualizar quantidade na interface
-  const qtySpan = itemDiv.querySelector(".item-qty");
-  let quantidade = parseInt(qtySpan.textContent) + 1;
-  qtySpan.textContent = quantidade;
+  // Sempre criar um novo item do zero
+  carrinho.itemAtual = {
+    idUnico: `${id}_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+    idOriginal: id,
+    nome: nome,
+    valor: valor,
+    tipo: tipo,
+    adicionais: [],
+    observacao: ""
+  };
 
-  // Se for hambúrguer ou combo, perguntar se deseja adicionar adicionais
-  if (tipo === "hamburguer" || tipo === "combo") {
-    // Mostrar a pergunta sobre adicionais dentro do item
-    mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo, observacao);
-    return;
+  // Limpar o campo de observação visível, se existir
+  const campoObs = itemDiv.querySelector(".observacao-texto");
+  if (campoObs) {
+    campoObs.value = "";
   }
 
-  // Para itens que não são hambúrgueres ou combos, adicionar diretamente ao carrinho
-  adicionarItemAoCarrinho(id, nome, valor, tipo, [], observacao);
+  // Perguntar sobre adicionais
+  mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo);
 }
 
 // Função para adicionar um item ao carrinho (com ou sem adicionais, e com observações)
