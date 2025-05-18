@@ -134,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para adicionar botões de observação a todos os itens
 function adicionarBotoesObservacao() {
-  const itens = document.querySelectorAll(".item");
+  // Obter apenas itens do tipo hamburger e combo
+  const itens = document.querySelectorAll(
+    '.item[data-tipo="hamburguer"], .item[data-tipo="combo"]'
+  );
 
   itens.forEach((item) => {
     // Verificar se já tem o campo de observação (mantemos o campo mas removemos os botões visíveis)
@@ -152,8 +155,6 @@ function adicionarBotoesObservacao() {
           <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
           <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
           <button type="button" class="opcao-rapida" data-texto="Trocar queijo cheddar por mussarela">Trocar queijo cheddar por mussarela</button>
-              
-
         </div>
         
         <div class="observacao-botoes">
@@ -689,6 +690,12 @@ function mostrarPerguntaAdicionais(
   tipo,
   observacao = ""
 ) {
+  // Se não for hambúrguer ou combo, adiciona direto ao carrinho
+  if (tipo !== "hamburguer" && tipo !== "combo") {
+    adicionarItemAoCarrinho(id, nome, valor, tipo, [], observacao);
+    return;
+  }
+
   // Remover pergunta anterior se existir
   const perguntaAnterior = itemDiv.querySelector(".pergunta-adicionais");
   if (perguntaAnterior) {
@@ -1101,6 +1108,12 @@ function adicionarItem(event) {
   const valor = parseFloat(itemDiv.dataset.valor);
   const tipo = itemDiv.dataset.tipo;
 
+  // Se for bebida ou porção, adiciona direto ao carrinho
+  if (tipo === "bebida" || tipo === "porcao") {
+    adicionarItemAoCarrinho(id, nome, valor, tipo, [], "");
+    return;
+  }
+
   // Sempre criar um novo item do zero
   carrinho.itemAtual = {
     idUnico: `${id}_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
@@ -1109,7 +1122,7 @@ function adicionarItem(event) {
     valor: valor,
     tipo: tipo,
     adicionais: [],
-    observacao: ""
+    observacao: "",
   };
 
   // Limpar o campo de observação visível, se existir
