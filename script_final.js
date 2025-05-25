@@ -1,6 +1,6 @@
 // Preços dos adicionais
 const adicionais = {
-  hamburguer160g: { nome: "Hambúrguer 160g", preco: 8.5 },
+  hamburguer160g: { nome: "Hambúrguer 160g", preco: 9.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.0 },
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
