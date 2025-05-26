@@ -714,7 +714,7 @@ function mostrarPerguntaAdicionais(
   } else {
     perguntaTexto = "Deseja adicionais ou alguma observação?";
     btnNaoTexto = "Sem adicionais/observações";
-    btnSimTexto = "Adicionar adicionais/observações";
+    btnSimTexto = "Personalizar";
   }
 
   // Criar elemento da pergunta
