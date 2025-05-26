@@ -1,7 +1,7 @@
 // Preços dos adicionais
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 9.0 },
-  hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.50 },
+  hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.5 },
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
@@ -929,7 +929,89 @@ function fecharModalAdicionais() {
   }
 }
 
-// Função para confirmar adicionais e adicionar ao carrinho
+// Função para editar um item do carrinho
+function editarItemDoCarrinho(uniqueId) {
+  console.log("Editando item:", uniqueId);
+
+  const item = carrinho.itens[uniqueId];
+  if (!item) {
+    console.error("Item não encontrado no carrinho");
+    return;
+  }
+
+  // Encontrar o item original no menu
+  const itemDiv = document.querySelector(`.item[data-id="${item.id}"]`);
+  if (!itemDiv) {
+    console.error("Item original não encontrado no menu");
+    return;
+  }
+
+  // Configurar o item atual para edição
+  carrinho.itemAtual = {
+    itemDiv,
+    id: item.id,
+    nome: item.nome,
+    valor: item.valor,
+    tipo: item.tipo,
+    observacao: item.observacoes || "",
+    uniqueId: uniqueId,
+  };
+
+  // Obter o modal
+  const modalOverlay = document.querySelector(".adicionais-modal-overlay");
+  if (!modalOverlay) {
+    console.log("Modal não encontrado, criando novo...");
+    criarModalAdicionais();
+  }
+
+  // Resetar todas as quantidades de adicionais
+  const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
+  qtySpans.forEach((span) => {
+    span.textContent = "0";
+  });
+
+  // Preencher os adicionais existentes
+  if (item.adicionais && item.adicionais.length > 0) {
+    item.adicionais.forEach((adicional) => {
+      const span = modalOverlay.querySelector(
+        `.adicional-qty[data-id="${adicional.id}"]`
+      );
+      if (span) {
+        const quantidade = item.adicionais.filter(
+          (a) => a.id === adicional.id
+        ).length;
+        span.textContent = quantidade;
+      }
+    });
+  }
+
+  // Preencher o campo de observações
+  const observacoesInput = document.getElementById("observacoes-pedido");
+  if (observacoesInput) {
+    observacoesInput.value = item.observacoes || "";
+  }
+
+  // Atualizar o título do modal
+  const tituloModal = modalOverlay.querySelector("h3");
+  if (tituloModal) {
+    tituloModal.textContent = `Editando: ${item.nome}`;
+  }
+
+  // Atualizar o resumo dos adicionais
+  atualizarResumoAdicionais();
+
+  // Mostrar o modal
+  modalOverlay.classList.add("show");
+  modalOverlay.style.display = "flex";
+  document.body.style.overflow = "hidden";
+
+  // Configurar os botões do modal
+  configurarBotoesModal();
+
+  console.log("Modal aberto para edição");
+}
+
+// Modificar a função confirmarAdicionais para suportar edição
 function confirmarAdicionais() {
   console.log("Confirmando adicionais...");
 
@@ -938,7 +1020,7 @@ function confirmarAdicionais() {
     return;
   }
 
-  const { id, nome, valor, tipo, observacao } = carrinho.itemAtual;
+  const { id, nome, valor, tipo, observacao, uniqueId } = carrinho.itemAtual;
   console.log(`Confirmando para: ${nome}`);
 
   // Obter adicionais selecionados
@@ -986,21 +1068,23 @@ function confirmarAdicionais() {
     ? observacoesInput.value.trim()
     : observacao;
 
-  // Atualizar o atributo data-observacao do item se for diferente
-  if (observacaoAtualizada !== observacao && carrinho.itemAtual.itemDiv) {
-    if (observacaoAtualizada) {
-      carrinho.itemAtual.itemDiv.dataset.observacao = observacaoAtualizada;
-    } else {
-      delete carrinho.itemAtual.itemDiv.dataset.observacao;
-    }
-  }
+  // Calcular preço total dos adicionais
+  let adicionaisTotal = 0;
+  adicionaisSelecionados.forEach((adicional) => {
+    adicionaisTotal += adicional.preco;
+  });
 
-  // Log para debug
-  console.log("Adicionais selecionados:", adicionaisSelecionados);
-  console.log("Observação:", observacaoAtualizada);
-
-  try {
-    // Adicionar item ao carrinho com os adicionais selecionados e observações
+  // Se estiver editando um item existente
+  if (uniqueId) {
+    // Atualizar o item existente
+    carrinho.itens[uniqueId] = {
+      ...carrinho.itens[uniqueId],
+      adicionais: adicionaisSelecionados,
+      adicionaisTotal,
+      observacoes: observacaoAtualizada,
+    };
+  } else {
+    // Adicionar novo item ao carrinho
     adicionarItemAoCarrinho(
       id,
       nome,
@@ -1009,25 +1093,23 @@ function confirmarAdicionais() {
       adicionaisSelecionados,
       observacaoAtualizada
     );
-
-    // Exibir notificação
-    mostrarNotificacao(`${nome} adicionado ao carrinho!`);
-
-    // Fechar o modal - Garantindo que ele seja realmente fechado
-    modalOverlay.classList.remove("show");
-    modalOverlay.style.display = "none";
-    document.body.style.overflow = "";
-
-    // Limpar item atual
-    carrinho.itemAtual = null;
-
-    console.log("Modal fechado após adicionar ao carrinho");
-  } catch (error) {
-    console.error("Erro ao adicionar ao carrinho:", error);
-    alert(
-      "Ocorreu um erro ao adicionar o item ao carrinho. Por favor, tente novamente."
-    );
   }
+
+  // Exibir notificação
+  mostrarNotificacao(
+    `${nome} ${uniqueId ? "atualizado" : "adicionado"} ao carrinho!`
+  );
+
+  // Fechar o modal
+  modalOverlay.classList.remove("show");
+  modalOverlay.style.display = "none";
+  document.body.style.overflow = "";
+
+  // Limpar item atual
+  carrinho.itemAtual = null;
+
+  // Atualizar o carrinho
+  atualizarCarrinho();
 }
 
 // Função para mostrar o campo de observação do item
@@ -1372,6 +1454,14 @@ function atualizarCarrinho() {
         ${observacoesHtml}
       </div>
       <div class="cart-item-actions">
+        <button type="button" class="btn-editar-item" data-item-id="${
+          item.uniqueId
+        }" title="Editar item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
         <div class="cart-item-price">R$ ${subtotal.toFixed(2)}</div>
         <button type="button" class="btn-remove-item" data-item-id="${
           item.uniqueId
@@ -1388,6 +1478,16 @@ function atualizarCarrinho() {
     if (btnRemover) {
       btnRemover.addEventListener("click", function () {
         removerItemDoCarrinho(item.uniqueId);
+      });
+    }
+
+    // Adicionar event listener ao botão de editar
+    const btnEditar = divItem.querySelector(
+      `.btn-editar-item[data-item-id="${item.uniqueId}"]`
+    );
+    if (btnEditar) {
+      btnEditar.addEventListener("click", function () {
+        editarItemDoCarrinho(item.uniqueId);
       });
     }
   }
