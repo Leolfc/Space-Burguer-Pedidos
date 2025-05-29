@@ -69,7 +69,10 @@ h1 {
   font-weight: 700;
   font-size: 2rem;
 }
-
+.atendimento-info{
+  background-color: #582814;
+  padding: 8px 0;
+}
 /* Estilos para campo de pesquisa */
 .search-container {
   background-color: #fff;
@@ -175,13 +178,13 @@ main {
 section {
   margin-bottom: 25px;
   padding: 15px;
-  background-color: #fff;
+  background-color: #502314;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 section h2 {
-  color: #ff5722;
+  color: white;
   font-size: 1.3rem;
   border-bottom: 2px solid #ff5722;
   padding-bottom: 8px;
