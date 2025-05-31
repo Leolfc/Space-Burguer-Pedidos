@@ -36,3 +36,8 @@ transform: scale(1.1); /* Aumenta o tamanho */
 transform: scale(1); /* Retorna ao tamanho original */
     }
 }
+
+.indisponivel{
+    pointer-events: none;
+    opacity: 0.5;
+}

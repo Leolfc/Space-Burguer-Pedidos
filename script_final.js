@@ -1863,3 +1863,17 @@ function configurarCamposObservacao() {
   // Configurar os botões de observação após criar os elementos
   adicionarBotoesObservacao();
 }
+
+
+function itemIndisponivel(event) {
+  event.preventDefault();
+const item = document.querySelector('.indisponivel');
+ if(item){
+  item.classList.add('indisponivel');
+  const fraseIndisponivel = document.createElement('p')
+ }else{
+  item.classList.remove('indisponivel');
+
+ }
+
+}
