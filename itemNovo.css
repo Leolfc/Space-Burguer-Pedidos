@@ -37,7 +37,21 @@ transform: scale(1); /* Retorna ao tamanho original */
     }
 }
 
-.indisponivel{
+.indisponivel {
     pointer-events: none;
     opacity: 0.5;
+    position: relative;
+}
+
+.indisponivel::after {
+    content: 'Item Indisponível';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
 }

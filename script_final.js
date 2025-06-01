@@ -1864,16 +1864,14 @@ function configurarCamposObservacao() {
   adicionarBotoesObservacao();
 }
 
-
 function itemIndisponivel(event) {
   event.preventDefault();
-const item = document.querySelector('.indisponivel');
- if(item){
-  item.classList.add('indisponivel');
-  const fraseIndisponivel = document.createElement('p')
- }else{
-  item.classList.remove('indisponivel');
 
- }
+  const div = document.querySelector(".item"); // Ou pode usar event.target.closest('.item') se tiver botão dentro do item.
 
+  if (!div.classList.contains("indisponivel")) {
+    div.classList.add("indisponivel");
+  } else {
+    div.classList.remove("indisponivel");
+  }
 }
