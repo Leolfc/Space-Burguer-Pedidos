@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Burguer</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="itemNovo.css">
+    <link rel="stylesheet" href="./style/styles.css">
+    <link rel="stylesheet" href="./style/itemNovo.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/imagemFavicon.png" type="image/x-icon">
 </head>
@@ -180,8 +180,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="item" data-id="spaceDoritos" data-nome="Space Plutão" data-valor="33.40" data-tipo="hamburguer">
-                                <div class="item-info">
+                            <div class="item" data-id="spacePlutao" data-nome="Space Plutão" data-valor="33.40" data-tipo="hamburguer"> <div class="item-info">
                                     <span class="item-name">Space Plutão</span>
                                     <span class="item-price">R$ 33,40</span>
                                    
@@ -825,8 +824,26 @@
                     <div class="cliente-info">
                         <input type="text" id="nomeCliente" placeholder="Nome do cliente" autocomplete="off">
                     </div>
-                    <div class="cliente-info">
-                        <textarea id="enderecoCliente" placeholder="Endereço de entrega ou Retirada " rows="2"></textarea>
+
+                    <div class="cliente-info tipo-servico-container">
+                        <label>Como você gostaria de receber seu pedido?</label>
+                        <div>
+                            <input type="radio" id="tipoServicoEntrega" name="tipoServico" value="entrega" checked>
+                            <label for="tipoServicoEntrega">Entrega</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="tipoServicoRetirada" name="tipoServico" value="retirada">
+                            <label for="tipoServicoRetirada">Retirada na Loja</label>
+                        </div>
+                    </div>
+
+                    <div id="camposEntrega" class="cliente-info">
+                        <textarea id="enderecoCliente" placeholder="Seu endereço completo (Rua, N°, Ref.)" rows="3"></textarea>
+                        
+                        <label for="bairroSelect" style="margin-top: 10px; display: block;">Bairro:</label>
+                        <select id="bairroSelect" class="forma-pagamento"> <option value="">Selecione o bairro</option>
+                            </select>
+                        <div id="taxaEntregaInfo" style="margin-top: 5px; font-size: 0.9em; color: #ff9800;"></div>
                     </div>
                     <div class="cliente-info">
                         <select id="formaPagamento" class="forma-pagamento">
@@ -843,9 +860,6 @@
                         <span>Total</span>
                         <span id="valorTotal">R$ 0,00</span>
                     </div>
-                    <div class="cart-info-taxa" style="margin: 10px 0; color: #ff9800; font-size: 0.98em; text-align: center;">
-                        Após finalizar o pedido, consulte nossas taxas de entrega.
-                    </div>
                     <div class="cart-buttons">
                         <button type="button" id="btnLimparCarrinho">Limpar Carrinho</button>
                     </div>
@@ -859,7 +873,6 @@
     
     <script src="script_final.js"></script>
 
-    <!-- Botões flutuantes para navegação -->
     <button id="btn-ir-carrinho" class="btn-flutuante" title="Ir para finalização do pedido">
         <span id="carrinho-contador" class="carrinho-notificacao">0</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -876,4 +889,4 @@
     </button>
 
 </body>
-</html> 
+</html>
