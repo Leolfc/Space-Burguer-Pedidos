@@ -57,6 +57,7 @@ transform: scale(1); /* Retorna ao tamanho original */
 }
 
 .embreve{
-text-align="center";
+text-align:"center";
 font-weight: "bold";  
+margin: 5px;
 }
