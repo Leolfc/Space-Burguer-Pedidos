@@ -16,14 +16,8 @@ const adicionais = {
 
 // NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
-  Centro: 7.0,
-  "Dom Pedro Filipack": 7.0,
-  "Bairro Aeroporto": 12.0,
-  "Vila Leão": 10.0,
-  "Parque dos Mirantes": 7.0,
-  "Novo Aeroporto": 14.00,
-  "Jardim São Luis 1": 8.0,
-  "Jardim São Luis 2": 8.0,
+  
+  "Centro": 7.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
   "Vila São Pedro": 7.0,
@@ -32,10 +26,19 @@ const taxasDeEntrega = {
   "Residencial Pompeia II": 8.0,
   "Residencial Pompeia III": 8.0,
   "Parque Bela Vista": 6.0,
+  "Jardim Alves": 7.0,
+  "Jardim Castro": 8.0,
   "Jardim Europa": 7.0,
   "Jardim Canada": 7.0,
   "Jardim Panorama": 10.0,
   "Jardim Morada do Sol": 8.0,
+  "Dom Pedro Filipack": 7.0,
+  "Bairro Aeroporto": 12.0,
+  "Vila Leão": 10.0,
+  "Parque dos Mirantes": 7.0,
+  "Novo Aeroporto": 14.0,
+  "Jardim São Luis 1": 8.0,
+  "Jardim São Luis 2": 8.0,
   "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
 };
 // FIM NOVO
@@ -44,11 +47,11 @@ const taxasDeEntrega = {
 const carrinho = {
   itens: {},
   total: 0,
-  contador: 0, 
-  itemAtual: null, 
-  nomeCliente: "", 
-  enderecoCliente: "", 
-  formaPagamento: "", 
+  contador: 0,
+  itemAtual: null,
+  nomeCliente: "",
+  enderecoCliente: "",
+  formaPagamento: "",
   // NOVAS PROPRIEDADES
   tipoServico: "entrega", // Valor padrão
   bairroSelecionado: "",
@@ -121,15 +124,15 @@ document.addEventListener("DOMContentLoaded", function () {
       camposEntregaDiv.style.display = "block";
       carrinho.tipoServico = "entrega";
       // Força a atualização da taxa caso um bairro já estivesse selecionado ao mudar para entrega
-      atualizarTaxaSelecionada(); 
+      atualizarTaxaSelecionada();
     } else {
       camposEntregaDiv.style.display = "none";
       carrinho.tipoServico = "retirada";
       carrinho.bairroSelecionado = ""; // Limpa bairro ao mudar para retirada
       carrinho.taxaEntrega = 0; // Zera taxa ao mudar para retirada
-      taxaEntregaInfoDiv.textContent = ""; 
+      taxaEntregaInfoDiv.textContent = "";
     }
-    atualizarCarrinho(); 
+    atualizarCarrinho();
   }
 
   // NOVO: Função para atualizar a taxa de entrega com base no bairro selecionado
@@ -140,21 +143,24 @@ document.addEventListener("DOMContentLoaded", function () {
       carrinho.taxaEntrega = taxasDeEntrega[bairro] || 0; // Pega a taxa ou 0 se não encontrar
 
       if (taxasDeEntrega[bairro] !== undefined) {
-          if (bairro === "Outro Bairro (Consultar)") {
-              taxaEntregaInfoDiv.textContent = "Taxa: A consultar";
-          } else {
-              taxaEntregaInfoDiv.textContent = `Taxa de Entrega: R$ ${carrinho.taxaEntrega.toFixed(2)}`;
-          }
+        if (bairro === "Outro Bairro (Consultar)") {
+          taxaEntregaInfoDiv.textContent = "Taxa: A consultar";
+        } else {
+          taxaEntregaInfoDiv.textContent = `Taxa de Entrega: R$ ${carrinho.taxaEntrega.toFixed(
+            2
+          )}`;
+        }
       } else {
-          // Isso não deveria acontecer se o select só tiver bairros válidos, mas é uma salvaguarda
-          taxaEntregaInfoDiv.textContent = "Bairro inválido";
-          carrinho.taxaEntrega = 0; 
+        // Isso não deveria acontecer se o select só tiver bairros válidos, mas é uma salvaguarda
+        taxaEntregaInfoDiv.textContent = "Bairro inválido";
+        carrinho.taxaEntrega = 0;
       }
     } else if (carrinho.tipoServico === "retirada") {
       carrinho.bairroSelecionado = "";
       carrinho.taxaEntrega = 0;
       taxaEntregaInfoDiv.textContent = "";
-    } else { // Caso "Selecione o bairro" ou tipo de serviço não seja entrega e o valor do select seja ""
+    } else {
+      // Caso "Selecione o bairro" ou tipo de serviço não seja entrega e o valor do select seja ""
       carrinho.bairroSelecionado = "";
       carrinho.taxaEntrega = 0;
       if (carrinho.tipoServico === "entrega") {
@@ -167,15 +173,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // NOVO: Event listeners para os radio buttons e select de bairro
-  if (radioEntrega) radioEntrega.addEventListener("change", gerenciarCamposEntrega);
-  if (radioRetirada) radioRetirada.addEventListener("change", gerenciarCamposEntrega);
-  if (bairroSelect) bairroSelect.addEventListener("change", atualizarTaxaSelecionada);
-  
+  if (radioEntrega)
+    radioEntrega.addEventListener("change", gerenciarCamposEntrega);
+  if (radioRetirada)
+    radioRetirada.addEventListener("change", gerenciarCamposEntrega);
+  if (bairroSelect)
+    bairroSelect.addEventListener("change", atualizarTaxaSelecionada);
+
   const nomeClienteInput = document.getElementById("nomeCliente");
   if (nomeClienteInput) {
     nomeClienteInput.addEventListener("input", function () {
       carrinho.nomeCliente = this.value.trim();
-      localStorage.setItem("nomeCliente", carrinho.nomeCliente); 
+      localStorage.setItem("nomeCliente", carrinho.nomeCliente);
     });
     const nomeSalvo = localStorage.getItem("nomeCliente");
     if (nomeSalvo) {
@@ -187,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (enderecoClienteInput) {
     enderecoClienteInput.addEventListener("input", function () {
       carrinho.enderecoCliente = this.value.trim();
-      localStorage.setItem("enderecoCliente", carrinho.enderecoCliente); 
+      localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
     });
     const enderecoSalvo = localStorage.getItem("enderecoCliente");
     if (enderecoSalvo) {
@@ -195,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
       carrinho.enderecoCliente = enderecoSalvo;
     }
   }
-  
+
   const formaPagamentoSelect = document.getElementById("formaPagamento");
   if (formaPagamentoSelect) {
     formaPagamentoSelect.addEventListener("change", function () {
@@ -217,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (tipoServicoSalvo === "retirada") {
       radioRetirada.checked = true;
     } else {
-      radioEntrega.checked = true; 
+      radioEntrega.checked = true;
     }
     carrinho.tipoServico = tipoServicoSalvo;
   }
@@ -225,23 +234,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const bairroSalvo = localStorage.getItem("bairroSelecionado");
   if (bairroSalvo && carrinho.tipoServico === "entrega") {
     // Verifica se o bairro salvo ainda existe nas opções do select
-    const existeOpcao = Array.from(bairroSelect.options).some(opt => opt.value === bairroSalvo);
+    const existeOpcao = Array.from(bairroSelect.options).some(
+      (opt) => opt.value === bairroSalvo
+    );
     if (existeOpcao) {
-        bairroSelect.value = bairroSalvo;
-        carrinho.bairroSelecionado = bairroSalvo;
+      bairroSelect.value = bairroSalvo;
+      carrinho.bairroSelecionado = bairroSalvo;
     } else {
-        // Se o bairro salvo não existe mais (ex: removido da lista), reseta
-        bairroSelect.value = "";
-        carrinho.bairroSelecionado = "";
-        localStorage.removeItem("bairroSelecionado");
+      // Se o bairro salvo não existe mais (ex: removido da lista), reseta
+      bairroSelect.value = "";
+      carrinho.bairroSelecionado = "";
+      localStorage.removeItem("bairroSelecionado");
     }
   }
 
   // Chamar inicialmente para configurar o estado correto dos campos e taxa
-  gerenciarCamposEntrega(); 
+  gerenciarCamposEntrega();
   if (carrinho.tipoServico === "entrega" && carrinho.bairroSelecionado) {
-    atualizarTaxaSelecionada(); 
-  } else if (carrinho.tipoServico === "entrega" && !carrinho.bairroSelecionado) {
+    atualizarTaxaSelecionada();
+  } else if (
+    carrinho.tipoServico === "entrega" &&
+    !carrinho.bairroSelecionado
+  ) {
     // Se for entrega e não houver bairro salvo, garantir que a taxa e info estejam limpas
     taxaEntregaInfoDiv.textContent = "Selecione um bairro para ver a taxa.";
     carrinho.taxaEntrega = 0;
@@ -254,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
   configurarBotaoWhatsApp();
 });
 // FIM DO DOMContentLoaded
-
 
 // Função para adicionar botões de observação a todos os itens
 function adicionarBotoesObservacao() {
@@ -399,7 +412,8 @@ function criarModalAdicionais() {
   closeButton.type = "button";
   closeButton.className = "btn-close-adicionais";
   closeButton.innerHTML = "×";
-  closeButton.style.cssText = "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
+  closeButton.style.cssText =
+    "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
   closeButton.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
@@ -530,15 +544,18 @@ function atualizarResumoAdicionais() {
       const subtotal = adicional.preco * quantidade;
       totalAdicionais += subtotal;
       const li = document.createElement("li");
-      li.style.cssText = "padding:8px;margin-bottom:8px;background-color:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.1);";
+      li.style.cssText =
+        "padding:8px;margin-bottom:8px;background-color:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.1);";
       li.dataset.id = adicionalId;
       const itemDiv = document.createElement("div");
       itemDiv.className = "adicional-resumo";
-      itemDiv.style.cssText = "display:flex;align-items:center;gap:10px;position:relative;";
+      itemDiv.style.cssText =
+        "display:flex;align-items:center;gap:10px;position:relative;";
       const qtySpanResumo = document.createElement("span"); // Renomeado para evitar conflito
       qtySpanResumo.className = "adicional-resumo-quantidade";
       qtySpanResumo.textContent = `${quantidade}x`;
-      qtySpanResumo.style.cssText = "background-color:#ffebee;color:#e53935;border-radius:12px;padding:2px 8px;font-weight:bold;";
+      qtySpanResumo.style.cssText =
+        "background-color:#ffebee;color:#e53935;border-radius:12px;padding:2px 8px;font-weight:bold;";
       itemDiv.appendChild(qtySpanResumo);
       const nomeSpan = document.createElement("span");
       nomeSpan.className = "adicional-resumo-nome";
@@ -554,9 +571,11 @@ function atualizarResumoAdicionais() {
       btnRemover.type = "button";
       btnRemover.className = "btn-remover-adicional";
       btnRemover.textContent = "×";
-      btnRemover.style.cssText = "background-color:#f44336;color:white;border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;cursor:pointer;margin-left:5px;";
+      btnRemover.style.cssText =
+        "background-color:#f44336;color:white;border:none;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;cursor:pointer;margin-left:5px;";
       btnRemover.addEventListener("click", function () {
-        const qtySpanOriginal = modalOverlay.querySelector( // Renomeado para evitar conflito
+        const qtySpanOriginal = modalOverlay.querySelector(
+          // Renomeado para evitar conflito
           `.adicional-qty[data-id="${adicionalId}"]`
         );
         if (qtySpanOriginal) {
@@ -571,13 +590,19 @@ function atualizarResumoAdicionais() {
   });
   selecionadosDiv.style.display = temSelecionados ? "block" : "none";
   if (temSelecionados) {
-    selecionadosDiv.querySelector("p").textContent = `Adicionais selecionados (${totalItens} ${totalItens === 1 ? "item" : "itens"}):`;
+    selecionadosDiv.querySelector(
+      "p"
+    ).textContent = `Adicionais selecionados (${totalItens} ${
+      totalItens === 1 ? "item" : "itens"
+    }):`;
     const totalLi = document.createElement("li");
     totalLi.className = "adicionais-total";
-    totalLi.style.cssText = "margin-top:10px;padding-top:8px;border-top:1px dashed #ffccbc;";
+    totalLi.style.cssText =
+      "margin-top:10px;padding-top:8px;border-top:1px dashed #ffccbc;";
     const totalDiv = document.createElement("div");
     totalDiv.className = "adicional-resumo-total";
-    totalDiv.style.cssText = "display:flex;justify-content:space-between;align-items:center;font-weight:700;";
+    totalDiv.style.cssText =
+      "display:flex;justify-content:space-between;align-items:center;font-weight:700;";
     const labelSpan = document.createElement("span");
     labelSpan.textContent = "Total dos adicionais:";
     totalDiv.appendChild(labelSpan);
@@ -591,7 +616,14 @@ function atualizarResumoAdicionais() {
   }
 }
 
-function mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
+function mostrarPerguntaAdicionais(
+  itemDiv,
+  id,
+  nome,
+  valor,
+  tipo,
+  observacao = ""
+) {
   if (tipo !== "hamburguer" && tipo !== "combo") {
     adicionarItemAoCarrinho(id, nome, valor, tipo, [], observacao);
     return;
@@ -600,8 +632,12 @@ function mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo, observacao = 
   if (perguntaAnterior) {
     perguntaAnterior.remove();
   }
-  let perguntaTexto = tipo === "combo" ? "Deseja personalizar ou adicionar observações ao combo?" : "Deseja adicionais ou alguma observação?";
-  let btnNaoTexto = tipo === "combo" ? "Sem personalização" : "Sem adicionais/observações";
+  let perguntaTexto =
+    tipo === "combo"
+      ? "Deseja personalizar ou adicionar observações ao combo?"
+      : "Deseja adicionais ou alguma observação?";
+  let btnNaoTexto =
+    tipo === "combo" ? "Sem personalização" : "Sem adicionais/observações";
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
@@ -636,25 +672,41 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
   qtySpans.forEach((span) => (span.textContent = "0"));
   const observacoesInput = document.getElementById("observacoes-pedido");
   if (observacoesInput) observacoesInput.value = observacao;
-  const selecionadosDiv = modalOverlay.querySelector(".adicionais-selecionados");
+  const selecionadosDiv = modalOverlay.querySelector(
+    ".adicionais-selecionados"
+  );
   if (selecionadosDiv) selecionadosDiv.style.display = "none";
-  let tituloTexto = tipo === "combo" ? `Personalizar Combo: ${nome}` : `Adicionais e Observações: ${nome}`;
-  let observacaoPlaceholder = tipo === "combo" ? "Deseja adicionar alguma observação ao combo?" : "Deseja adicionar alguma observação?";
-  let btnTexto = tipo === "combo" ? "Confirmar Personalização" : "Confirmar e Adicionar ao Carrinho";
+  let tituloTexto =
+    tipo === "combo"
+      ? `Personalizar Combo: ${nome}`
+      : `Adicionais e Observações: ${nome}`;
+  let observacaoPlaceholder =
+    tipo === "combo"
+      ? "Deseja adicionar alguma observação ao combo?"
+      : "Deseja adicionar alguma observação?";
+  let btnTexto =
+    tipo === "combo"
+      ? "Confirmar Personalização"
+      : "Confirmar e Adicionar ao Carrinho";
   const tituloModal = modalOverlay.querySelector("h3");
   if (tituloModal) {
     tituloModal.textContent = tituloTexto;
-    tituloModal.style.cssText = "color:#ff5722;font-size:18px;font-weight:bold;text-align:center;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #ff5722;padding-right:40px;";
+    tituloModal.style.cssText =
+      "color:#ff5722;font-size:18px;font-weight:bold;text-align:center;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #ff5722;padding-right:40px;";
   }
-  const observacoesContainerH4 = modalOverlay.querySelector(".observacoes-container h4"); // Corrigido
+  const observacoesContainerH4 = modalOverlay.querySelector(
+    ".observacoes-container h4"
+  ); // Corrigido
   if (observacoesContainerH4) {
     observacoesContainerH4.textContent = observacaoPlaceholder;
-    observacoesContainerH4.style.cssText = "font-size:16px;font-weight:bold;margin-bottom:10px;";
+    observacoesContainerH4.style.cssText =
+      "font-size:16px;font-weight:bold;margin-bottom:10px;";
   }
   const btnConfirmar = modalOverlay.querySelector(".btn-confirmar-adicionais");
   if (btnConfirmar) {
     btnConfirmar.textContent = btnTexto;
-    btnConfirmar.style.cssText = "background-color:#ff5722;color:#fff;padding:15px;font-size:16px;font-weight:bold;border-radius:8px;margin-top:15px;cursor:pointer;";
+    btnConfirmar.style.cssText =
+      "background-color:#ff5722;color:#fff;padding:15px;font-size:16px;font-weight:bold;border-radius:8px;margin-top:15px;cursor:pointer;";
     btnConfirmar.onclick = function (event) {
       event.preventDefault();
       confirmarAdicionais();
@@ -805,7 +857,8 @@ function confirmarObservacao(event) {
   const observacao = textarea.value.trim();
   if (observacao) {
     btnObservacao.textContent = "Observação adicionada ✓";
-    btnObservacao.style.cssText = "background-color:#e8f5e9;border-color:#a5d6a7;color:#388e3c;";
+    btnObservacao.style.cssText =
+      "background-color:#e8f5e9;border-color:#a5d6a7;color:#388e3c;";
     itemDiv.dataset.observacao = observacao;
   } else {
     btnObservacao.textContent = "Adicionar observação";
@@ -846,7 +899,14 @@ function adicionarItem(event) {
   mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo);
 }
 
-function adicionarItemAoCarrinho(id, nome, valor, tipo, adicionaisList = [], observacoes = "") {
+function adicionarItemAoCarrinho(
+  id,
+  nome,
+  valor,
+  tipo,
+  adicionaisList = [],
+  observacoes = ""
+) {
   carrinho.contador++;
   const itemUniqueKey = `item_${carrinho.contador}`;
   let adicionaisTotal = 0;
@@ -875,7 +935,8 @@ function removerItem(event) {
     qtySpan.textContent = quantidade;
     const itemsToRemove = [];
     for (const key in carrinho.itens) {
-      if (carrinho.itens[key].id === id) { // Modificado para verificar carrinho.itens[key].id
+      if (carrinho.itens[key].id === id) {
+        // Modificado para verificar carrinho.itens[key].id
         itemsToRemove.push(key);
       }
     }
@@ -913,17 +974,17 @@ function limparCarrinho() {
   if (Object.keys(carrinho.itens).length > 0) {
     carrinho.itens = {};
     // MODIFICADO: Resetar informações de entrega/retirada
-    carrinho.tipoServico = "entrega"; 
+    carrinho.tipoServico = "entrega";
     const radioEntrega = document.getElementById("tipoServicoEntrega");
     if (radioEntrega) radioEntrega.checked = true;
-    
+
     const camposEntregaDiv = document.getElementById("camposEntrega");
     if (camposEntregaDiv) camposEntregaDiv.style.display = "block";
-    
+
     carrinho.bairroSelecionado = "";
     const bairroSelect = document.getElementById("bairroSelect");
     if (bairroSelect) bairroSelect.value = "";
-    
+
     carrinho.taxaEntrega = 0;
     const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
     if (taxaEntregaInfoDiv) taxaEntregaInfoDiv.textContent = "";
@@ -932,7 +993,7 @@ function limparCarrinho() {
     const qtySpans = document.querySelectorAll(".item-qty");
     qtySpans.forEach((span) => (span.textContent = "0"));
     mostrarNotificacao("Carrinho limpo com sucesso!");
-    atualizarCarrinho(); 
+    atualizarCarrinho();
   }
 }
 
@@ -953,7 +1014,7 @@ function atualizarCarrinho() {
   console.log("Atualizando carrinho:", carrinho);
 
   const itensCarrinhoDiv = document.getElementById("itens-carrinho"); // Renomeado para evitar conflito
-  const valorTotalSpan = document.getElementById("valorTotal"); 
+  const valorTotalSpan = document.getElementById("valorTotal");
 
   if (!itensCarrinhoDiv || !valorTotalSpan) {
     console.error("Elementos do carrinho não encontrados");
@@ -961,7 +1022,7 @@ function atualizarCarrinho() {
   }
 
   itensCarrinhoDiv.innerHTML = "";
-  let subTotalItens = 0; 
+  let subTotalItens = 0;
   let temItens = false;
 
   for (const itemKey in carrinho.itens) {
@@ -970,7 +1031,7 @@ function atualizarCarrinho() {
 
     const valorItem = item.valor;
     const valorAdicionais = item.adicionaisTotal || 0;
-    const subtotalItemCarrinho = valorItem + valorAdicionais; 
+    const subtotalItemCarrinho = valorItem + valorAdicionais;
 
     subTotalItens += subtotalItemCarrinho;
 
@@ -1066,7 +1127,7 @@ function atualizarCarrinho() {
     totalFinalPedido += carrinho.taxaEntrega;
   }
 
-  carrinho.total = totalFinalPedido; 
+  carrinho.total = totalFinalPedido;
   valorTotalSpan.textContent = `R$ ${totalFinalPedido.toFixed(2)}`;
 
   atualizarContadorCarrinho();
@@ -1210,15 +1271,17 @@ function enviarPedidoWhatsApp() {
 
   if (!carrinho.nomeCliente) {
     mostrarNotificacao("Por favor, informe seu nome");
-    const nomeClienteInput = document.getElementById("nomeCliente"); 
+    const nomeClienteInput = document.getElementById("nomeCliente");
     if (nomeClienteInput) nomeClienteInput.focus();
     return;
   }
 
   if (carrinho.tipoServico === "entrega") {
     if (!carrinho.enderecoCliente) {
-      mostrarNotificacao("Por favor, informe seu endereço completo para entrega.");
-      const enderecoClienteInput = document.getElementById("enderecoCliente"); 
+      mostrarNotificacao(
+        "Por favor, informe seu endereço completo para entrega."
+      );
+      const enderecoClienteInput = document.getElementById("enderecoCliente");
       if (enderecoClienteInput) enderecoClienteInput.focus();
       return;
     }
@@ -1228,19 +1291,25 @@ function enviarPedidoWhatsApp() {
       if (bairroSelect) bairroSelect.focus();
       return;
     }
-    if (carrinho.bairroSelecionado === "Outro Bairro (Consultar)" && carrinho.taxaEntrega === 0) { // Adicionado && carrinho.taxaEntrega === 0
-        mostrarNotificacao("Para 'Outro Bairro', a taxa será informada após o contato. Continue se desejar ou aguarde contato.");
+    if (
+      carrinho.bairroSelecionado === "Outro Bairro (Consultar)" &&
+      carrinho.taxaEntrega === 0
+    ) {
+      // Adicionado && carrinho.taxaEntrega === 0
+      mostrarNotificacao(
+        "Para 'Outro Bairro', a taxa será informada após o contato. Continue se desejar ou aguarde contato."
+      );
     }
   }
 
   if (!carrinho.formaPagamento) {
     mostrarNotificacao("Por favor, selecione uma forma de pagamento");
-    const formaPagamentoSelect = document.getElementById("formaPagamento"); 
+    const formaPagamentoSelect = document.getElementById("formaPagamento");
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
 
-  const numeroWhatsApp = "5543996114268"; 
+  const numeroWhatsApp = "5543996114268";
   let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
 
@@ -1249,9 +1318,11 @@ function enviarPedidoWhatsApp() {
     mensagem += `*🏠 Endereço:* ${carrinho.enderecoCliente}\n`;
     mensagem += `*🏘️ Bairro:* ${carrinho.bairroSelecionado}\n`;
     if (carrinho.bairroSelecionado === "Outro Bairro (Consultar)") {
-        mensagem += `*💰 Taxa de Entrega:* (A CONSULTAR)\n`;
+      mensagem += `*💰 Taxa de Entrega:* (A CONSULTAR)\n`;
     } else {
-        mensagem += `*💰 Taxa de Entrega:* R$ ${carrinho.taxaEntrega.toFixed(2)}\n`;
+      mensagem += `*💰 Taxa de Entrega:* R$ ${carrinho.taxaEntrega.toFixed(
+        2
+      )}\n`;
     }
   } else {
     mensagem += `*🛍️ Tipo de Serviço:* Retirada na Loja\n`;
@@ -1265,7 +1336,7 @@ function enviarPedidoWhatsApp() {
     const item = carrinho.itens[itemId];
     // const valorItem = item.valor; // Não precisa mais aqui
     // const valorAdicionais = item.adicionaisTotal || 0; // Não precisa mais aqui
-    
+
     mensagem += `\n*${contadorItensMsg}. ${item.nome}*\n`;
 
     if (item.observacoes) {
@@ -1298,13 +1369,20 @@ function enviarPedidoWhatsApp() {
 
   mensagem += `\n----------------------------------\n`;
   mensagem += `*TOTAL DO PEDIDO: R$ ${carrinho.total.toFixed(2)}*\n`;
-  if (carrinho.tipoServico === "entrega" && carrinho.taxaEntrega > 0 && carrinho.bairroSelecionado !== "Outro Bairro (Consultar)") {
+  if (
+    carrinho.tipoServico === "entrega" &&
+    carrinho.taxaEntrega > 0 &&
+    carrinho.bairroSelecionado !== "Outro Bairro (Consultar)"
+  ) {
     mensagem += `_(Itens + Taxa de Entrega)_`;
-  } else if (carrinho.tipoServico === "entrega" && carrinho.bairroSelecionado === "Outro Bairro (Consultar)") {
+  } else if (
+    carrinho.tipoServico === "entrega" &&
+    carrinho.bairroSelecionado === "Outro Bairro (Consultar)"
+  ) {
     mensagem += `_(Itens + Taxa de Entrega A CONSULTAR)_`;
   }
   mensagem += `\n----------------------------------\n\n`;
-  
+
   mensagem += `Obrigado pelo seu pedido! Entraremos em contato em breve para confirmar.`;
 
   const mensagemCodificada = encodeURIComponent(mensagem);
@@ -1314,7 +1392,6 @@ function enviarPedidoWhatsApp() {
   mostrarNotificacao("Redirecionando para o WhatsApp...");
 }
 // FIM MODIFICADO
-
 
 function configurarCamposObservacao() {
   const itemsParaObservacao = document.querySelectorAll(
@@ -1361,12 +1438,24 @@ function configurarCamposObservacao() {
 
 function itemIndisponivel(event) {
   event.preventDefault();
-  const div = event.target.closest('.item'); // Melhorado para pegar o item correto
+  const div = event.target.closest(".item"); // Melhorado para pegar o item correto
   if (!div) return; // Adiciona uma verificação caso o clique não seja em um item
 
   if (!div.classList.contains("indisponivel")) {
     div.classList.add("indisponivel");
   } else {
     div.classList.remove("indisponivel");
+  }
+}
+
+function itemEmBreve(event) {
+  event.preventDefault();
+  const div = event.target.closest(".item"); // Melhorado para pegar o item correto
+  if (!div) return; // Adiciona uma verificação caso o clique não seja em um item
+
+  if (!div.classList.contains("embreve")) {
+    div.classList.add("embreve");
+  } else {
+    div.classList.remove("embreve");
   }
 }

@@ -1,63 +1,84 @@
-.item_novo{
-    color: #D92517;
-    border: 2px solid #FF6B01;
-    border-radius: 8px;
-    width: 50%;
-    text-align: center;
-    animation: pulse 1.5s infinite;
+.item_novo {
+  color: #d92517;
+  border: 2px solid #ff6b01;
+  border-radius: 8px;
+  width: 50%;
+  text-align: center;
+  animation: pulse 1.5s infinite;
 }
-.item_em_dobro{
-    color: #D92517;
-    animation: pulseTexto 1s infinite;
-   font-weight: bold;
-   display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
+.item_em_dobro {
+  color: #d92517;
+  animation: pulseTexto 1s infinite;
+  font-weight: bold;
+  display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
 }
 
 @keyframes pulse {
-    0%{
-transform: scale(1); /* Tamanho inicial */
-    }
-    50%{
-transform: scale(1.1); /* Aumenta o tamanho */
-    }
-    100%{
-transform: scale(1); /* Retorna ao tamanho original */
-    }
+  0% {
+    transform: scale(1); /* Tamanho inicial */
+  }
+  50% {
+    transform: scale(1.1); /* Aumenta o tamanho */
+  }
+  100% {
+    transform: scale(1); /* Retorna ao tamanho original */
+  }
 }
 
 @keyframes pulseTexto {
-    0%{
-transform: scale(1); /* Tamanho inicial */
-    }
-    50%{
-transform: scale(1.1); /* Aumenta o tamanho */
-    }
-    100%{
-transform: scale(1); /* Retorna ao tamanho original */
-    }
+  0% {
+    transform: scale(1); /* Tamanho inicial */
+  }
+  50% {
+    transform: scale(1.1); /* Aumenta o tamanho */
+  }
+  100% {
+    transform: scale(1); /* Retorna ao tamanho original */
+  }
 }
 
 .indisponivel {
-    pointer-events: none;
-    opacity: 0.5;
-    position: relative;
+  pointer-events: none;
+  opacity: 0.5;
+  position: relative;
 }
 
 .indisponivel::after {
-    content: 'Item Indisponível';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 14px;
+  content: "Item Indisponível";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
 }
-
-.embreve{
-text-align:"center";
-font-weight: "bold";  
-margin: 5px;
+.embreve {
+  pointer-events: none;
+  opacity: 0.6;
+  position: relative;
+  
+}
+.embreve::after {
+  content: "Em Breve";
+  color: rgb(19, 19, 19) !important;
+  position: absolute;
+  font-weight: bold;
+  top: 30%;
+  left: 30%;
+ 
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 209, 6, 0.918);
+  color: white;
+  padding: 10px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  animation: pulseTexto 1s infinite;
+width: max-content;
+display: flex;
+align-items: center;
+justify-content: center; 
+margin: 0 auto;
 }

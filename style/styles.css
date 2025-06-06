@@ -72,6 +72,10 @@ h1 {
 .atendimento-info{
   background-color: #582814;
   padding: 8px 0;
+  border-radius: 8px;
+}
+.atendimento-info_paragrafo{
+  font-family:  "Roboto", sans-serif;
 }
 /* Estilos para campo de pesquisa */
 .search-container {
