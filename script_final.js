@@ -1,4 +1,4 @@
-// Preços dos adicionais
+//*Preços dos adicionais
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 9.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.5 },
@@ -14,7 +14,7 @@ const adicionais = {
   doritos: { nome: "Doritos", preco: 5.0 },
 };
 
-// NOVO: Taxas de Entrega por Bairro
+// *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
 
   "Centro": 7.0,
