@@ -10,7 +10,7 @@ const adicionais = {
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
   tomate: { nome: "Tomate", preco: 2.0 },
   cebolaRoxa: { nome: "Cebola Roxa", preco: 2.5 },
-  catupiry: { nome: "Catupiry", preco: 7.0 },
+  catupiry: { nome: "Catupiry", preco: 8.0 },
   doritos: { nome: "Doritos", preco: 5.0 },
 };
 
