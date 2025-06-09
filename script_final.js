@@ -18,14 +18,15 @@ const adicionais = {
 const taxasDeEntrega = {
 
   "Centro": 7.0,
+  "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
   "Vila São Pedro": 7.0,
+  "Vila Maria": 8.0,
   "Vila Rondon": 7.0,
   "Residencial Pompeia I": 8.0,
   "Residencial Pompeia II": 8.0,
   "Residencial Pompeia III": 8.0,
-  "Parque Bela Vista": 6.0,
   "Jardim Alves": 7.0,
   "Jardim Castro": 8.0,
   "Jardim Europa": 7.0,
