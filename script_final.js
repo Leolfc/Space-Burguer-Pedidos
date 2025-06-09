@@ -16,8 +16,7 @@ const adicionais = {
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
-
-  "Centro": 7.0,
+  Centro: 7.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
@@ -40,7 +39,7 @@ const taxasDeEntrega = {
   "Novo Aeroporto": 14.0,
   "Jardim São Luis 1": 8.0,
   "Jardim São Luis 2": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
 };
 // FIM NOVO
