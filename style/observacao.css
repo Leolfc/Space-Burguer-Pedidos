@@ -1,0 +1,64 @@
+.btn-observacao {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.btn-observacao:hover {
+  color: #ff6b01;
+}
+
+.item-observacao {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.observacao-texto {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+.observacao-botoes {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-confirmar-obs,
+.btn-cancelar-obs {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn-confirmar-obs {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-confirmar-obs:hover {
+  background-color: #45a049;
+}
+
+.btn-cancelar-obs {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-cancelar-obs:hover {
+  background-color: #da190b;
+}
