@@ -1227,32 +1227,26 @@ function configurarBotoesModal() {
 function configurarBotoesFlutuantes() {
   const btnIrCarrinho = document.getElementById("btn-ir-carrinho");
   const btnVoltarTopo = document.getElementById("btn-voltar-topo");
-  const resumoPedido = document.getElementById("resumoPedido");
-  if (!btnIrCarrinho || !btnVoltarTopo || !resumoPedido) return;
-  btnIrCarrinho.addEventListener("click", function () {
-    const carrinhoPos =
-      resumoPedido.getBoundingClientRect().top + window.pageYOffset;
-    window.scrollTo({
-      top: carrinhoPos - 20,
-      behavior: "smooth",
+  const cartContainer = document.querySelector(".cart-container");
+
+  if (btnIrCarrinho && cartContainer) {
+    btnIrCarrinho.addEventListener("click", () => {
+      cartContainer.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-    const nomeClienteInput = document.getElementById("nomeCliente"); // Corrigido
-    if (nomeClienteInput) {
-      setTimeout(() => nomeClienteInput.focus(), 500);
-    }
-  });
-  btnVoltarTopo.addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-  window.addEventListener("scroll", function () {
-    if (window.pageYOffset > 300) {
-      btnVoltarTopo.classList.add("visivel");
-    } else {
-      btnVoltarTopo.classList.remove("visivel");
-    }
-  });
-  if (window.pageYOffset > 300) {
-    btnVoltarTopo.classList.add("visivel");
+  }
+
+  if (btnVoltarTopo) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        btnVoltarTopo.classList.add("visivel");
+      } else {
+        btnVoltarTopo.classList.remove("visivel");
+      }
+    });
+
+    btnVoltarTopo.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   }
 }
 
