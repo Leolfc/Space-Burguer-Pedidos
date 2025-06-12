@@ -221,7 +221,8 @@ section h2 {
 .item-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .item-name {
@@ -232,8 +233,34 @@ section h2 {
 
 .item-price {
   color: #ff5722;
-  font-weight: 700;
-  white-space: nowrap;
+  font-weight: bold;
+}
+
+.preco-promocional {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.preco-original {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.preco-promocional .item-price {
+  color: #ff5722;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.dark-mode .preco-original {
+  color: #777;
+}
+
+.dark-mode .preco-promocional .item-price {
+  color: #ff7043;
 }
 
 /* Botões de adicionar/remover */
@@ -1998,51 +2025,16 @@ button {
   margin-top: 5px; /* Pequeno espaço acima do select */
 }
 
-.promocao-badge {
-  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+.item_promocao {
+  background-color: #ff5722;
   color: white;
   padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 0.9em;
+  border-radius: 4px;
+  font-size: 0.9rem;
   font-weight: bold;
   text-align: center;
   margin: 5px 0;
   animation: pulse 2s infinite;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.promocao-badge.namorados {
-  background: linear-gradient(45deg, #ff1493, #ff69b4);
-  font-size: 1em;
-}
-
-.preco-antigo {
-  color: #666;
-  font-size: 0.9em;
-  margin: 5px 0;
-  text-align: center;
-}
-
-.preco-riscado {
-  text-decoration: line-through;
-  color: #999;
-}
-
-.preco-novo {
-  color: #ff6b6b;
-  font-weight: bold;
-}
-
-.dark-mode .preco-antigo {
-  color: #999;
-}
-
-.dark-mode .preco-riscado {
-  color: #777;
-}
-
-.dark-mode .preco-novo {
-  color: #ff8e8e;
 }
 
 @keyframes pulse {
@@ -2057,6 +2049,28 @@ button {
   }
 }
 
-.dark-mode .promocao-badge {
-  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+.dark-mode .item_promocao {
+  background-color: #ff7043;
+  box-shadow: 0 0 10px rgba(255, 112, 67, 0.5);
+}
+
+.preco-promocional {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.preco-original {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.dark-mode .preco-original {
+  color: #777;
+}
+
+.dark-mode .item-price {
+  color: #ff7043;
 }
