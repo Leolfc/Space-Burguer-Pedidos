@@ -69,13 +69,13 @@ h1 {
   font-weight: 700;
   font-size: 2rem;
 }
-.atendimento-info{
+.atendimento-info {
   background-color: #582814;
   padding: 8px 0;
   border-radius: 8px;
 }
-.atendimento-info_paragrafo{
-  font-family:  "Roboto", sans-serif;
+.atendimento-info_paragrafo {
+  font-family: "Roboto", sans-serif;
 }
 /* Estilos para campo de pesquisa */
 .search-container {
@@ -1888,95 +1888,104 @@ button {
 
 /* NOVO: Estilos para Opções de Entrega/Retirada */
 .tipo-servico-container {
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: var(--card-bg); /* Ajustado para usar variável de tema */
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: var(--card-bg); /* Ajustado para usar variável de tema */
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
 }
 
-.tipo-servico-container label { /* Label principal "Como você gostaria..." */
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-    color: var(--text-color);
+.tipo-servico-container label {
+  /* Label principal "Como você gostaria..." */
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: var(--text-color);
 }
 
-.tipo-servico-container div { /* Container para cada radio + label */
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
+.tipo-servico-container div {
+  /* Container para cada radio + label */
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .tipo-servico-container input[type="radio"] {
-    margin-right: 8px;
-    accent-color: #ff6b01; /* Cor do radio button selecionado */
-    transform: scale(1.1); /* Levemente maior para facilitar o clique */
+  margin-right: 8px;
+  accent-color: #ff6b01; /* Cor do radio button selecionado */
+  transform: scale(1.1); /* Levemente maior para facilitar o clique */
 }
 
-.tipo-servico-container label[for*="tipoServico"] { /* Estilo para os labels dos radios ("Entrega", "Retirada") */
-    font-weight: normal;
-    margin-bottom: 0; /* Remove margem inferior desnecessária */
-    cursor: pointer;
-    font-size: 0.95rem;
-    color: var(--text-color);
+.tipo-servico-container label[for*="tipoServico"] {
+  /* Estilo para os labels dos radios ("Entrega", "Retirada") */
+  font-weight: normal;
+  margin-bottom: 0; /* Remove margem inferior desnecessária */
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text-color);
 }
-
 
 #camposEntrega {
-    padding: 15px; /* Mais padding interno */
-    border: 1px solid var(--card-border); 
-    border-radius: 8px;
-    margin-bottom: 15px;
-    background-color: var(--card-bg); /* Ajustado para usar variável de tema */
-    animation: fadeIn 0.3s ease-in-out; /* Animação suave ao aparecer */
+  padding: 15px; /* Mais padding interno */
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: var(--card-bg); /* Ajustado para usar variável de tema */
+  animation: fadeIn 0.3s ease-in-out; /* Animação suave ao aparecer */
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
 
 #camposEntrega textarea,
 #camposEntrega select {
-    margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
-#camposEntrega label[for="bairroSelect"] { /* Estilo para "Bairro:" */
-    font-weight: 600;
-    color: var(--text-color);
-    font-size: 0.9rem;
+#camposEntrega label[for="bairroSelect"] {
+  /* Estilo para "Bairro:" */
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.9rem;
 }
 
 #taxaEntregaInfo {
-    font-weight: 600;
-    color: #ff6b01; 
-    min-height: 1.2em; 
-    margin-top: 8px; /* Espaçamento acima da taxa */
-    font-size: 0.95rem; /* Tamanho um pouco maior */
+  font-weight: 600;
+  color: #ff6b01;
+  min-height: 1.2em;
+  margin-top: 8px; /* Espaçamento acima da taxa */
+  font-size: 0.95rem; /* Tamanho um pouco maior */
 }
 
 /* Classe para ocultar elementos (já deve existir, mas garantindo) */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 /* Ajustes para o modo escuro */
 .dark-mode .tipo-servico-container,
 .dark-mode #camposEntrega {
-    background-color: var(--card-bg); 
-    border-color: var(--input-border);
+  background-color: var(--card-bg);
+  border-color: var(--input-border);
 }
 
 .dark-mode .tipo-servico-container label, /* Label principal */
 .dark-mode .tipo-servico-container label[for*="tipoServico"], /* Labels dos radios */
-.dark-mode #camposEntrega label[for="bairroSelect"] { /* Label "Bairro:" */
-    color: var(--text-color);
+.dark-mode #camposEntrega label[for="bairroSelect"] {
+  /* Label "Bairro:" */
+  color: var(--text-color);
 }
 
 .dark-mode #taxaEntregaInfo {
-    color: #ff9800; 
+  color: #ff9800;
 }
 
 /* Se você tinha .cart-info-taxa-entrega, pode remover ou adaptar.
@@ -1984,7 +1993,70 @@ button {
 
 /* Garante que o select de bairro use o estilo base .forma-pagamento */
 #bairroSelect.forma-pagamento {
-    /* Herda estilos de .forma-pagamento */
-    /* Você pode adicionar ou sobrescrever estilos específicos aqui se necessário */
-    margin-top: 5px; /* Pequeno espaço acima do select */
+  /* Herda estilos de .forma-pagamento */
+  /* Você pode adicionar ou sobrescrever estilos específicos aqui se necessário */
+  margin-top: 5px; /* Pequeno espaço acima do select */
+}
+
+.promocao-badge {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px 0;
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.promocao-badge.namorados {
+  background: linear-gradient(45deg, #ff1493, #ff69b4);
+  font-size: 1em;
+}
+
+.preco-antigo {
+  color: #666;
+  font-size: 0.9em;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.preco-riscado {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.preco-novo {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.dark-mode .preco-antigo {
+  color: #999;
+}
+
+.dark-mode .preco-riscado {
+  color: #777;
+}
+
+.dark-mode .preco-novo {
+  color: #ff8e8e;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dark-mode .promocao-badge {
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }

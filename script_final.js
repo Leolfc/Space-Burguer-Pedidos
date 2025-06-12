@@ -487,17 +487,17 @@ function criarModalAdicionais() {
   const observacoesDiv = document.createElement("div");
   observacoesDiv.className = "observacoes-container";
   observacoesDiv.innerHTML = `
-      <h4>Observações</h4>
-      <p class="observacao-exemplo">Ex: retirar tomate, sem cebola, etc.</p>
-      <textarea id="observacoes-pedido" placeholder="Alguma observação sobre o preparo?"></textarea>
-      <div class="opcoes-rapidas">
-        <button type="button" class="opcao-rapida" data-texto="Sem tomate">Sem tomate</button>
-        <button type="button" class="opcao-rapida" data-texto="Sem cebola">Sem cebola</button>
-        <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
-        <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
-        <button type="button" class="opcao-rapida" data-texto="Bem passado">Bem passado</button>
-        <button type="button" class="opcao-rapida" data-texto="Ao ponto">Ao ponto</button>
-        <button type="button" class="opcao-rapida" data-texto="Mal passado">Mal passado</button>
+    <h4>Observações</h4>
+    <p class="observacao-exemplo">Ex: retirar tomate, sem cebola, etc.</p>
+    <textarea id="observacoes-pedido" placeholder="Alguma observação sobre o preparo?"></textarea>
+    <div class="opcoes-rapidas">
+      <button type="button" class="opcao-rapida" data-texto="Sem tomate">Sem tomate</button>
+      <button type="button" class="opcao-rapida" data-texto="Sem cebola">Sem cebola</button>
+      <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
+      <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
+      <button type="button" class="opcao-rapida" data-texto="Bem passado">Bem passado</button>
+      <button type="button" class="opcao-rapida" data-texto="Ao ponto">Ao ponto</button>
+      <button type="button" class="opcao-rapida" data-texto="Mal passado">Mal passado</button>
       </div>`;
   adicionaisContainer.appendChild(observacoesDiv);
   observacoesDiv.querySelectorAll(".opcao-rapida").forEach((opcao) => {
@@ -1060,45 +1060,45 @@ function atualizarCarrinho() {
       });
       for (const [id, info] of Object.entries(adicionaisContagem)) {
         adicionaisHtml += `<small class="adicional-item">
-            <span class="adicional-badge">${info.quantidade}x</span> 
-            ${info.nome} 
-            <span class="adicional-preco">(R$ ${(
-              info.preco * info.quantidade
-            ).toFixed(2)})</span>
-          </small>`;
+          <span class="adicional-badge">${info.quantidade}x</span> 
+          ${info.nome} 
+          <span class="adicional-preco">(R$ ${(
+            info.preco * info.quantidade
+          ).toFixed(2)})</span>
+        </small>`;
       }
       adicionaisHtml += "</div>";
     }
 
     if (item.observacoes) {
       observacoesHtml = `<div class="observacoes-list">
-          <small class="observacao"><span class="observacao-badge">Obs:</span> ${item.observacoes}</small>
-        </div>`;
+        <small class="observacao"><span class="observacao-badge">Obs:</span> ${item.observacoes}</small>
+      </div>`;
     }
 
     divItem.innerHTML = `
-        <div class="cart-item-name">
-          ${itemNome}
-          ${adicionaisHtml}
-          ${observacoesHtml}
-        </div>
-        <div class="cart-item-actions">
-          <button type="button" class="btn-editar-item" data-item-id="${
-            item.uniqueId
-          }" title="Editar item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-          </button>
+      <div class="cart-item-name">
+        ${itemNome}
+        ${adicionaisHtml}
+        ${observacoesHtml}
+      </div>
+      <div class="cart-item-actions">
+        <button type="button" class="btn-editar-item" data-item-id="${
+          item.uniqueId
+        }" title="Editar item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
           <div class="cart-item-price">R$ ${subtotalItemCarrinho.toFixed(
             2
           )}</div>
-          <button type="button" class="btn-remove-item" data-item-id="${
-            item.uniqueId
-          }">×</button>
-        </div>
-      `;
+        <button type="button" class="btn-remove-item" data-item-id="${
+          item.uniqueId
+        }">×</button>
+      </div>
+    `;
     itensCarrinhoDiv.appendChild(divItem);
 
     const btnRemover = divItem.querySelector(
@@ -1253,142 +1253,151 @@ function configurarBotoesFlutuantes() {
 function configurarBotaoWhatsApp() {
   const btnWhatsApp = document.getElementById("btnFinalizarWhatsapp");
   if (btnWhatsApp) {
-    btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
-  }
-}
+    btnWhatsApp.addEventListener("click", async function () {
+      const nome = document.getElementById("nomeCliente").value;
+      const endereco = document.getElementById("enderecoCliente").value;
+      const formaPagamento = document.getElementById("formaPagamento").value;
+      const tipoServico = document.querySelector(
+        'input[name="tipoServico"]:checked'
+      ).value;
+      const bairro = document.getElementById("bairroSelect").value;
 
-// MODIFICADO: Função para enviar o pedido via WhatsApp
-function enviarPedidoWhatsApp() {
-  if (Object.keys(carrinho.itens).length === 0) {
-    mostrarNotificacao(
-      "Adicione itens ao carrinho antes de finalizar o pedido"
-    );
-    return;
-  }
+      if (
+        !nome ||
+        !formaPagamento ||
+        (tipoServico === "entrega" && (!endereco || !bairro))
+      ) {
+        alert("Por favor, preencha todos os campos obrigatórios!");
+        return;
+      }
 
-  if (!carrinho.nomeCliente) {
-    mostrarNotificacao("Por favor, informe seu nome");
-    const nomeClienteInput = document.getElementById("nomeCliente");
-    if (nomeClienteInput) nomeClienteInput.focus();
-    return;
-  }
-
-  if (carrinho.tipoServico === "entrega") {
-    if (!carrinho.enderecoCliente) {
-      mostrarNotificacao(
-        "Por favor, informe seu endereço completo para entrega."
-      );
-      const enderecoClienteInput = document.getElementById("enderecoCliente");
-      if (enderecoClienteInput) enderecoClienteInput.focus();
-      return;
-    }
-    if (!carrinho.bairroSelecionado || carrinho.bairroSelecionado === "") {
-      mostrarNotificacao("Por favor, selecione o bairro para entrega.");
-      const bairroSelect = document.getElementById("bairroSelect");
-      if (bairroSelect) bairroSelect.focus();
-      return;
-    }
-    if (
-      carrinho.bairroSelecionado === "Outro Bairro (Consultar)" &&
-      carrinho.taxaEntrega === 0
-    ) {
-      // Adicionado && carrinho.taxaEntrega === 0
-      mostrarNotificacao(
-        "Para 'Outro Bairro', a taxa será informada após o contato. Continue se desejar ou aguarde contato."
-      );
-    }
-  }
-
-  if (!carrinho.formaPagamento) {
-    mostrarNotificacao("Por favor, selecione uma forma de pagamento");
-    const formaPagamentoSelect = document.getElementById("formaPagamento");
-    if (formaPagamentoSelect) formaPagamentoSelect.focus();
-    return;
-  }
-
-  const numeroWhatsApp = "5543996114268";
-  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
-  mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
-
-  if (carrinho.tipoServico === "entrega") {
-    mensagem += `*🛵 Tipo de Serviço:* Entrega\n`;
-    mensagem += `*🏠 Endereço:* ${carrinho.enderecoCliente}\n`;
-    mensagem += `*🏘️ Bairro:* ${carrinho.bairroSelecionado}\n`;
-    if (carrinho.bairroSelecionado === "Outro Bairro (Consultar)") {
-      mensagem += `*💰 Taxa de Entrega:* (A CONSULTAR)\n`;
-    } else {
-      mensagem += `*💰 Taxa de Entrega:* R$ ${carrinho.taxaEntrega.toFixed(
-        2
-      )}\n`;
-    }
-  } else {
-    mensagem += `*🛍️ Tipo de Serviço:* Retirada na Loja\n`;
-  }
-
-  mensagem += `*💳 Forma de Pagamento:* ${carrinho.formaPagamento}\n\n`;
-  mensagem += `*📝 ITENS DO PEDIDO:*\n`;
-
-  let contadorItensMsg = 1; // Renomeado para evitar conflito
-  for (const itemId in carrinho.itens) {
-    const item = carrinho.itens[itemId];
-    // const valorItem = item.valor; // Não precisa mais aqui
-    // const valorAdicionais = item.adicionaisTotal || 0; // Não precisa mais aqui
-
-    mensagem += `\n*${contadorItensMsg}. ${item.nome}*\n`;
-
-    if (item.observacoes) {
-      mensagem += `   ✏️ _Obs: ${item.observacoes}_\n`;
-    }
-
-    if (item.adicionais && item.adicionais.length > 0) {
-      const adicionaisContagem = {};
-      item.adicionais.forEach((adicional) => {
-        if (!adicionaisContagem[adicional.id]) {
-          adicionaisContagem[adicional.id] = {
-            nome: adicional.nome,
-            preco: adicional.preco,
-            quantidade: 1,
-          };
-        } else {
-          adicionaisContagem[adicional.id].quantidade++;
+      const itens = [];
+      document.querySelectorAll(".item").forEach((item) => {
+        const quantidade = parseInt(
+          item.querySelector(".item-qty").textContent
+        );
+        if (quantidade > 0) {
+          itens.push({
+            nome: item.dataset.nome,
+            quantidade: quantidade,
+            preco: parseFloat(item.dataset.valor),
+            observacao: item.querySelector(".observacao-texto")?.value || "",
+          });
         }
       });
 
-      mensagem += `   ➕ *Adicionais:*\n`;
-      for (const [id, info] of Object.entries(adicionaisContagem)) {
-        mensagem += `     - ${info.quantidade}x ${info.nome} (+ R$ ${(
-          info.preco * info.quantidade
-        ).toFixed(2)})\n`;
+      if (itens.length === 0) {
+        alert("Adicione pelo menos um item ao carrinho!");
+        return;
       }
-    }
-    contadorItensMsg++;
+
+      const total = itens.reduce(
+        (acc, item) => acc + item.preco * item.quantidade,
+        0
+      );
+      const taxaEntrega =
+        tipoServico === "entrega"
+          ? parseFloat(
+              document
+                .getElementById("taxaEntregaInfo")
+                .textContent.match(/R\$ (\d+,\d+)/)[1]
+                .replace(",", ".")
+            )
+          : 0;
+      const totalComTaxa = total + taxaEntrega;
+
+      const pedido = {
+        cliente: {
+          nome: nome,
+          endereco: endereco,
+          bairro: bairro,
+        },
+        itens: itens,
+        total: totalComTaxa,
+        formaPagamento: formaPagamento,
+        tipoServico: tipoServico,
+        status: "pendente",
+        data: new Date(),
+      };
+
+      try {
+        // Salvar pedido no MongoDB
+        await salvarPedido(pedido);
+
+        // Formatar mensagem para WhatsApp
+        let mensagem = `*Novo Pedido - Space Burguer Delivery* 🚀\n\n`;
+        mensagem += `*Cliente:* ${nome}\n`;
+        mensagem += `*Tipo de Serviço:* ${
+          tipoServico === "entrega" ? "Entrega" : "Retirada"
+        }\n`;
+
+        if (tipoServico === "entrega") {
+          mensagem += `*Endereço:* ${endereco}\n`;
+          mensagem += `*Bairro:* ${bairro}\n`;
+        }
+
+        mensagem += `*Forma de Pagamento:* ${formaPagamento}\n\n`;
+        mensagem += `*Itens do Pedido:*\n`;
+
+        itens.forEach((item) => {
+          mensagem += `- ${item.quantidade}x ${item.nome} - R$ ${(
+            item.preco * item.quantidade
+          ).toFixed(2)}\n`;
+          if (item.observacao) {
+            mensagem += `  Obs: ${item.observacao}\n`;
+          }
+        });
+
+        mensagem += `\n*Subtotal:* R$ ${total.toFixed(2)}\n`;
+        if (taxaEntrega > 0) {
+          mensagem += `*Taxa de Entrega:* R$ ${taxaEntrega.toFixed(2)}\n`;
+        }
+        mensagem += `*Total:* R$ ${totalComTaxa.toFixed(2)}\n\n`;
+        mensagem += `*Data e Hora:* ${new Date().toLocaleString()}`;
+
+        // Codificar a mensagem para URL
+        const mensagemCodificada = encodeURIComponent(mensagem);
+
+        // Número do WhatsApp (substitua pelo seu número)
+        const numeroWhatsapp = "5511999999999";
+
+        // Abrir WhatsApp com a mensagem
+        window.open(
+          `https://wa.me/${numeroWhatsapp}?text=${mensagemCodificada}`,
+          "_blank"
+        );
+
+        // Limpar carrinho
+        limparCarrinho();
+      } catch (error) {
+        console.error("Erro ao processar pedido:", error);
+        alert("Erro ao processar pedido. Por favor, tente novamente.");
+      }
+    });
   }
-
-  mensagem += `\n----------------------------------\n`;
-  mensagem += `*TOTAL DO PEDIDO: R$ ${carrinho.total.toFixed(2)}*\n`;
-  if (
-    carrinho.tipoServico === "entrega" &&
-    carrinho.taxaEntrega > 0 &&
-    carrinho.bairroSelecionado !== "Outro Bairro (Consultar)"
-  ) {
-    mensagem += `_(Itens + Taxa de Entrega)_`;
-  } else if (
-    carrinho.tipoServico === "entrega" &&
-    carrinho.bairroSelecionado === "Outro Bairro (Consultar)"
-  ) {
-    mensagem += `_(Itens + Taxa de Entrega A CONSULTAR)_`;
-  }
-  mensagem += `\n----------------------------------\n\n`;
-
-  mensagem += `Obrigado pelo seu pedido! Entraremos em contato em breve para confirmar.`;
-
-  const mensagemCodificada = encodeURIComponent(mensagem);
-  const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
-
-  window.open(urlWhatsApp, "_blank");
-  mostrarNotificacao("Redirecionando para o WhatsApp...");
 }
-// FIM MODIFICADO
+
+// Função para salvar pedido no MongoDB
+async function salvarPedido(pedido) {
+  try {
+    const response = await fetch("/api/pedidos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pedido),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao salvar pedido");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao salvar pedido:", error);
+    throw error;
+  }
+}
 
 function configurarCamposObservacao() {
   const itemsParaObservacao = document.querySelectorAll(
@@ -1401,10 +1410,10 @@ function configurarCamposObservacao() {
       observacaoDiv.className = "item-observacao";
       observacaoDiv.style.display = "none";
       observacaoDiv.innerHTML = `
-          <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-          <div class="observacao-botoes">
-            <button type="button" class="btn-confirmar-obs">Confirmar</button>
-            <button type="button" class="btn-cancelar-obs">Cancelar</button>
+        <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
+        <div class="observacao-botoes">
+          <button type="button" class="btn-confirmar-obs">Confirmar</button>
+          <button type="button" class="btn-cancelar-obs">Cancelar</button>
           </div>`;
       const itemActions = item.querySelector(".item-actions");
       if (itemActions) {
@@ -1417,8 +1426,8 @@ function configurarCamposObservacao() {
       adicionalSelector.className = "adicional-selector";
       adicionalSelector.style.display = "none";
       adicionalSelector.innerHTML = `
-          <select>
-            <option value="">Selecione um adicional (opcional)</option>
+        <select>
+          <option value="">Selecione um adicional (opcional)</option>
           </select>`;
       if (observacaoDiv) {
         observacaoDiv.insertAdjacentElement("afterend", adicionalSelector);
