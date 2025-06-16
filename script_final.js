@@ -25,6 +25,7 @@ const taxasDeEntrega = {
   "Vila Maria": 8.0,
   "Vila Esperança": 8.0,
   "Vila Rondon": 7.0,
+  "Vila Silas Peixoto":8.0,
   "Residencial Pompeia I": 8.0,
   "Residencial Pompeia II": 8.0,
   "Residencial Pompeia III": 8.0,
