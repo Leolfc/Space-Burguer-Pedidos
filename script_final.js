@@ -25,10 +25,10 @@ const taxasDeEntrega = {
   "Vila Maria": 8.0,
   "Vila Esperança": 8.0,
   "Vila Rondon": 7.0,
-  "Residencial Pompeia I": 8.0,
-  "Residencial Pompeia II": 8.0,
-  "Residencial Pompeia III": 8.0,
+  "Villa Aggeu": 8.0,
+  "Residencial Pompeia I, II, III ": 8.0,
   "Jardim Miguel Afonso": 7.0,
+  "Jardim Scylla Peixoto": 8.0,
   "Jardim Alves": 7.0,
   "Jardim Castro": 8.0,
   "Jardim Europa": 7.0,
@@ -40,8 +40,7 @@ const taxasDeEntrega = {
   "Vila Leão": 10.0,
   "Parque dos Mirantes": 7.0,
   "Novo Aeroporto": 14.0,
-  "Jardim São Luis 1": 8.0,
-  "Jardim São Luis 2": 8.0,
+  "Jardim São Luis I, II": 8.0,
   "Papagaio": 8.0,
   "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
 };
@@ -290,7 +289,8 @@ function adicionarBotoesObservacao() {
           <button type="button" class="opcao-rapida" data-texto="Sem cebola">Sem cebola</button>
           <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
           <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
-          <button type="button" class="opcao-rapida" data-texto="Trocar queijo cheddar por mussarela">Trocar queijo cheddar por mussarela</button>
+          
+          
         </div>
         <div class="observacao-botoes">
           <button type="button" class="btn-confirmar-obs">Confirmar</button>
