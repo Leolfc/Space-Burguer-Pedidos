@@ -21,7 +21,7 @@ const taxasDeEntrega = {
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
-  "Vila Silas": 8.0,
+  "Vila Silas": 7.0,
   "Vila São Pedro": 7.0,
   "Vila Maria": 8.0,
   "Vila Esperança": 8.0,
