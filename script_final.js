@@ -31,6 +31,7 @@ const taxasDeEntrega = {
   "Jardim Miguel Afonso": 7.0,
   "Jardim Scylla Peixoto": 8.0,
   "Jardim Alves": 7.0,
+  "Jardim América": 7.0,
   "Jardim Castro": 8.0,
   "Jardim Europa": 7.0,
   "Jardim Canada": 7.0,
