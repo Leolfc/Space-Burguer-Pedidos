@@ -8,6 +8,8 @@ const adicionais = {
   bacon: { nome: "Bacon", preco: 8.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
+  ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
+  salsicha: { nome: "Salsicha", preco: 2.0 },
   tomate: { nome: "Tomate", preco: 2.0 },
   cebolaRoxa: { nome: "Cebola Roxa", preco: 2.5 },
   catupiry: { nome: "Catupiry", preco: 8.0 },
@@ -17,7 +19,7 @@ const adicionais = {
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
-  "Centro": 6.0,
+  Centro: 6.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
@@ -44,7 +46,7 @@ const taxasDeEntrega = {
   "Parque dos Mirantes": 7.0,
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I, II": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
 };
 // FIM NOVO
