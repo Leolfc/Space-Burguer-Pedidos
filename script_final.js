@@ -28,6 +28,7 @@ const taxasDeEntrega = {
   "Vila Maria": 8.0,
   "Vila Esperança": 8.0,
   "Vila Rondon": 7.0,
+  "Vila Rosa": 6.0,
   "Villa Aggeu": 8.0,
   "Residencial Pompeia I, II, III ": 8.0,
   "Jardim Miguel Afonso": 7.0,
@@ -1266,7 +1267,8 @@ function configurarBotaoWhatsApp() {
 }
 
 // MODIFICADO: Função para enviar o pedido via WhatsApp
-function enviarPedidoWhatsApp() {
+// MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
+async function enviarPedidoWhatsApp() { // Adicionamos 'async' para usar 'await'
   if (Object.keys(carrinho.itens).length === 0) {
     mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
@@ -1300,7 +1302,6 @@ function enviarPedidoWhatsApp() {
       carrinho.bairroSelecionado === "Outro Bairro (Consultar)" &&
       carrinho.taxaEntrega === 0
     ) {
-      // Adicionado && carrinho.taxaEntrega === 0
       mostrarNotificacao(
         "Para 'Outro Bairro', a taxa será informada após o contato. Continue se desejar ou aguarde contato."
       );
@@ -1313,6 +1314,32 @@ function enviarPedidoWhatsApp() {
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
+
+  // NOVO: Envia o pedido para o nosso back-end
+  try {
+    const response = await fetch('/novo-pedido', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carrinho), // Envia todo o objeto do carrinho
+    });
+
+    if (!response.ok) {
+        // Se a resposta do servidor não for OK, exibe um erro mas continua
+        throw new Error('Falha ao enviar pedido para o servidor');
+    }
+
+    const result = await response.json();
+    console.log('Resposta do servidor:', result.message);
+    // Você pode exibir uma notificação de sucesso se desejar
+
+  } catch (error) {
+      console.error('Erro ao enviar pedido para o back-end:', error);
+      // Informa ao usuário que pode ter havido um problema, mas o pedido ainda pode ser enviado pelo WhatsApp
+      mostrarNotificacao('Erro ao registrar pedido. Tente finalizar pelo WhatsApp.');
+  }
+  // FIM NOVO
 
   const numeroWhatsApp = "5543996114268";
   let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
@@ -1336,12 +1363,9 @@ function enviarPedidoWhatsApp() {
   mensagem += `*💳 Forma de Pagamento:* ${carrinho.formaPagamento}\n\n`;
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
 
-  let contadorItensMsg = 1; // Renomeado para evitar conflito
+  let contadorItensMsg = 1;
   for (const itemId in carrinho.itens) {
     const item = carrinho.itens[itemId];
-    // const valorItem = item.valor; // Não precisa mais aqui
-    // const valorAdicionais = item.adicionaisTotal || 0; // Não precisa mais aqui
-
     mensagem += `\n*${contadorItensMsg}. ${item.nome}*\n`;
 
     if (item.observacoes) {
@@ -1387,7 +1411,6 @@ function enviarPedidoWhatsApp() {
     mensagem += `_(Itens + Taxa de Entrega A CONSULTAR)_`;
   }
   mensagem += `\n----------------------------------\n\n`;
-
   mensagem += `Obrigado pelo seu pedido! Entraremos em contato em breve para confirmar.`;
 
   const mensagemCodificada = encodeURIComponent(mensagem);
