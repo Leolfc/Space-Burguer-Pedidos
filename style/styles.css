@@ -189,10 +189,12 @@ section {
 
 section h2 {
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.5rem !important;
   border-bottom: 2px solid #ff5722;
   padding-bottom: 8px;
   margin-bottom: 15px;
+  font-family: "Bungee", sans-serif;
+
 }
 
 /* Grid de itens */
@@ -226,7 +228,9 @@ section h2 {
 }
 
 .item-name {
-  font-weight: 600;
+  /* font-weight: 600; */
+  font-size: 1.2rem;
+  font-family: "Bungee", sans-serif;
   flex: 1;
   margin-right: 10px;
 }
