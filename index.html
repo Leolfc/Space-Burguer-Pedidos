@@ -1,918 +1,1497 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Space Burguer🚀</title>
-    <link rel="stylesheet" href="./style/styles.css">
-    <link rel="stylesheet" href="./style/itemNovo.css">
-    <link rel="stylesheet" href="./style/frasesEducadas.css">
-    <link rel="stylesheet" href="./style/rodape.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="img/imagemFavicon.png" type="image/x-icon">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-     <!-- fonte Google -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Chewy&family=Fredoka:wght@300..700&family=Lilita+One&family=Lobster&family=Luckiest+Guy&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="./style/styles.css" />
+    <link rel="stylesheet" href="./style/itemNovo.css" />
+    <link rel="stylesheet" href="./style/frasesEducadas.css" />
+    <link rel="stylesheet" href="./style/rodape.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="img/imagemFavicon.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- fonte Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Chewy&family=Fredoka:wght@300..700&family=Lilita+One&family=Lobster&family=Luckiest+Guy&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <header>
-        <div class="atendimento-info">
-            <p class="atendimento-info_paragrafo">Atendimento: Quarta a Segunda, das 18:50 às 23:00</p>
-        </div>
-        <h1>Space Burguer Delivery🚀</h1>
-        <p class="subtitle">Faça seu pedido</p>
+      <div class="atendimento-info">
+        <p class="atendimento-info_paragrafo">
+          Atendimento: Quarta a Segunda, das 18:50 às 23:00
+        </p>
+      </div>
+      <h1>Space Burguer Delivery🚀</h1>
+      <p class="subtitle">Faça seu pedido</p>
     </header>
 
     <div class="theme-toggle">
-        <button id="theme-toggle-btn">🌙 Modo Escuro</button>
+      <button id="theme-toggle-btn">🌙 Modo Escuro</button>
     </div>
 
     <div class="search-container">
-        <div class="search-box">
-            <input type="text" id="pesquisaInput" placeholder="Pesquisar lanches...">
-            <button id="btnPesquisar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </button>
-        </div>
-        <div class="search-results">
-            <span id="searchResultsCount"></span>
-        </div>
+      <div class="search-box">
+        <input
+          type="text"
+          id="pesquisaInput"
+          placeholder="Pesquisar lanches..."
+        />
+        <button id="btnPesquisar">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="search-results">
+        <span id="searchResultsCount"></span>
+      </div>
     </div>
 
     <main>
-        <div class="container">
-            <div class="menu-container">
-                <form id="pedidoForm">
-                    <section>
-                        <h2>Space Burguer´s</h2>
-                        <div class="item-container">
-                            <div class="item" data-id="spaceClassic" data-nome="Space Classic" data-valor="21.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Classic</span>
-                                    <span class="item-price">R$ 21,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item  " data-id="spaceSalad" data-nome="Space Salad" data-valor="23.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Salad</span>
-                                    <span class="item-price">R$ 23,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, alface americana, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceBacon" data-nome="Space Bacon" data-valor="33.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Bacon</span>
-                                    <span class="item-price">R$ 33,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, <span class="item_em_dobro">BACON EM DOBRO</span>, alface americana, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceExplosao" data-nome="Space Explosão" data-valor="34.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Explosão</span>
-                                    <span class="item-price">R$ 34,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal 160g, queijo cheddar, crispy crocante de bacon, cebola caramelizada, alface americana e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceDuplo" data-nome="Space Duplo" data-valor="38.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Duplo</span>
-                                    <span class="item-price">R$ 38,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, 2 hambúrgueres artesanais de 160g, queijo cheddar <span class="item_em_dobro">EM DOBRO</span>, tomate, picles e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceBurguer" data-nome="Space Burguer" data-valor="41.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Burguer</span>
-                                    <span class="item-price">R$ 41,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 200g recheado c/ catupiry, queijo cheddar, bacon, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceMarter" data-nome="Space Marte" data-valor="35.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Marte</span>
-                                    <span class="item-price">R$ 35,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesal de 180g, bacon crocante, queijo cheddar, picles, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spaceDoritos" data-nome="Space Doritos" data-valor="31.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Doritos</span>
-                                    <span class="item-price">R$ 31,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesal de 160g, doritos,<span class="item_em_dobro">queijo cheddar EM DOBRO</span>, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="spacePlutao" data-nome="Space Plutão" data-valor="33.40" data-tipo="hamburguer"> <div class="item-info">
-                                    <span class="item-name">Space Plutão</span>
-                                    <span class="item-price">R$ 33,40</span>
-                                   
-                                </div>
-                                 <h4 class="item_novo">Novo</h4>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo Mussarela, bacon, <span class="item_em_dobro">TOMATE CHAPIADO</span>, cebola roxa, barbercue e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section>
-                        <h2>Smash Burguer's</h2>
-                        <div class="item-container">
-                            <div class="item" data-id="smashClassic" data-nome="Smash Classic" data-valor="18.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Classic</span>
-                                    <span class="item-price">R$ 18,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashSalad" data-nome="Smash Salad" data-valor="20.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Salad</span>
-                                    <span class="item-price">R$ 20,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, alface americana, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashBacon" data-nome="Smash Bacon" data-valor="28.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Bacon</span>
-                                    <span class="item-price">R$ 28,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, <span class="item_em_dobro">BACON EM DOBRO</span>, alface americana e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashExplosao" data-nome="Smash Explosão" data-valor="29.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Explosão</span>
-                                    <span class="item-price">R$ 29,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, crispy crocante de bacon, cebola caramelizada e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashDuplo" data-nome="Smash Duplo" data-valor="31.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Duplo</span>
-                                    <span class="item-price">R$ 31,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, 2 hambúrgueres artesanais de 95g, queijo cheddar <span class="item_em_dobro">EM DOBRO</span>, tomate, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashDoritos" data-nome="Smash Doritos" data-valor="27.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Doritos</span>
-                                    <span class="item-price">R$ 27,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal 95g, doritos, queijo cheddar, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashPlutao" data-nome="Smash Plutão" data-valor="29.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Plutão</span>
-                                    <span class="item-price">R$ 29,40</span>
-                                   
-                                </div>
-                                 <h4 class="item_novo">Novo</h4>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesal de 95g, queijo mussarela, bacon, <span class="item_em_dobro">TOMATE CHAPIADO</span>, cebola roxa, barbercue e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section>
-                        <h2>Novos Burguer's</h2>
-                        <div class="item-container">
-                            <div class="item" data-id="spaceCalabresa" data-nome="Space Calabresa" data-valor="33.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Calabresa</span>
-                                    <span class="item-price">R$ 33,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, 100g de calabresa, queijo mussarela, tomate, alface, barbecue e molho especial da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashCalabresa" data-nome="Smash Calabresa" data-valor="28.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Calabresa</span>
-                                    <span class="item-price">R$ 28,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, 100g de calabresa, queijo mussarela, tomate, alface, barbecue e molho especial da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="smashVenus" data-nome="Smash Vênus" data-valor="30.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Smash Vênus</span>
-                                    <span class="item-price">R$ 30,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 120g, catupiry, picles, cebola roxa e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="item" data-id="spaceDog" data-nome="Space Dog" data-valor="25.90" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Dog</span>
-                                    <span class="item-price">R$ 25,90</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, salsicha, bacon em cubos, vinagrete de tomate com cebola roxa, muçarela e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item indisponivel" data-id="spaceChicken" data-nome="Space Chicken" data-valor="26.40" data-tipo="hamburguer">
-                                <div class="item-info">
-                                    <span class="item-name">Space Chicken</span>
-                                    <span class="item-price">R$ 26,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, 160g de filé de peito de frango, queijo cheddar, alface americana, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                               <div class="item  " data-id="eggBacon" data-nome="Egg Bacon" data-valor="29.90" data-tipo="hamburguer">
-                                
-                                <div class="item-info">
-                                    <span class="item-name ">Egg Bacon </span>
-                                    <div class="preco-promocional">
-                                        <span class="item-price">R$ 29,90</span>
-                                    </div>
-                                </div>
-                                <h4 class="item_novo">Novo</h4>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo mussarela, bacon, Ovo, tomate e molho da casa.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </section>
-                    
-                    <section>
-                        <h2>Combos</h2>
-                        <div class="item-container">
-                            <div class="item" data-id="comboClassic" data-nome="Combo Classic" data-valor="35.40" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Classic</span>
-                                    <span class="item-price">R$ 35,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, tomate e molho da casa. Coca 200ml + fritas de 100g.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="comboSalad" data-nome="Combo Salad" data-valor="37.40" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Salad</span>
-                                    <span class="item-price">R$ 37,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, alface americana, tomate e molho da casa. Coca 200ml + fritas de 100g.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="comboBacon" data-nome="Combo Bacon" data-valor="42.40" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Bacon</span>
-                                    <span class="item-price">R$ 42,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal 160g, queijo cheddar, <span class="item_em_dobro">BACON EM DOBRO</span>, alface americana e molho da casa. Coca 200ml + fritas 100g.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="comboExplosao" data-nome="Combo Explosão" data-valor="44.40" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Explosão</span>
-                                    <span class="item-price">R$ 44,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, bacon crocante, cebola caramelizada, alface americana e molho da casa. Coca 200ml + fritas 100g.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="comboKids" data-nome="Combo Kids" data-valor="27.40" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Kids</span>
-                                    <span class="item-price">R$ 27,40</span>
-                                </div>
-                                <div class="item-desc">Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar, tomate e molho da casa. Suco Kapo + fritas 100g.</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="item" data-id="comboCasal" data-nome="Combo Casal" data-valor="68.50" data-tipo="combo">
-                                <div class="item-info">
-                                    <span class="item-name">Combo Casal</span>
-                                    <div class="preco-promocional">
-                                        
-                                        <span class="item-price">R$ 68,50</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="item-desc">
-                                    <span style="color: #ff5722; font-weight: bold;">Space Classic:</span>
-                                    Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, tomate e molho da casa<br/>
-                                    <span style="color: #2196F3; font-weight: bold;">Space Salad:</span>
-                                    Pão de brioche, hambúrguer artesanal de 160g, queijo cheddar, alface americana, tomate e molho da casa<br/>
-                                    <span style="font-weight: bold;">+ 2 Fritas P + Coca 600ml</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                                <div class="item-observacao" style="display: none;">
-                                    <textarea placeholder="Ex: retirar tomate, sem cebola, etc." class="observacao-texto"></textarea>
-                                    <div class="observacao-botoes">
-                                        <button type="button" class="btn-confirmar-obs">Confirmar</button>
-                                        <button type="button" class="btn-cancelar-obs">Cancelar</button>
-                                    </div>
-                                </div>
-                                <div class="adicional-selector" style="display: none;">
-                                    <select>
-                                        <option value="">Selecione um adicional (opcional)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section>
-                        <h2>Porções</h2>
-                        <div class="item-container">
-                            <div class="item" data-id="fritasP" data-nome="Fritas P" data-valor="10.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Fritas P</span>
-                                    <span class="item-price">R$ 10,90</span>
-                                </div>
-                                <div class="item-desc">Porção de fritas pequena (100g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="fritasM" data-nome="Fritas M" data-valor="11.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Fritas M</span>
-                                    <span class="item-price">R$ 11,90</span>
-                                </div>
-                                <div class="item-desc">Porção de fritas média (150g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="onionRingsP" data-nome="Onion Rings P" data-valor="9.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Onion Rings P</span>
-                                    <span class="item-price">R$ 9,90</span>
-                                </div>
-                                <div class="item-desc">Porção de onion rings pequena (100g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="onionRingsM" data-nome="Onion Rings M" data-valor="10.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Onion Rings M</span>
-                                    <span class="item-price">R$ 10,90</span>
-                                </div>
-                                <div class="item-desc">Porção de onion rings média (150g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="neggutsP" data-nome="Negguts P" data-valor="8.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Negguts P</span>
-                                    <span class="item-price">R$ 8,90</span>
-                                </div>
-                                <div class="item-desc">Porção de negguts pequena (100g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="neggutsM" data-nome="Negguts M" data-valor="9.90" data-tipo="porcao">
-                                <div class="item-info">
-                                    <span class="item-name">Negguts M</span>
-                                    <span class="item-price">R$ 9,90</span>
-                                </div>
-                                <div class="item-desc">Porção de negguts média (150g)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section>
-                        <h2>Bebidas</h2>
-                        
-                        <h3 class="subcategoria">Águas</h3>
-                        <div class="item-container">
-                            <div class="item" data-id="aguaComGas" data-nome="Água com Gás" data-valor="3.50" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Água com Gás</span>
-                                    <span class="item-price">R$ 4,00</span>
-                                </div>
-                                <div class="item-desc">Água mineral com gás (350ml)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="aguaSemGas" data-nome="Água sem Gás" data-valor="3.50" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Água sem Gás</span>
-                                    <span class="item-price">R$ 4,00</span>
-                                </div>
-                                <div class="item-desc">Água mineral sem gás (350ml)</div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="subcategoria">Refrigerantes 350ml</h3>
-                        <div class="item-container">
-                            <div class="item" data-id="guaranaAntartica" data-nome="Guaraná Antartica 350ml" data-valor="6.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Guaraná Antartica 350ml</span>
-                                    <span class="item-price">R$ 6,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="cocaCola350" data-nome="Coca-Cola Original 350ml" data-valor="7.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Original 350ml</span>
-                                    <span class="item-price">R$ 7,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="cocaCola350Zero" data-nome="Coca-Cola Zero 350ml" data-valor="7.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Zero 350ml</span>
-                                    <span class="item-price">R$ 7,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="fanta350" data-nome="Fanta 350ml" data-valor="6.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Fanta 350ml</span>
-                                    <span class="item-price">R$ 6,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="sprite350" data-nome="Sprite 350ml" data-valor="6.00" data-tipo="bebida">
-                                    <div class="item-info">
-                                        <span class="item-name">Sprite 350ml</span>
-                                        <span class="item-price">R$ 6,00</span>
-                                    </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 class="subcategoria">Refrigerantes 600ml</h3>
-                        <div class="item-container">
-                            <div class="item" data-id="cocaCola600" data-nome="Coca-Cola Original 600ml" data-valor="9.50" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Original 600ml</span>
-                                    <span class="item-price">R$ 9,50</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="cocaColaZero600" data-nome="Coca-Cola Zero 600ml" data-valor="9.50" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Zero 600ml</span>
-                                    <span class="item-price">R$ 9,50</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                       
-                        
-                        <h3 class="subcategoria">Refrigerantes 2L</h3>
-                        <div class="item-container">
-                            <div class="item" data-id="cocaCola2L" data-nome="Coca-Cola Original 2L" data-valor="15.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Original 2L</span>
-                                    <span class="item-price">R$ 15,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="item" data-id="cocaColaZero2L" data-nome="Coca-Cola Zero 2L" data-valor="15.00" data-tipo="bebida">
-                                <div class="item-info">
-                                    <span class="item-name">Coca-Cola Zero 2L</span>
-                                    <span class="item-price">R$ 15,00</span>
-                                </div>
-                                <div class="item-actions">
-                                    <button type="button" class="btn-decrease">-</button>
-                                    <span class="item-qty">0</span>
-                                    <button type="button" class="btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </div>
-            <div class="cart-container">
-                <div id="resumoPedido">
-                    <h2>Carrinho</h2>
-                    <div class="cliente-info">
-                        <input type="text" id="nomeCliente" placeholder="Nome do cliente" autocomplete="off">
-                    </div>
-
-                    <div class="cliente-info tipo-servico-container">
-                        <label>Como você gostaria de receber seu pedido?</label>
-                        <div>
-                            <input type="radio" id="tipoServicoEntrega" name="tipoServico" value="entrega" checked>
-                            <label for="tipoServicoEntrega">Entrega</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="tipoServicoRetirada" name="tipoServico" value="retirada">
-                            <label for="tipoServicoRetirada">Retirada na Loja</label>
-                        </div>
-                    </div>
-
-                    <div id="camposEntrega" class="cliente-info">
-                        <textarea id="enderecoCliente" placeholder="Seu endereço completo (Rua, N°, Ref.)" rows="3"></textarea>
-                        
-                        <label for="bairroSelect" style="margin-top: 10px; display: block;">Bairro:</label>
-                        <select id="bairroSelect" class="forma-pagamento"> <option value="">Selecione o bairro</option>
-                            </select>
-                        <div id="taxaEntregaInfo" style="margin-top: 5px; font-size: 0.9em; color: #ff9800;"></div>
-                    </div>
-                    <div class="cliente-info">
-                        <select id="formaPagamento" class="forma-pagamento">
-                            <option value="">Selecione a forma de pagamento</option>
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="Cartão de Crédito">Cartão</option>
-                            <option value="PIX">PIX</option>
-                        </select>
-                    </div>
-                    <div id="itens-carrinho">
-                        <p class="empty-cart">Seu carrinho está vazio</p>
-                    </div>
-                    <div class="cart-total">
-                        <span>Total</span>
-                        <span id="valorTotal">R$ 0,00</span>
-                    </div>
-                    <div class="cart-buttons">
-                        <button type="button" id="btnLimparCarrinho">Limpar Carrinho</button>
-                    </div>
-                    <div class="cart-buttons" style="margin-top: 10px;">
-                        <button type="button" id="btnFinalizarWhatsapp" class="btn-finalizar-whatsapp">Finalizar Pedido via WhatsApp</button>
-                    </div>
+      <div class="container">
+        <div class="menu-container">
+          <form id="pedidoForm">
+            <section>
+              <h2>Space Burguer´s</h2>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="spaceClassic"
+                  data-nome="Space Classic"
+                  data-valor="21.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Classic</span>
+                    <span class="item-price">R$ 21,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
                 </div>
-            </div>
+                <div
+                  class="item"
+                  data-id="spaceSalad"
+                  data-nome="Space Salad"
+                  data-valor="23.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Salad 🥬</span>
+                    <span class="item-price">R$ 23,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, alface americana, tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceBacon"
+                  data-nome="Space Bacon"
+                  data-valor="33.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Bacon 🥓🥓</span>
+                    <span class="item-price">R$ 33,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, <span class="item_em_dobro">BACON EM DOBRO</span>,
+                    alface americana, cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceExplosao"
+                  data-nome="Space Explosão"
+                  data-valor="34.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Explosão 💣</span>
+                    <span class="item-price">R$ 34,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal 160g, queijo cheddar,
+                    crispy crocante de bacon, cebola caramelizada, alface
+                    americana e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceDuplo"
+                  data-nome="Space Duplo"
+                  data-valor="38.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Duplo</span>
+                    <span class="item-price">R$ 38,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, 2 hambúrgueres artesanais de 160g, queijo
+                    cheddar <span class="item_em_dobro">EM DOBRO</span>, tomate,
+                    picles e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceBurguer"
+                  data-nome="Space Burguer"
+                  data-valor="41.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Burguer</span>
+                    <span class="item-price">R$ 41,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 200g recheado c/
+                    catupiry, queijo cheddar, bacon, cebola roxa e molho da
+                    casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceMarter"
+                  data-nome="Space Marte"
+                  data-valor="35.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Marte</span>
+                    <span class="item-price">R$ 35,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesal de 180g, bacon crocante,
+                    queijo cheddar, picles, cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spaceDoritos"
+                  data-nome="Space Doritos"
+                  data-valor="31.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Doritos</span>
+                    <span class="item-price">R$ 31,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesal de 160g, doritos,<span
+                      class="item_em_dobro"
+                      >queijo cheddar EM DOBRO</span
+                    >, cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="spacePlutao"
+                  data-nome="Space Plutão"
+                  data-valor="33.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Plutão</span>
+                    <span class="item-price">R$ 33,40</span>
+                  </div>
+                  <h4 class="item_novo">Novo</h4>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    Mussarela, bacon,
+                    <span class="item_em_dobro">TOMATE CHAPIADO</span>, cebola
+                    roxa, barbercue e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <h2>Smash Burguer's</h2>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="smashClassic"
+                  data-nome="Smash Classic"
+                  data-valor="18.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Classic</span>
+                    <span class="item-price">R$ 18,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar,
+                    tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashSalad"
+                  data-nome="Smash Salad"
+                  data-valor="20.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Salad</span>
+                    <span class="item-price">R$ 20,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar,
+                    alface americana, tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashBacon"
+                  data-nome="Smash Bacon"
+                  data-valor="28.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Bacon🥓</span>
+                    <span class="item-price">R$ 28,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar,
+                    <span class="item_em_dobro">BACON EM DOBRO</span>, alface
+                    americana e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashExplosao"
+                  data-nome="Smash Explosão"
+                  data-valor="29.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Explosão 🧨</span>
+                    <span class="item-price">R$ 29,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar,
+                    crispy crocante de bacon, cebola caramelizada e molho da
+                    casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashDuplo"
+                  data-nome="Smash Duplo"
+                  data-valor="31.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Duplo</span>
+                    <span class="item-price">R$ 31,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, 2 hambúrgueres artesanais de 95g, queijo
+                    cheddar <span class="item_em_dobro">EM DOBRO</span>, tomate,
+                    cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashDoritos"
+                  data-nome="Smash Doritos"
+                  data-valor="27.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Doritos</span>
+                    <span class="item-price">R$ 27,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal 95g, doritos, queijo
+                    cheddar, cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashPlutao"
+                  data-nome="Smash Plutão"
+                  data-valor="29.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Plutão</span>
+                    <span class="item-price">R$ 29,40</span>
+                  </div>
+                  <h4 class="item_novo">Novo</h4>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesal de 95g, queijo mussarela,
+                    bacon, <span class="item_em_dobro">TOMATE CHAPIADO</span>,
+                    cebola roxa, barbercue e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <h2>Novos Burguer's</h2>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="spaceCalabresa"
+                  data-nome="Space Calabresa"
+                  data-valor="33.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Calabresa</span>
+                    <span class="item-price">R$ 33,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, 100g de
+                    calabresa, queijo mussarela, tomate, alface, barbecue e
+                    molho especial da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashCalabresa"
+                  data-nome="Smash Calabresa"
+                  data-valor="28.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Calabresa</span>
+                    <span class="item-price">R$ 28,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, 100g de
+                    calabresa, queijo mussarela, tomate, alface, barbecue e
+                    molho especial da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="smashVenus"
+                  data-nome="Smash Vênus"
+                  data-valor="30.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Smash Vênus</span>
+                    <span class="item-price">R$ 30,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 120g, catupiry,
+                    picles, cebola roxa e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div
+                  class="item"
+                  data-id="spaceDog"
+                  data-nome="Space Dog"
+                  data-valor="25.90"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Dog🐕</span>
+                    <span class="item-price">R$ 25,90</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, salsicha, bacon em cubos, vinagrete de
+                    tomate com cebola roxa, muçarela e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item indisponivel"
+                  data-id="spaceChicken"
+                  data-nome="Space Chicken"
+                  data-valor="26.40"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Space Chicken🐔</span>
+                    <span class="item-price">R$ 26,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, 160g de filé de peito de frango, queijo
+                    cheddar, alface americana, tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="eggBacon"
+                  data-nome="Egg Bacon"
+                  data-valor="29.90"
+                  data-tipo="hamburguer"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Egg Bacon🥚 </span>
+                    <div class="preco-promocional">
+                      <span class="item-price">R$ 29,90</span>
+                    </div>
+                  </div>
+                  <h4 class="item_novo">Novo</h4>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    mussarela, bacon, Ovo, tomate e molho da casa.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2>Combos</h2>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="comboClassic"
+                  data-nome="Combo Classic"
+                  data-valor="35.40"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Classic</span>
+                    <span class="item-price">R$ 35,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, tomate e molho da casa. Coca 200ml + fritas de
+                    100g.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="comboSalad"
+                  data-nome="Combo Salad"
+                  data-valor="37.40"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Salad 🥬</span>
+                    <span class="item-price">R$ 37,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, alface americana, tomate e molho da casa. Coca
+                    200ml + fritas de 100g.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="comboBacon"
+                  data-nome="Combo Bacon"
+                  data-valor="42.40"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Bacon🥓🥓</span>
+                    <span class="item-price">R$ 42,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal 160g, queijo cheddar,
+                    <span class="item_em_dobro">BACON EM DOBRO</span>, alface
+                    americana e molho da casa. Coca 200ml + fritas 100g.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="comboExplosao"
+                  data-nome="Combo Explosão"
+                  data-valor="44.40"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Explosão💣</span>
+                    <span class="item-price">R$ 44,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, bacon crocante, cebola caramelizada, alface
+                    americana e molho da casa. Coca 200ml + fritas 100g.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="comboKids"
+                  data-nome="Combo Kids"
+                  data-valor="27.40"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Kids</span>
+                    <span class="item-price">R$ 27,40</span>
+                  </div>
+                  <div class="item-desc">
+                    Pão de brioche, hambúrguer artesanal de 95g, queijo cheddar,
+                    tomate e molho da casa. Suco Kapo + fritas 100g.
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="comboCasal"
+                  data-nome="Combo Casal"
+                  data-valor="68.50"
+                  data-tipo="combo"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Combo Casal👫</span>
+                    <div class="preco-promocional">
+                      <span class="item-price">R$ 68,50</span>
+                    </div>
+                  </div>
+
+                  <div class="item-desc">
+                    <span style="color: #ff5722; font-weight: bold"
+                      >Space Classic:</span
+                    >
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, tomate e molho da casa<br />
+                    <span style="color: #2196f3; font-weight: bold"
+                      >Space Salad:</span
+                    >
+                    Pão de brioche, hambúrguer artesanal de 160g, queijo
+                    cheddar, alface americana, tomate e molho da casa<br />
+                    <span style="font-weight: bold"
+                      >+ 2 Fritas P + Coca 600ml</span
+                    >
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                  <div class="item-observacao" style="display: none">
+                    <textarea
+                      placeholder="Ex: retirar tomate, sem cebola, etc."
+                      class="observacao-texto"
+                    ></textarea>
+                    <div class="observacao-botoes">
+                      <button type="button" class="btn-confirmar-obs">
+                        Confirmar
+                      </button>
+                      <button type="button" class="btn-cancelar-obs">
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="adicional-selector" style="display: none">
+                    <select>
+                      <option value="">
+                        Selecione um adicional (opcional)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <h2>Porções</h2>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="fritasP"
+                  data-nome="Fritas P"
+                  data-valor="10.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Fritas P 🍟</span>
+                    <span class="item-price">R$ 10,90</span>
+                  </div>
+                  <div class="item-desc">Porção de fritas pequena (100g)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="fritasM"
+                  data-nome="Fritas M"
+                  data-valor="11.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Fritas M 🍟</span>
+                    <span class="item-price">R$ 11,90</span>
+                  </div>
+                  <div class="item-desc">Porção de fritas média (150g)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="onionRingsP"
+                  data-nome="Onion Rings P"
+                  data-valor="9.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Onion Rings P</span>
+                    <span class="item-price">R$ 9,90</span>
+                  </div>
+                  <div class="item-desc">
+                    Porção de onion rings pequena (100g)
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="onionRingsM"
+                  data-nome="Onion Rings M"
+                  data-valor="10.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Onion Rings M</span>
+                    <span class="item-price">R$ 10,90</span>
+                  </div>
+                  <div class="item-desc">
+                    Porção de onion rings média (150g)
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="neggutsP"
+                  data-nome="Negguts P"
+                  data-valor="8.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Negguts P</span>
+                    <span class="item-price">R$ 8,90</span>
+                  </div>
+                  <div class="item-desc">Porção de negguts pequena (100g)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="neggutsM"
+                  data-nome="Negguts M"
+                  data-valor="9.90"
+                  data-tipo="porcao"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Negguts M</span>
+                    <span class="item-price">R$ 9,90</span>
+                  </div>
+                  <div class="item-desc">Porção de negguts média (150g)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <h2>Bebidas</h2>
+
+              <h3 class="subcategoria">Águas</h3>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="aguaComGas"
+                  data-nome="Água com Gás"
+                  data-valor="3.50"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Água com Gás</span>
+                    <span class="item-price">R$ 4,00</span>
+                  </div>
+                  <div class="item-desc">Água mineral com gás (350ml)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="aguaSemGas"
+                  data-nome="Água sem Gás"
+                  data-valor="3.50"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Água sem Gás</span>
+                    <span class="item-price">R$ 4,00</span>
+                  </div>
+                  <div class="item-desc">Água mineral sem gás (350ml)</div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="subcategoria">Refrigerantes 350ml</h3>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="guaranaAntartica"
+                  data-nome="Guaraná Antartica 350ml"
+                  data-valor="6.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Guaraná Antartica 350ml</span>
+                    <span class="item-price">R$ 6,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="cocaCola350"
+                  data-nome="Coca-Cola Original 350ml"
+                  data-valor="7.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Original 350ml</span>
+                    <span class="item-price">R$ 7,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="cocaCola350Zero"
+                  data-nome="Coca-Cola Zero 350ml"
+                  data-valor="7.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Zero 350ml</span>
+                    <span class="item-price">R$ 7,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="fanta350"
+                  data-nome="Fanta 350ml"
+                  data-valor="6.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Fanta 350ml</span>
+                    <span class="item-price">R$ 6,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="sprite350"
+                  data-nome="Sprite 350ml"
+                  data-valor="6.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Sprite 350ml</span>
+                    <span class="item-price">R$ 6,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="subcategoria">Refrigerantes 600ml</h3>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="cocaCola600"
+                  data-nome="Coca-Cola Original 600ml"
+                  data-valor="9.50"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Original 600ml</span>
+                    <span class="item-price">R$ 9,50</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="cocaColaZero600"
+                  data-nome="Coca-Cola Zero 600ml"
+                  data-valor="9.50"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Zero 600ml</span>
+                    <span class="item-price">R$ 9,50</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="subcategoria">Refrigerantes 2L</h3>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="cocaCola2L"
+                  data-nome="Coca-Cola Original 2L"
+                  data-valor="15.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Original 2L</span>
+                    <span class="item-price">R$ 15,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="cocaColaZero2L"
+                  data-nome="Coca-Cola Zero 2L"
+                  data-valor="15.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <span class="item-name">Coca-Cola Zero 2L</span>
+                    <span class="item-price">R$ 15,00</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </form>
         </div>
+        <div class="cart-container">
+          <div id="resumoPedido">
+            <h2>Carrinho</h2>
+            <div class="cliente-info">
+              <input
+                type="text"
+                id="nomeCliente"
+                placeholder="Nome do cliente"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="cliente-info tipo-servico-container">
+              <label>Como você gostaria de receber seu pedido?</label>
+              <div>
+                <input
+                  type="radio"
+                  id="tipoServicoEntrega"
+                  name="tipoServico"
+                  value="entrega"
+                  checked
+                />
+                <label for="tipoServicoEntrega">Entrega</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  id="tipoServicoRetirada"
+                  name="tipoServico"
+                  value="retirada"
+                />
+                <label for="tipoServicoRetirada">Retirada na Loja</label>
+              </div>
+            </div>
+
+            <div id="camposEntrega" class="cliente-info">
+              <textarea
+                id="enderecoCliente"
+                placeholder="Seu endereço completo (Rua, N°, Ref.)"
+                rows="3"
+              ></textarea>
+
+              <label for="bairroSelect" style="margin-top: 10px; display: block"
+                >Bairro:</label
+              >
+              <select id="bairroSelect" class="forma-pagamento">
+                <option value="">Selecione o bairro</option>
+              </select>
+              <div
+                id="taxaEntregaInfo"
+                style="margin-top: 5px; font-size: 0.9em; color: #ff9800"
+              ></div>
+            </div>
+            <div class="cliente-info">
+              <select id="formaPagamento" class="forma-pagamento">
+                <option value="">Selecione a forma de pagamento</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Cartão de Crédito">Cartão</option>
+                <option value="PIX">PIX</option>
+              </select>
+            </div>
+            <div id="itens-carrinho">
+              <p class="empty-cart">Seu carrinho está vazio</p>
+            </div>
+            <div class="cart-total">
+              <span>Total</span>
+              <span id="valorTotal">R$ 0,00</span>
+            </div>
+            <div class="cart-buttons">
+              <button type="button" id="btnLimparCarrinho">
+                Limpar Carrinho
+              </button>
+            </div>
+            <div class="cart-buttons" style="margin-top: 10px">
+              <button
+                type="button"
+                id="btnFinalizarWhatsapp"
+                class="btn-finalizar-whatsapp"
+              >
+                Finalizar Pedido via WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script src="script_final.js"></script>
 
-    <button id="btn-ir-carrinho" class="btn-flutuante" title="Ir para finalização do pedido">
-        <span id="carrinho-contador" class="carrinho-notificacao">0</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.9 2.9a1 1 0 0 0 .7 1.7H17"></path>
-            <circle cx="9" cy="19" r="2"></circle>
-            <circle cx="17" cy="19" r="2"></circle>
-        </svg>
+    <button
+      id="btn-ir-carrinho"
+      class="btn-flutuante"
+      title="Ir para finalização do pedido"
+    >
+      <span id="carrinho-contador" class="carrinho-notificacao">0</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.9 2.9a1 1 0 0 0 .7 1.7H17"
+        ></path>
+        <circle cx="9" cy="19" r="2"></circle>
+        <circle cx="17" cy="19" r="2"></circle>
+      </svg>
     </button>
-    
-    <button id="btn-voltar-topo" class="btn-flutuante" title="Voltar ao topo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
-<footer class='rodape'>
-    <p class="rd">© 2025 <a href="https://www.instagram.com/spaceburgdelivery/" target="_blank"><i class="fa-brands fa-square-instagram fa-lg"></i>Space Burguer Delivery</a></p>
-  <p class='rodape-texto'>
-  Desenvolvido por <a href="https://www.linkedin.com/in/leolfc/" target="_blank" rel="noopener noreferrer">
-    <i class="fab fa-linkedin"></i>Leonardo Feliciano
-    </a>
-  </p>
-</footer>
 
-</body>
+    <button id="btn-voltar-topo" class="btn-flutuante" title="Voltar ao topo">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
+    <footer class="rodape">
+      <p class="rd">
+        © 2025
+        <a href="https://www.instagram.com/spaceburgdelivery/" target="_blank"
+          ><i class="fa-brands fa-square-instagram fa-lg"></i>Space Burguer
+          Delivery</a
+        >
+      </p>
+      <p class="rodape-texto">
+        Desenvolvido por
+        <a
+          href="https://www.linkedin.com/in/leolfc/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fab fa-linkedin"></i>Leonardo Feliciano
+        </a>
+      </p>
+    </footer>
+  </body>
 </html>
