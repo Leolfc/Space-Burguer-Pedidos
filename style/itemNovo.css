@@ -59,7 +59,6 @@
   pointer-events: none;
   opacity: 0.6;
   position: relative;
-  
 }
 .embreve::after {
   content: "Em Breve";
@@ -68,7 +67,7 @@
   font-weight: bold;
   top: 30%;
   left: 30%;
- 
+
   transform: translate(-50%, -50%);
   background-color: rgba(255, 209, 6, 0.918);
   color: white;
@@ -76,9 +75,106 @@
   border-radius: 4px;
   font-size: 14px;
   animation: pulseTexto 1s infinite;
-width: max-content;
-display: flex;
-align-items: center;
-justify-content: center; 
-margin: 0 auto;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/*!Item maior da casa */
+.item__maiorDaCasa {
+  background: linear-gradient(45deg, #ff6b01, #ff8c00, #ffa500, #ff6b01);
+  background-size: 300% 300%;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin: 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: gradientShift 3s ease-in-out infinite,
+    bounce 2s ease-in-out infinite;
+  box-shadow: 0 4px 15px rgba(255, 107, 1, 0.4);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item__maiorDaCasa:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 107, 1, 0.6);
+}
+
+.item__maiorDaCasa::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Versão para modo escuro */
+.dark-mode .item__maiorDaCasa {
+  background: linear-gradient(45deg, #ff6b01, #ff8c00, #ffa500, #ff6b01);
+  box-shadow: 0 4px 15px rgba(255, 107, 1, 0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .item__maiorDaCasa:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 1, 0.8);
+}
+
+
+.corDoshamburguerMaiores{
+  color: red;
 }
