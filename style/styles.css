@@ -194,7 +194,6 @@ section h2 {
   padding-bottom: 8px;
   margin-bottom: 15px;
   font-family: "Bungee", sans-serif;
-
 }
 
 /* Grid de itens */
@@ -212,6 +211,10 @@ section h2 {
   border-radius: 8px;
   background-color: var(--card-bg);
   transition: all 0.2s;
+}
+.item-desc {
+  font-weight: bold;
+
 }
 
 .item:hover {
