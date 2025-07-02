@@ -30,6 +30,7 @@ const taxasDeEntrega = {
   "Vila Rondon": 7.0,
   "Vila Rosa": 6.0,
   "Villa Aggeu": 8.0,
+  "Vila Rural": 15.0,
   "Residencial Pompeia I, II, III ": 8.0,
   "Jardim Miguel Afonso": 7.0,
   "Jardim Scylla Peixoto": 8.0,
@@ -1268,7 +1269,8 @@ function configurarBotaoWhatsApp() {
 
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
-async function enviarPedidoWhatsApp() { // Adicionamos 'async' para usar 'await'
+async function enviarPedidoWhatsApp() {
+  // Adicionamos 'async' para usar 'await'
   if (Object.keys(carrinho.itens).length === 0) {
     mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
@@ -1317,27 +1319,28 @@ async function enviarPedidoWhatsApp() { // Adicionamos 'async' para usar 'await'
 
   // NOVO: Envia o pedido para o nosso back-end
   try {
-    const response = await fetch('/novo-pedido', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(carrinho), // Envia todo o objeto do carrinho
+    const response = await fetch("/novo-pedido", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(carrinho), // Envia todo o objeto do carrinho
     });
 
     if (!response.ok) {
-        // Se a resposta do servidor não for OK, exibe um erro mas continua
-        throw new Error('Falha ao enviar pedido para o servidor');
+      // Se a resposta do servidor não for OK, exibe um erro mas continua
+      throw new Error("Falha ao enviar pedido para o servidor");
     }
 
     const result = await response.json();
-    console.log('Resposta do servidor:', result.message);
+    console.log("Resposta do servidor:", result.message);
     // Você pode exibir uma notificação de sucesso se desejar
-
   } catch (error) {
-      console.error('Erro ao enviar pedido para o back-end:', error);
-      // Informa ao usuário que pode ter havido um problema, mas o pedido ainda pode ser enviado pelo WhatsApp
-      mostrarNotificacao('Erro ao registrar pedido. Tente finalizar pelo WhatsApp.');
+    console.error("Erro ao enviar pedido para o back-end:", error);
+    // Informa ao usuário que pode ter havido um problema, mas o pedido ainda pode ser enviado pelo WhatsApp
+    mostrarNotificacao(
+      "Erro ao registrar pedido. Tente finalizar pelo WhatsApp."
+    );
   }
   // FIM NOVO
 
