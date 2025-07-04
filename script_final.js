@@ -498,16 +498,19 @@ function criarModalAdicionais() {
   observacoesDiv.className = "observacoes-container";
   observacoesDiv.innerHTML = `
     <h4>Observações</h4>
-    <p class="observacao-exemplo">Ex: retirar tomate, sem cebola, etc.</p>
+    <p class="observacao-exemplo">Ex: retirar tomate, sem cebola, sem queijo, muçarela, etc.</p>
     <textarea id="observacoes-pedido" placeholder="Alguma observação sobre o preparo?"></textarea>
     <div class="opcoes-rapidas">
       <button type="button" class="opcao-rapida" data-texto="Sem tomate">Sem tomate</button>
+      <button type="button" class="opcao-rapida" data-texto="Sem queijo">Sem queijo</button>
+      <button type="button" class="opcao-rapida" data-texto="Trocar cheddar por muçarela">Trocar cheddar por muçarela</button>
       <button type="button" class="opcao-rapida" data-texto="Sem cebola">Sem cebola</button>
       <button type="button" class="opcao-rapida" data-texto="Sem alface">Sem alface</button>
       <button type="button" class="opcao-rapida" data-texto="Sem molho">Sem molho</button>
       <button type="button" class="opcao-rapida" data-texto="Bem passado">Bem passado</button>
       <button type="button" class="opcao-rapida" data-texto="Ao ponto">Ao ponto</button>
       <button type="button" class="opcao-rapida" data-texto="Mal passado">Mal passado</button>
+      
     </div>`;
   adicionaisContainer.appendChild(observacoesDiv);
   observacoesDiv.querySelectorAll(".opcao-rapida").forEach((opcao) => {
