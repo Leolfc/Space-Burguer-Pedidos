@@ -1419,7 +1419,7 @@ async function enviarPedidoWhatsApp() {
   const mensagemCodificada = encodeURIComponent(mensagem);
   const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
 
-  window.open(urlWhatsApp, "_blank");
+  window.location.href = urlWhatsApp;
   mostrarNotificacao("Redirecionando para o WhatsApp...");
 }
 // FIM MODIFICADO
