@@ -178,3 +178,10 @@
 .corDoshamburguerMaiores{
   color: red;
 }
+
+/* Estilo para o molho cheese */
+.molhoPersonalizado{
+   box-shadow: 2px 6px 20px rgba(255, 107, 1, 0.8);
+   border-radius: 8px;
+   padding: 2px;
+}
