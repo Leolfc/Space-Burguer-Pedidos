@@ -12,6 +12,13 @@
   font-weight: bold;
   display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
 }
+.item_em_dobro_queijo {
+  color: #E67514;
+  animation: pulseTexto 1s infinite;
+  font-weight: bold;
+  display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
+}
+
 
 @keyframes pulse {
   0% {
