@@ -9,7 +9,7 @@ const adicionais = {
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
   ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
-  salsicha: { nome: "Salsicha", preco: 2.0 },
+  salsicha: { nome: "Salsicha", preco: 4.0 },
   tomate: { nome: "Tomate", preco: 2.0 },
   cebolaRoxa: { nome: "Cebola Roxa", preco: 2.5 },
   catupiry: { nome: "Catupiry", preco: 8.0 },
