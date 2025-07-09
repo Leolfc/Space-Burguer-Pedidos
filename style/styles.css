@@ -1745,7 +1745,7 @@ button {
 }
 
 .subcategoria {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: #444;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -1754,12 +1754,15 @@ button {
   background-color: #f8f9fa;
   padding: 8px 12px;
   border-radius: 4px;
+  text-transform: uppercase;
+  
 }
 
 .dark-mode .subcategoria {
   color: #e0e0e0;
   background-color: #2c3e50;
   border-left: 4px solid #3498db;
+  font-size: 1.3rem;
 }
 
 @media (max-width: 576px) {
