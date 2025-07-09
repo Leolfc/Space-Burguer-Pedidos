@@ -36,6 +36,7 @@ const taxasDeEntrega = {
   "Jardim Scylla Peixoto": 8.0,
   "Jardim Alves": 7.0,
   "Jardim América": 7.0,
+  "Jardim Alcântara": 8.0,
   "Jardim Castro": 8.0,
   "Jardim Europa": 7.0,
   "Jardim Canada": 7.0,
@@ -651,7 +652,7 @@ function mostrarPerguntaAdicionais(
       ? "Deseja personalizar ou adicionar observações ao combo?"
       : "Deseja adicionais ou alguma observação?";
   let btnNaoTexto =
-    tipo === "combo" ? "Sem personalização" : "Sem adicionais/observações";
+    tipo === "combo" ? "Sem personalização" : "Adicionar Direto";
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
