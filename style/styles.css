@@ -175,13 +175,9 @@ main {
   top: 80px;
   height: fit-content;
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
+ 
 }
-@media (max-width: 600px){
-  .cart-container{
-    overflow-y: none;
-  }
-}
+
 /* Seções de produtos */
 section {
   margin-bottom: 25px;
