@@ -70,6 +70,34 @@ const carrinho = {
   // FIM NOVAS PROPRIEDADES
 };
 
+// --- MAIONESE VERDE ---
+const VALOR_MAIONESE_VERDE = 2.0;
+const MAX_MAIONESE_VERDE = 5;
+let qtdMaioneseVerde = 0;
+
+function atualizarMaioneseVerdeUI() {
+  const spanQtd = document.getElementById("qtdMaioneseVerde");
+  if (spanQtd) spanQtd.textContent = qtdMaioneseVerde;
+}
+
+function adicionarMaioneseVerde() {
+  if (qtdMaioneseVerde < MAX_MAIONESE_VERDE) {
+    qtdMaioneseVerde++;
+    carrinho.qtdMaioneseVerde = qtdMaioneseVerde;
+    atualizarMaioneseVerdeUI();
+    atualizarCarrinho();
+  }
+}
+
+function removerMaioneseVerde() {
+  if (qtdMaioneseVerde > 0) {
+    qtdMaioneseVerde--;
+    carrinho.qtdMaioneseVerde = qtdMaioneseVerde;
+    atualizarMaioneseVerdeUI();
+    atualizarCarrinho();
+  }
+}
+
 // Inicialização
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Documento carregado!");
@@ -277,6 +305,18 @@ document.addEventListener("DOMContentLoaded", function () {
   configurarAlternadorTema();
   configurarBotoesFlutuantes();
   configurarBotaoWhatsApp();
+
+  const btnMaisMaionese = document.getElementById("btnMaisMaionese");
+  const btnMenosMaionese = document.getElementById("btnMenosMaionese");
+  if (btnMaisMaionese)
+    btnMaisMaionese.addEventListener("click", adicionarMaioneseVerde);
+  if (btnMenosMaionese)
+    btnMenosMaionese.addEventListener("click", removerMaioneseVerde);
+  // Se recarregar, manter valor salvo
+  if (typeof carrinho.qtdMaioneseVerde === "number") {
+    qtdMaioneseVerde = carrinho.qtdMaioneseVerde;
+    atualizarMaioneseVerdeUI();
+  }
 });
 // FIM DO DOMContentLoaded
 
@@ -1141,7 +1181,13 @@ function atualizarCarrinho() {
   if (carrinho.tipoServico === "entrega" && carrinho.taxaEntrega > 0) {
     totalFinalPedido += carrinho.taxaEntrega;
   }
-
+  // Adiciona o valor da maionese verde
+  if (
+    typeof carrinho.qtdMaioneseVerde === "number" &&
+    carrinho.qtdMaioneseVerde > 0
+  ) {
+    totalFinalPedido += carrinho.qtdMaioneseVerde * VALOR_MAIONESE_VERDE;
+  }
   carrinho.total = totalFinalPedido;
   valorTotalSpan.textContent = `R$ ${totalFinalPedido.toFixed(2)}`;
 
@@ -1403,6 +1449,16 @@ async function enviarPedidoWhatsApp() {
     contadorItensMsg++;
   }
 
+  // Adicional de maionese verde
+  if (
+    typeof carrinho.qtdMaioneseVerde === "number" &&
+    carrinho.qtdMaioneseVerde > 0
+  ) {
+    mensagem += `\n🥗 *Adicional de Maionese Verde:* ${
+      carrinho.qtdMaioneseVerde
+    }x (R$ ${(carrinho.qtdMaioneseVerde * VALOR_MAIONESE_VERDE).toFixed(2)})\n`;
+  }
+
   mensagem += `\n----------------------------------\n`;
   mensagem += `*TOTAL DO PEDIDO: R$ ${carrinho.total.toFixed(2)}*\n`;
   if (
@@ -1494,3 +1550,19 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
+
+const inputRadio = document.querySelector("#sim");
+const divMolho = document.querySelector(".add-molho-verde");
+inputRadio.addEventListener("change", (event) => {
+  event.preventDefault();
+  if (inputRadio.checked) {
+    const div = document.createElement("div");
+    div.innerHTML = `
+    <button id="menos">-</button>
+    <input type="number" id="quantidade" value="1" min="1">
+    <button id="mais">+</button>
+    <p>Total: R$ <span id="total">0.50</span></p>
+ `;
+    divMolho.appendChild(div);
+  }
+});

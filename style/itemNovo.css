@@ -13,12 +13,11 @@
   display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
 }
 .item_em_dobro_queijo {
-  color: #E67514;
+  color: #e67514;
   animation: pulseTexto 1s infinite;
   font-weight: bold;
   display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
 }
-
 
 @keyframes pulse {
   0% {
@@ -181,15 +180,13 @@
   box-shadow: 0 6px 20px rgba(255, 107, 1, 0.8);
 }
 
-
-.corDoshamburguerMaiores{
+.corDoshamburguerMaiores {
   color: red;
 }
 
 /* Estilo para o molho cheese */
-.molhoPersonalizado{
-   box-shadow: 2px 6px 20px rgba(255, 107, 1, 0.8);
-   border-radius: 8px;
-   padding: 2px 10px;
- 
+.molhoPersonalizado {
+  box-shadow: 2px 6px 20px rgba(255, 107, 1, 0.8);
+  border-radius: 8px;
+  padding: 2px 10px;
 }
