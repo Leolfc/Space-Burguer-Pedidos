@@ -175,7 +175,7 @@ main {
   top: 80px;
   height: fit-content;
   max-height: calc(100vh - 100px);
- 
+  overflow-y: auto;
 }
 
 /* Seções de produtos */
