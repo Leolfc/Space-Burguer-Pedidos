@@ -5,7 +5,7 @@ const adicionais = {
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
-molhoChesse: { nome: "Molho American Chesse", preco: 5.0},
+molhoChesse: { nome: "Molho American Cheese", preco: 5.0},
   bacon: { nome: "Bacon", preco: 8.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
