@@ -214,7 +214,6 @@ section h2 {
 }
 .item-desc {
   font-weight: bold;
-
 }
 
 .item:hover {
@@ -908,8 +907,6 @@ button#btnLimparCarrinho {
   .cart-container {
     position: static;
     margin-top: 20px;
-  
-    
   }
 
   h1 {
@@ -1755,7 +1752,6 @@ button {
   padding: 8px 12px;
   border-radius: 4px;
   text-transform: uppercase;
-  
 }
 
 .dark-mode .subcategoria {
@@ -2087,4 +2083,43 @@ button {
 
 .dark-mode .item-price {
   color: #ff7043;
+}
+
+/* --- Estilos para o adicional de maionese verde no carrinho --- */
+.add-molho-verde {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+.add-molho-verde span {
+  font-weight: bold;
+}
+#btnMenosMaionese,
+#btnMaisMaionese {
+  width: 32px;
+  height: 32px;
+  font-size: 1.2em;
+  border: none;
+  background: #e0e0e0;
+  color: #388e3c;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#btnMenosMaionese:hover,
+#btnMaisMaionese:hover {
+  background: #388e3c;
+  color: #fff;
+}
+#qtdMaioneseVerde {
+  min-width: 24px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+}
+.add-molho-verde .preco-maionese {
+  color: #388e3c;
+  font-size: 0.95em;
+  font-weight: bold;
 }
