@@ -529,7 +529,7 @@ section h2 {
 
 .item-desc {
   font-weight: bold;
-  font-size: clamp(0.9rem, 3vw, 1rem);
+  font-size: 1.2rem;
   word-wrap: break-word;
 }
 
@@ -560,7 +560,7 @@ section h2 {
 .item-price {
   color: #ff5722;
   font-weight: bold;
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  font-size: clamp(1.0rem, 4vw, 1.1rem);
   white-space: nowrap;
 }
 
@@ -1607,15 +1607,15 @@ button#btnLimparCarrinho {
   }
 
   .item-name {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
   }
 
   .item-price {
-    font-size: 0.85rem;
+    font-size: 1.0rem;
   }
 
   .item-desc {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
   }
 }
 
@@ -1674,15 +1674,15 @@ button#btnLimparCarrinho {
   }
 
   .item-name {
-    font-size: 0.85rem;
+    font-size: 1.3rem;
   }
 
   .item-price {
-    font-size: 0.8rem;
+    font-size: 1.0rem;
   }
 
   .item-desc {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
   }
 
   .btn-decrease,
