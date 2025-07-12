@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Space Burguer🚀</title>
     <link rel="stylesheet" href="./style/styles.css" />
     <link rel="stylesheet" href="./style/itemNovo.css" />
@@ -81,9 +81,45 @@
     <main>
       <div class="container">
         <div class="menu-container">
+          <!-- Container para navegação lateral -->
+          <div class="categorias-container">
+            <!-- Barra de navegação das categorias -->
+            <div class="categorias-nav">
+              <button class="categoria-btn ativo" data-categoria="space-burguers">
+                🍔 Space Burguer's
+              </button>
+              <button class="categoria-btn" data-categoria="smash-burguers">
+                🥪 Smash Burguer's
+              </button>
+              <button class="categoria-btn" data-categoria="combos">
+                🍟 Combos
+              </button>
+              <button class="categoria-btn" data-categoria="porcoes">
+                🍽️ Porções
+              </button>
+              <button class="categoria-btn" data-categoria="bebidas">
+                🥤 Bebidas
+              </button>
+            </div>
+            
+            <!-- Botões de navegação lateral -->
+            <button class="nav-btn prev" id="navPrev">‹</button>
+            <button class="nav-btn next" id="navNext">›</button>
+            
+            <!-- Indicadores de seção -->
+            <div class="section-indicators">
+              <div class="section-indicator active" data-categoria="space-burguers"></div>
+              <div class="section-indicator" data-categoria="smash-burguers"></div>
+              <div class="section-indicator" data-categoria="combos"></div>
+              <div class="section-indicator" data-categoria="porcoes"></div>
+              <div class="section-indicator" data-categoria="bebidas"></div>
+            </div>
+          </div>
+
           <form id="pedidoForm">
-            <section>
-              <h2>Space Burguer´s (160 a 200 gramas)</h2>
+            <!-- Seção Space Burguer's -->
+            <section class="categoria-secao ativo" id="space-burguers">
+              <h2>Space Burguer´s</h2>
               <div class="item-container">
                 <div
                   class="item"
@@ -484,8 +520,9 @@
                 </div>
               </div>
             </section>
-            <section>
-              <h2>Smash Burguer's (95 gramas)</h2>
+            <!-- Seção Smash Burguer's -->
+            <section class="categoria-secao" id="smash-burguers">
+              <h2>Smash Burguer's</h2>
               <div class="item-container">
                 <div
                   class="item"
@@ -783,9 +820,10 @@
               <div class="item-container">
 
               </div>
-            </section> -->
+            </section>
 
-            <section>
+            <!-- Seção Combos -->
+            <section class="categoria-secao" id="combos">
               <h2>Combos</h2>
               <div class="item-container">
                 <div
@@ -1060,7 +1098,8 @@
                 </div>
               </div>
             </section>
-            <section>
+            <!-- Seção Porções -->
+            <section class="categoria-secao" id="porcoes">
               <h2>Porções</h2>
               <div class="item-container">
                 <div
@@ -1142,7 +1181,8 @@
                
               </div>
             </section>
-            <section>
+            <!-- Seção Bebidas -->
+            <section class="categoria-secao" id="bebidas">
               <h2>Bebidas</h2>
 
               <h3 class="subcategoria">Águas</h3>

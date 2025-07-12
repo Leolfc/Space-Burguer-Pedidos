@@ -5,7 +5,7 @@ const adicionais = {
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
-molhoChesse: { nome: "Molho American Cheese", preco: 5.0},
+  molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
   bacon: { nome: "Bacon", preco: 8.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
@@ -72,9 +72,194 @@ const carrinho = {
 };
 
 // --- MAIONESE VERDE ---
-const VALOR_MAIONESE_VERDE = 0.50;
+const VALOR_MAIONESE_VERDE = 0.5;
 const MAX_MAIONESE_VERDE = 5;
 let qtdMaioneseVerde = 0;
+
+// Função para controlar navegação entre categorias
+function configurarNavegacaoCategorias() {
+  const botoesCategoria = document.querySelectorAll(".categoria-btn");
+  const secoesCategoria = document.querySelectorAll(".categoria-secao");
+  const indicadores = document.querySelectorAll(".section-indicator");
+  const btnPrev = document.getElementById("navPrev");
+  const btnNext = document.getElementById("navNext");
+
+  const categorias = [
+    "space-burguers",
+    "smash-burguers",
+    "combos",
+    "porcoes",
+    "bebidas",
+  ];
+  let categoriaAtual = 0;
+
+  // Função para mudar categoria
+  function mudarCategoria(novaCategoria, direcao = "") {
+    const categoriaAnterior = categorias[categoriaAtual];
+    categoriaAtual = novaCategoria;
+
+    // Remove classes ativo
+    botoesCategoria.forEach((btn) => btn.classList.remove("ativo"));
+    secoesCategoria.forEach((sec) => sec.classList.remove("ativo"));
+    indicadores.forEach((ind) => ind.classList.remove("active"));
+
+    // Adiciona classes ativo
+    const botaoAtivo = document.querySelector(
+      `[data-categoria="${categorias[categoriaAtual]}"]`
+    );
+    const secaoAtiva = document.getElementById(categorias[categoriaAtual]);
+    const indicadorAtivo = document.querySelector(
+      `[data-categoria="${categorias[categoriaAtual]}"]`
+    );
+
+    if (botaoAtivo) botaoAtivo.classList.add("ativo");
+    if (secaoAtiva) {
+      secaoAtiva.classList.add("ativo");
+      if (direcao === "left") {
+        secaoAtiva.classList.add("slide-left");
+        setTimeout(() => secaoAtiva.classList.remove("slide-left"), 300);
+      } else if (direcao === "right") {
+        secaoAtiva.classList.add("slide-right");
+        setTimeout(() => secaoAtiva.classList.remove("slide-right"), 300);
+      }
+    }
+    if (indicadorAtivo) indicadorAtivo.classList.add("active");
+
+    // Atualiza visibilidade dos botões de navegação
+    atualizarBotoesNavegacao();
+  }
+
+  // Função para atualizar visibilidade dos botões
+  function atualizarBotoesNavegacao() {
+    if (btnPrev) {
+      btnPrev.classList.toggle("hidden", categoriaAtual === 0);
+    }
+    if (btnNext) {
+      btnNext.classList.toggle(
+        "hidden",
+        categoriaAtual === categorias.length - 1
+      );
+    }
+  }
+
+  // Event listeners para botões de categoria
+  botoesCategoria.forEach((botao) => {
+    botao.addEventListener("click", function () {
+      const categoria = this.dataset.categoria;
+      const novaIndex = categorias.indexOf(categoria);
+      if (novaIndex !== -1) {
+        mudarCategoria(novaIndex);
+      }
+    });
+  });
+
+  // Event listeners para indicadores
+  indicadores.forEach((indicador) => {
+    indicador.addEventListener("click", function () {
+      const categoria = this.dataset.categoria;
+      const novaIndex = categorias.indexOf(categoria);
+      if (novaIndex !== -1) {
+        mudarCategoria(novaIndex);
+      }
+    });
+  });
+
+  // Event listeners para botões de navegação
+  if (btnPrev) {
+    btnPrev.addEventListener("click", function () {
+      if (categoriaAtual > 0) {
+        mudarCategoria(categoriaAtual - 1, "right");
+      }
+    });
+  }
+
+  if (btnNext) {
+    btnNext.addEventListener("click", function () {
+      if (categoriaAtual < categorias.length - 1) {
+        mudarCategoria(categoriaAtual + 1, "left");
+      }
+    });
+  }
+
+  // Configurar swipe/touch
+  configurarSwipe();
+
+  // Inicializar estado dos botões
+  atualizarBotoesNavegacao();
+}
+
+// Função para configurar swipe/touch
+function configurarSwipe() {
+  const menuContainer = document.querySelector(".menu-container");
+  if (!menuContainer) return;
+
+  let startX = 0;
+  let startY = 0;
+  let endX = 0;
+  let endY = 0;
+
+  menuContainer.addEventListener("touchstart", function (e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+
+  menuContainer.addEventListener("touchend", function (e) {
+    endX = e.changedTouches[0].clientX;
+    endY = e.changedTouches[0].clientY;
+    handleSwipe();
+  });
+
+  // Suporte para mouse (desktop)
+  menuContainer.addEventListener("mousedown", function (e) {
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  menuContainer.addEventListener("mouseup", function (e) {
+    endX = e.clientX;
+    endY = e.clientY;
+    handleSwipe();
+  });
+
+  function handleSwipe() {
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    const minSwipeDistance = 50;
+
+    // Verifica se é um swipe horizontal válido
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      Math.abs(deltaX) > minSwipeDistance
+    ) {
+      const categorias = [
+        "space-burguers",
+        "smash-burguers",
+        "combos",
+        "porcoes",
+        "bebidas",
+      ];
+      const botoesCategoria = document.querySelectorAll(".categoria-btn");
+      let categoriaAtual = 0;
+
+      // Encontra a categoria atual
+      botoesCategoria.forEach((btn, index) => {
+        if (btn.classList.contains("ativo")) {
+          categoriaAtual = index;
+        }
+      });
+
+      if (deltaX > 0 && categoriaAtual > 0) {
+        // Swipe para direita - categoria anterior
+        const btnPrev = document.getElementById("navPrev");
+        if (btnPrev) btnPrev.click();
+      } else if (deltaX < 0 && categoriaAtual < categorias.length - 1) {
+        // Swipe para esquerda - próxima categoria
+        const btnNext = document.getElementById("navNext");
+        if (btnNext) btnNext.click();
+      }
+    }
+  }
+}
 
 function atualizarMaioneseVerdeUI() {
   const spanQtd = document.getElementById("qtdMaioneseVerde");
@@ -106,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
   criarModalAdicionais();
   configurarCamposObservacao();
   adicionarBotoesObservacao();
+  configurarNavegacaoCategorias();
 
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
@@ -1552,18 +1738,4 @@ function itemEmBreve(event) {
   }
 }
 
-const inputRadio = document.querySelector("#sim");
-const divMolho = document.querySelector(".add-molho-verde");
-inputRadio.addEventListener("change", (event) => {
-  event.preventDefault();
-  if (inputRadio.checked) {
-    const div = document.createElement("div");
-    div.innerHTML = `
-    <button id="menos">-</button>
-    <input type="number" id="quantidade" value="1" min="1">
-    <button id="mais">+</button>
-    <p>Total: R$ <span id="total">0.50</span></p>
- `;
-    divMolho.appendChild(div);
-  }
-});
+
