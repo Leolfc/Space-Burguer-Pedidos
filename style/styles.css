@@ -174,8 +174,13 @@ main {
   position: sticky;
   top: 80px;
   height: fit-content;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
+}
+
+@media (min-width: 769px) {
+  .cart-container {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
 }
 
 /* Seções de produtos */
@@ -1147,6 +1152,7 @@ button#btnLimparCarrinho {
   .btn-flutuante {
     width: 48px;
     height: 48px;
+    
   }
 
   #btn-ir-carrinho {
@@ -2122,4 +2128,13 @@ button {
   color: #388e3c;
   font-size: 0.95em;
   font-weight: bold;
+}
+
+.linkSecoes{
+  color: rgb(15, 15, 15);
+  text-decoration: none;
+ 
+}
+.dark-mode .linkSecoes{
+  color: white;
 }

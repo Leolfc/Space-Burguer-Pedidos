@@ -1,0 +1,11 @@
+---
+description:
+Before generating any code, read carefully:
+Never change the main logic or existing functionalities in my code, especially parts related to adding to cart, price calculations, product display, or any critical website functionality.
+Only generate the requested code in a clean and isolated way, without modifying any functions or structures that are already working.
+If you need to create something new, write it as a separate snippet, clearly indicating where to insert it, or create new functions with different names, without replacing anything existing.
+If you are not sure how to implement without changing the original functionality, let me know first.
+Be clear, objective, and professional in your responses.
+globs:
+alwaysApply: false
+---

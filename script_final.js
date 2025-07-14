@@ -5,7 +5,7 @@ const adicionais = {
   picles: { nome: "Picles", preco: 7.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
-molhoChesse: { nome: "Molho American Cheese", preco: 5.0},
+  molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
   bacon: { nome: "Bacon", preco: 8.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
   alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
@@ -72,7 +72,7 @@ const carrinho = {
 };
 
 // --- MAIONESE VERDE ---
-const VALOR_MAIONESE_VERDE = 0.50;
+const VALOR_MAIONESE_VERDE = 0.5;
 const MAX_MAIONESE_VERDE = 5;
 let qtdMaioneseVerde = 0;
 
@@ -1567,3 +1567,21 @@ inputRadio.addEventListener("change", (event) => {
     divMolho.appendChild(div);
   }
 });
+
+// Scroll suave para as seções via botões flutuantes
+// function scrollToSectionByKeyword(keyword) {
+//   const section = Array.from(document.querySelectorAll("section h2")).find(
+//     (h2) => h2.textContent.toLowerCase().includes(keyword.toLowerCase())
+//   );
+//   if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+// }
+
+// document.addEventListener("DOMContentLoaded", function () {
+//   const btnSmash = document.getElementById("btn-ir-smash");
+//   const btnCombos = document.getElementById("btn-ir-combos");
+//   const btnBebidas = document.getElementById("btn-ir-bebidas");
+//   if (btnSmash) btnSmash.onclick = () => scrollToSectionByKeyword("Smash");
+//   if (btnCombos) btnCombos.onclick = () => scrollToSectionByKeyword("Combos");
+//   if (btnBebidas)
+//     btnBebidas.onclick = () => scrollToSectionByKeyword("Bebidas");
+// });
