@@ -1567,4 +1567,3 @@ inputRadio.addEventListener("change", (event) => {
     divMolho.appendChild(div);
   }
 });
-

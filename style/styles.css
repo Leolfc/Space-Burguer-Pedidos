@@ -42,7 +42,7 @@
   --red-dark: #8b0000;
   --red-dark-hover: #a00000;
 }
-html{
+html {
   scroll-behavior: smooth; /*escrolagem suave*/
 }
 
@@ -1155,7 +1155,6 @@ button#btnLimparCarrinho {
   .btn-flutuante {
     width: 48px;
     height: 48px;
-    
   }
 
   #btn-ir-carrinho {
@@ -2133,11 +2132,39 @@ button {
   font-weight: bold;
 }
 
-.linkSecoes{
+.linkSecoes {
   color: rgb(15, 15, 15);
   text-decoration: none;
- 
 }
-.dark-mode .linkSecoes{
+.dark-mode .linkSecoes {
   color: white;
+}
+
+.btn-flutuante-nav.flutuantes-horizontal {
+  position: static !important;
+  margin: 0 8px 0 0;
+  box-shadow: none;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+#barra-flutuante-horizontal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 120px;
+  z-index: 1200;
+  pointer-events: none;
+}
+#barra-flutuante-horizontal .btn-flutuante-nav {
+  pointer-events: auto;
+}
+#barra-flutuante-horizontal.oculto {
+  display: none !important;
 }
