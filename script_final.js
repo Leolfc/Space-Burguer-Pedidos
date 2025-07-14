@@ -1568,20 +1568,3 @@ inputRadio.addEventListener("change", (event) => {
   }
 });
 
-// Scroll suave para as seções via botões flutuantes
-// function scrollToSectionByKeyword(keyword) {
-//   const section = Array.from(document.querySelectorAll("section h2")).find(
-//     (h2) => h2.textContent.toLowerCase().includes(keyword.toLowerCase())
-//   );
-//   if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
-// }
-
-// document.addEventListener("DOMContentLoaded", function () {
-//   const btnSmash = document.getElementById("btn-ir-smash");
-//   const btnCombos = document.getElementById("btn-ir-combos");
-//   const btnBebidas = document.getElementById("btn-ir-bebidas");
-//   if (btnSmash) btnSmash.onclick = () => scrollToSectionByKeyword("Smash");
-//   if (btnCombos) btnCombos.onclick = () => scrollToSectionByKeyword("Combos");
-//   if (btnBebidas)
-//     btnBebidas.onclick = () => scrollToSectionByKeyword("Bebidas");
-// });

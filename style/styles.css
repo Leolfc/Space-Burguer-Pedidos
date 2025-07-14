@@ -42,6 +42,9 @@
   --red-dark: #8b0000;
   --red-dark-hover: #a00000;
 }
+html{
+  scroll-behavior: smooth; /*escrolagem suave*/
+}
 
 body {
   font-family: "Poppins", sans-serif;
