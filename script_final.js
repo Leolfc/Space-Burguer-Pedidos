@@ -107,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
   configurarCamposObservacao();
   adicionarBotoesObservacao();
 
+
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
@@ -318,6 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
     qtdMaioneseVerde = carrinho.qtdMaioneseVerde;
     atualizarMaioneseVerdeUI();
   }
+ 
 });
 // FIM DO DOMContentLoaded
 
@@ -1311,10 +1313,13 @@ function configurarBotoesFlutuantes() {
   }
 }
 
+
 function configurarBotaoWhatsApp() {
   const btnWhatsApp = document.getElementById("btnFinalizarWhatsapp");
+
   if (btnWhatsApp) {
     btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
+   
   }
 }
 
@@ -1367,7 +1372,12 @@ async function enviarPedidoWhatsApp() {
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
-
+  //!Função para mostrar notificação quando hamburgueria estiver fechada
+  const isClosed = checkRestaurantOpen()
+  if(isClosed){
+mostrarNotificacao("Estamos fechados no Momento!😔")
+return
+  }
   // NOVO: Envia o pedido para o nosso back-end
   try {
     const response = await fetch("/novo-pedido", {
@@ -1552,18 +1562,19 @@ function itemEmBreve(event) {
   }
 }
 
-const inputRadio = document.querySelector("#sim");
-const divMolho = document.querySelector(".add-molho-verde");
-inputRadio.addEventListener("change", (event) => {
-  event.preventDefault();
-  if (inputRadio.checked) {
-    const div = document.createElement("div");
-    div.innerHTML = `
-    <button id="menos">-</button>
-    <input type="number" id="quantidade" value="1" min="1">
-    <button id="mais">+</button>
-    <p>Total: R$ <span id="total">0.50</span></p>
- `;
-    divMolho.appendChild(div);
-  }
-});
+
+//!função que indentifica o dia da hamburgueria fechada
+function checkRestaurantOpen(){
+  const data = new Date()
+  const dia = data.getDay()
+  return dia === 2 //2 =TERÇA-FEIRA, hamburgueria fechada
+}
+const estaFechada = checkRestaurantOpen()
+const fraseSeHmaburgueriaAberta = document.querySelector('.atendimento-info')
+if(estaFechada ){
+fraseSeHmaburgueriaAberta.style.backgroundColor = 'red'
+
+
+}else{
+fraseSeHmaburgueriaAberta.style.backgroundColor = 'green'
+}
