@@ -65,12 +65,24 @@ header {
   /* position: sticky; */
   top: 0;
   z-index: 100;
+  background-image: url('../img/imgHamburguer.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 200px;
+  min-height: 200px;
+font-weight: 700;
+text-shadow: 2px 2px 4px black;
+  
 }
 
 h1 {
   margin: 0;
   font-weight: 700;
   font-size: 2rem;
+ 
+ 
 }
 .atendimento-info {
   background-color: #582814;
