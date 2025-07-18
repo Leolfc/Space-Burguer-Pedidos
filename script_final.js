@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
   configurarCamposObservacao();
   adicionarBotoesObservacao();
 
-
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
@@ -319,7 +318,6 @@ document.addEventListener("DOMContentLoaded", function () {
     qtdMaioneseVerde = carrinho.qtdMaioneseVerde;
     atualizarMaioneseVerdeUI();
   }
- 
 });
 // FIM DO DOMContentLoaded
 
@@ -699,7 +697,34 @@ function mostrarPerguntaAdicionais(
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
+  perguntaDiv.style.position = "relative";
   perguntaDiv.innerHTML = `<p>${perguntaTexto}</p><div class="pergunta-botoes"><button type="button" class="btn-nao">${btnNaoTexto}</button><button type="button" class="btn-sim">${btnSimTexto}</button></div>`;
+  // Adiciona o botão de fechar (X)
+  const btnFechar = document.createElement("button");
+  btnFechar.type = "button";
+  btnFechar.innerHTML = "×";
+  btnFechar.setAttribute("aria-label", "Fechar");
+  btnFechar.style.position = "absolute";
+  btnFechar.style.top = "8px";
+  btnFechar.style.right = "12px";
+  btnFechar.style.width = "32px";
+  btnFechar.style.height = "32px";
+  btnFechar.style.borderRadius = "50%";
+  btnFechar.style.backgroundColor = "#f44336";
+  btnFechar.style.color = "white";
+  btnFechar.style.fontSize = "22px";
+  btnFechar.style.fontWeight = "bold";
+  btnFechar.style.display = "flex";
+  btnFechar.style.alignItems = "center";
+  btnFechar.style.justifyContent = "center";
+  btnFechar.style.cursor = "pointer";
+  btnFechar.style.border = "none";
+  btnFechar.style.zIndex = "10";
+  btnFechar.addEventListener("click", function (event) {
+    event.preventDefault();
+    perguntaDiv.remove();
+  });
+  perguntaDiv.appendChild(btnFechar);
   const itemActions = itemDiv.querySelector(".item-actions");
   itemActions.insertAdjacentElement("afterend", perguntaDiv);
   const btnNao = perguntaDiv.querySelector(".btn-nao");
@@ -1313,13 +1338,11 @@ function configurarBotoesFlutuantes() {
   }
 }
 
-
 function configurarBotaoWhatsApp() {
   const btnWhatsApp = document.getElementById("btnFinalizarWhatsapp");
 
   if (btnWhatsApp) {
     btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
-   
   }
 }
 
@@ -1373,10 +1396,10 @@ async function enviarPedidoWhatsApp() {
     return;
   }
   //!Função para mostrar notificação quando hamburgueria estiver fechada
-  const isClosed = checkRestaurantOpen()
-  if(isClosed){
-mostrarNotificacao("Estamos fechados no Momento!😔")
-return
+  const isClosed = checkRestaurantOpen();
+  if (isClosed) {
+    mostrarNotificacao("Estamos fechados no Momento!😔");
+    return;
   }
   // NOVO: Envia o pedido para o nosso back-end
   try {
@@ -1562,19 +1585,16 @@ function itemEmBreve(event) {
   }
 }
 
-
 //!função que indentifica o dia da hamburgueria fechada
-function checkRestaurantOpen(){
-  const data = new Date()
-  const dia = data.getDay()
-  return dia === 2 //2 =TERÇA-FEIRA, hamburgueria fechada
+function checkRestaurantOpen() {
+  const data = new Date();
+  const dia = data.getDay();
+  return dia === 2; //2 =TERÇA-FEIRA, hamburgueria fechada
 }
-const estaFechada = checkRestaurantOpen()
-const fraseSeHmaburgueriaAberta = document.querySelector('.atendimento-info')
-if(estaFechada ){
-fraseSeHmaburgueriaAberta.style.backgroundColor = 'red'
-
-
-}else{
-fraseSeHmaburgueriaAberta.style.backgroundColor = 'green'
+const estaFechada = checkRestaurantOpen();
+const fraseSeHmaburgueriaAberta = document.querySelector(".atendimento-info");
+if (estaFechada) {
+  fraseSeHmaburgueriaAberta.style.backgroundColor = "red";
+} else {
+  fraseSeHmaburgueriaAberta.style.backgroundColor = "green";
 }
