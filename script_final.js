@@ -1406,7 +1406,7 @@ async function enviarPedidoWhatsApp() {
   }
 
   if (carrinho.formaPagamento==="Dinheiro" && trocoInput.value === "") {
-    mostrarNotificacao("informar troco");
+    mostrarNotificacao("informar troco😃");
     return;
   }
 
@@ -1577,7 +1577,7 @@ function configurarCamposObservacao() {
 function itemIndisponivel(event) {
   event.preventDefault();
   const div = event.target.closest(".item"); // Melhorado para pegar o item correto
-  if (!div) return; // Adiciona uma verificação caso o clique não seja em um item
+  if (!div) return;
 
   if (!div.classList.contains("indisponivel")) {
     div.classList.add("indisponivel");
