@@ -21,6 +21,7 @@ const adicionais = {
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
   Centro: 6.0,
+  "Campo Belo": 8.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
   "Vila Setti": 8.0,
@@ -64,14 +65,12 @@ const carrinho = {
   nomeCliente: "",
   enderecoCliente: "",
   formaPagamento: "",
-  // NOVAS PROPRIEDADES
-  tipoServico: "entrega", // Valor padrão
+  tipoServico: "entrega",
   bairroSelecionado: "",
   taxaEntrega: 0,
-  // FIM NOVAS PROPRIEDADES
 };
 
-// --- MAIONESE VERDE ---
+// !MAIONESE VERDE ---
 const VALOR_MAIONESE_VERDE = 0.5;
 const MAX_MAIONESE_VERDE = 5;
 let qtdMaioneseVerde = 0;
@@ -99,7 +98,7 @@ function removerMaioneseVerde() {
   }
 }
 
-// Inicialização
+//*Inicialização
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Documento carregado!");
 
@@ -134,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   configurarPesquisa();
 
-  // NOVO: Referências para os elementos de tipo de serviço e entrega
+  // Referências para os elementos de tipo de serviço e entrega
   const radioEntrega = document.getElementById("tipoServicoEntrega");
   const radioRetirada = document.getElementById("tipoServicoRetirada");
   const camposEntregaDiv = document.getElementById("camposEntrega");
@@ -251,14 +250,17 @@ document.addEventListener("DOMContentLoaded", function () {
       carrinho.formaPagamento = this.value;
       if (this.value) {
         localStorage.setItem("formaPagamento", this.value);
+      
       }
     });
     const formaPagamentoSalva = localStorage.getItem("formaPagamento");
     if (formaPagamentoSalva) {
       formaPagamentoSelect.value = formaPagamentoSalva;
       carrinho.formaPagamento = formaPagamentoSalva;
+     
     }
   }
+
 
   // NOVO: Carregar dados do localStorage para tipo de serviço e bairro
   const tipoServicoSalvo = localStorage.getItem("tipoServico");
@@ -1399,9 +1401,16 @@ async function enviarPedidoWhatsApp() {
   const isClosed = checkRestaurantOpen();
   if (isClosed) {
     mostrarNotificacao("Estamos fechados no Momento!😔");
+
     return;
   }
-  // NOVO: Envia o pedido para o nosso back-end
+
+  if (carrinho.formaPagamento==="Dinheiro" && trocoInput.value === "") {
+    mostrarNotificacao("informar troco");
+    return;
+  }
+
+  // Envia o pedido para o nosso back-end
   try {
     const response = await fetch("/novo-pedido", {
       method: "POST",
@@ -1448,6 +1457,10 @@ async function enviarPedidoWhatsApp() {
   }
 
   mensagem += `*💳 Forma de Pagamento:* ${carrinho.formaPagamento}\n\n`;
+  if (carrinho.formaPagamento === "Dinheiro") {
+    //!Logica para aparecer a mensagemno whats somente quando for seleiconado dinheiro
+    mensagem += `*Troco pra R$ ${trocoInput.value}\n`;
+  }
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
 
   let contadorItensMsg = 1;
@@ -1558,7 +1571,7 @@ function configurarCamposObservacao() {
       }
     }
   });
-  adicionarBotoesObservacao(); // Chamada movida para o final de DOMContentLoaded para garantir que os elementos existam
+  adicionarBotoesObservacao(); 
 }
 
 function itemIndisponivel(event) {
@@ -1597,4 +1610,43 @@ if (estaFechada) {
   fraseSeHmaburgueriaAberta.style.backgroundColor = "red";
 } else {
   fraseSeHmaburgueriaAberta.style.backgroundColor = "green";
+}
+
+//!Função para o troco/////
+
+const formaPagamentoSelect = document.getElementById("formaPagamento");
+const trocoInput = document.querySelector("#troco-input");
+const trocoContainer = document.querySelector("#container-troco");
+
+if (formaPagamentoSelect) {
+  //  Função para mostrar ou esconder troco conforme valor atual
+  function gerenciarVisibilidadeTroco() {
+    if (formaPagamentoSelect.value === "Dinheiro") {
+      trocoContainer.style.display = "flex";
+    } else {
+      trocoContainer.style.display = "none";
+      trocoInput.value = ""; //*limpa o input
+    }
+  }
+
+ 
+  formaPagamentoSelect.addEventListener("change", ()=> {
+    carrinho.formaPagamento = this.value;
+
+    if (this.value) {
+      localStorage.setItem("formaPagamento", this.value);
+    }
+
+    gerenciarVisibilidadeTroco(); 
+  });
+
+
+  const formaPagamentoSalva = localStorage.getItem("formaPagamento");
+  if (formaPagamentoSalva) {
+    formaPagamentoSelect.value = formaPagamentoSalva;
+    carrinho.formaPagamento = formaPagamentoSalva;
+  }
+
+  // 
+  gerenciarVisibilidadeTroco();
 }
