@@ -733,6 +733,7 @@ section h2 {
   padding-bottom: 8px;
   margin-bottom: 15px;
   font-size: 1.3rem;
+  position: static;
 }
 
 /* Estilo para o campo de nome do cliente */
