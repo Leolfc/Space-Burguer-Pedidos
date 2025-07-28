@@ -1,0 +1,27 @@
+{
+  "name": "spaceburguerpedido",
+  "version": "1.0.0",
+  "description": "Projeto desenvolvido com Html5, Css3 e Javascript",
+  "main": "script_final.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leolfc/Space-Burguer-Pedidos.git"
+  },
+  "keywords": [],
+  "author": "Leonardo Feliciano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leolfc/Space-Burguer-Pedidos/issues"
+  },
+  "homepage": "https://github.com/Leolfc/Space-Burguer-Pedidos#readme",
+  "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.12.0"
+  }
+}
