@@ -30,7 +30,7 @@ Este é um projeto que me enche de orgulho, pois representa a aplicação práti
 
 Nada melhor do que ver o projeto em ação!
 
-**[➡️ Clique aqui para acessar a aplicação ao vivo!](https://space-burguer-pedidos.vercel.app/)**
+<p target="_blank"> **[➡️ Clique aqui para acessar a aplicação ao vivo!](https://space-burguer-pedidos.vercel.app/)**</p>
 
 <p align="center">
  
