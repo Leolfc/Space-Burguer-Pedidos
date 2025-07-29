@@ -33,7 +33,7 @@ Nada melhor do que ver o projeto em ação!
 **[➡️ Clique aqui para acessar a aplicação ao vivo!](https://space-burguer-pedidos.vercel.app/)**
 
 <p align="center">
-  <em>(Aqui você pode adicionar um GIF ou screenshots do seu projeto)</em>
+ 
   <br>
   <img src="URL_DO_SEU_GIF_OU_SCREENSHOT_AQUI" alt="Demonstração do Space Book" width="700"/>
   <br>
