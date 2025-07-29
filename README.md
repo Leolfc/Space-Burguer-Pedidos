@@ -37,7 +37,7 @@ Nada melhor do que ver o projeto em ação!
   <br>
   <img src="URL_DO_SEU_GIF_OU_SCREENSHOT_AQUI" alt="Demonstração do Space Book" width="700"/>
   <br>
-  <small>Fluxo de um pedido no Space Book</small>
+  <small>Fluxo de um pedido no Space Burguer Delivery</small>
 </p>
 
 
