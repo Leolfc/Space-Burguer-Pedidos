@@ -1,4 +1,4 @@
-# Space Book - Cardápio Digital 🍔🚀
+# Space Burguer Delivery - Cardápio Digital 🍔🚀
 
 ![Status do Projeto](https://img.shields.io/badge/STATUS-EM_PRODUÇÃO-brightgreen?style=for-the-badge)
 
