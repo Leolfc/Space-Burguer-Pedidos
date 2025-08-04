@@ -1618,7 +1618,7 @@ if(estaFechada  ){
     atendimentoInfo.style.backgroundColor = 'green'
 }else{
 isOpen.innerHTML = "🔴FECHADOS NO MOMENTO"
-atendimentoInfo.style.backgroundColor = 'red'
+atendimentoInfo.style.backgroundColor = '#d32525ff'
 }
 
 
