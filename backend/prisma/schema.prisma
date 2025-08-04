@@ -18,7 +18,12 @@ datasource db {
 model Item{
   id  String @id @default(auto()) @map("_id") @db.ObjectId
   nome String @unique
-  descricao String
-  preco Float
+  descricao String 
+  categoria String[]
+  destaque Boolean @default(false)
+indisponivel Boolean @default(false)
+  preco Float   
+  novoItem Boolean  @default(false)
   criadoEm DateTime @default(now())
 }
+

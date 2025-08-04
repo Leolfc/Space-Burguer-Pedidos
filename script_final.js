@@ -250,17 +250,14 @@ document.addEventListener("DOMContentLoaded", function () {
       carrinho.formaPagamento = this.value;
       if (this.value) {
         localStorage.setItem("formaPagamento", this.value);
-      
       }
     });
     const formaPagamentoSalva = localStorage.getItem("formaPagamento");
     if (formaPagamentoSalva) {
       formaPagamentoSelect.value = formaPagamentoSalva;
       carrinho.formaPagamento = formaPagamentoSalva;
-     
     }
   }
-
 
   // NOVO: Carregar dados do localStorage para tipo de serviço e bairro
   const tipoServicoSalvo = localStorage.getItem("tipoServico");
@@ -1405,7 +1402,7 @@ async function enviarPedidoWhatsApp() {
     return;
   }
 
-  if (carrinho.formaPagamento==="Dinheiro" && trocoInput.value === "") {
+  if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
     mostrarNotificacao("informar troco😃");
     return;
   }
@@ -1571,7 +1568,7 @@ function configurarCamposObservacao() {
       }
     }
   });
-  adicionarBotoesObservacao(); 
+  adicionarBotoesObservacao();
 }
 
 function itemIndisponivel(event) {
@@ -1602,15 +1599,28 @@ function itemEmBreve(event) {
 function checkRestaurantOpen() {
   const data = new Date();
   const dia = data.getDay();
-  return dia === 2; //2 =TERÇA-FEIRA, hamburgueria fechada
+  const hours = data.getHours();
+ const minutes = data.getMinutes()
+ const totalMinutes = hours * 60 + minutes
+const abre = 18 * 60 + 30
+const fecha = 23 * 60
+if(dia===2){
+  return false
+}
+ return totalMinutes >=abre && totalMinutes <= fecha
+  
 }
 const estaFechada = checkRestaurantOpen();
-const fraseSeHmaburgueriaAberta = document.querySelector(".atendimento-info");
-if (estaFechada) {
-  fraseSeHmaburgueriaAberta.style.backgroundColor = "red";
-} else {
-  fraseSeHmaburgueriaAberta.style.backgroundColor = "green";
+const isOpen = document.querySelector('#estaAberta')
+const atendimentoInfo = document.querySelector('.atendimento-info')
+if(estaFechada  ){
+    isOpen.innerHTML = "🟢Aberto - Aceitando pedidos"
+    atendimentoInfo.style.backgroundColor = 'green'
+}else{
+isOpen.innerHTML = "🔴FECHADOS NO MOMENTO"
+atendimentoInfo.style.backgroundColor = 'red'
 }
+
 
 //!Função para o troco/////
 
@@ -1629,17 +1639,15 @@ if (formaPagamentoSelect) {
     }
   }
 
- 
-  formaPagamentoSelect.addEventListener("change", ()=> {
+  formaPagamentoSelect.addEventListener("change", () => {
     carrinho.formaPagamento = this.value;
 
     if (this.value) {
       localStorage.setItem("formaPagamento", this.value);
     }
 
-    gerenciarVisibilidadeTroco(); 
+    gerenciarVisibilidadeTroco();
   });
-
 
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
   if (formaPagamentoSalva) {
@@ -1647,6 +1655,107 @@ if (formaPagamentoSelect) {
     carrinho.formaPagamento = formaPagamentoSalva;
   }
 
-  // 
+  //
   gerenciarVisibilidadeTroco();
 }
+
+// //!back end
+// // A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
+// function itemHtml(burguer) {
+//     const burguerDestacado =  burguer.destaque ? `<span class="item__maiorDaCasa">Maior da casa</span>` : "" 
+//     //!Mostra a animção do item que tem no banco de dados com true//
+    
+//     const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : ""
+
+ 
+   
+//   return ` 
+  
+//     <div class="item ${burguer.indisponivel ? "indisponivel" : ""} " 
+
+//          data-id="${burguer.id}" 
+//          data-nome="${burguer.nome}" 
+//          data-valor="${burguer.preco}" 
+//          data-tipo="hamburguer">
+
+//       <div class="item-info">
+//         <span class="item-name">${burguer.nome}</span>
+//         <span class="item-price">R$${parseFloat(burguer.preco).toFixed(2).replace(".", ",")}</span>
+//       </div>
+//      ${itemNovo}
+//   ${burguerDestacado}
+//       <div class="item-desc">${burguer.descricao}</div>
+      
+//       <div class="item-actions">
+//         <button type="button" class="btn-decrease">Remover</button>
+//         <span class="item-qty">0</span>
+//         <button type="button" class="btn-increase">Adicionar</button>
+//       </div>
+//     </div>`;
+// }
+
+
+// // A função principal que orquestra tudo
+// async function carregarHamburguers() {
+//   try {
+//     // 1. BUSCAR os dados do servidor
+//     const response = await fetch("http://localhost:3000/buscar/hamburguers");
+//     if (!response.ok) {
+//       throw new Error("Falha ao buscar dados do servidor.");
+//     }
+//     const todosHamburgueres = await response.json();
+
+//     // 2. PREPARAR os dados (filtrar e ordenar cada categoria)
+//     const spaceBurgers = todosHamburgueres
+//       .filter(burguer => burguer.categoria.includes("space"))
+//       .sort((a, b) => a.preco - b.preco);
+
+//     const smashBurgers = todosHamburgueres
+//       .filter(burguer => burguer.categoria.includes("smash"))
+//       .sort((a, b) => a.preco - b.preco);
+
+//       const comboBurguers = todosHamburgueres
+//       .filter(burguer => burguer.categoria.includes("combo"))
+//       .sort((a,b)=> a.preco - b.preco) 
+//     // 3. MONTAR as strings de HTML usando as listas PREPARADAS
+//     let htmlSpace = "";
+//     spaceBurgers.forEach(burguer => {
+//       htmlSpace += itemHtml(burguer); // CHAMA a função para cada burger
+//     });
+
+//     let htmlSmash = "";
+//     smashBurgers.forEach(burguer => {
+//       htmlSmash += itemHtml(burguer); // CHAMA a função para cada burger
+//     });
+//     let htmlCombo = ""
+// comboBurguers.forEach(burguer=>{
+//   htmlCombo += itemHtml(burguer)
+
+
+// })
+
+
+//     // 4. EXIBIR o HTML na tela de uma só vez
+//     const listaSpaceDiv = document.querySelector("#space .item-container");
+//     const listaSmashDiv = document.querySelector("#smash .item-container");
+//     const listaCombo = document.querySelector("#combos .item-container");
+
+//     listaSpaceDiv.innerHTML = htmlSpace;
+//     listaSmashDiv.innerHTML = htmlSmash;
+//     listaCombo.innerHTML = htmlCombo
+
+//     // 5. ADICIONAR os eventos de clique aos botões
+//     document.querySelectorAll(".btn-increase").forEach(btn => btn.addEventListener("click", adicionarItem));
+//     document.querySelectorAll(".btn-decrease").forEach(btn => btn.addEventListener("click", removerItem));
+    
+//     adicionarBotoesObservacao();
+
+//   } catch (error) {
+//     console.error("Erro ao carregar o cardápio:", error);
+//   }
+// }
+
+// // Garante que o script roda depois que a página carregou
+// document.addEventListener("DOMContentLoaded", () => {
+//   carregarHamburguers();
+// });
