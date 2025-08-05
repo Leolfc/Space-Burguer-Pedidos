@@ -1396,14 +1396,14 @@ async function enviarPedidoWhatsApp() {
   }
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isClosed = checkRestaurantOpen();
-  if (isClosed) {
+  if (isClosed || isOpen) {
     mostrarNotificacao("Estamos fechados no Momento!😔");
 
     return;
   }
 
   if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
-    mostrarNotificacao("informar troco😃");
+    mostrarNotificacao("informar troco😃 ou não precisa");
     return;
   }
 
@@ -1619,6 +1619,8 @@ if(estaFechada  ){
 }else{
 isOpen.innerHTML = "🔴FECHADOS NO MOMENTO"
 atendimentoInfo.style.backgroundColor = '#d32525ff'
+
+
 }
 
 
@@ -1659,29 +1661,47 @@ if (formaPagamentoSelect) {
   gerenciarVisibilidadeTroco();
 }
 
-// //!back end
-// // A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
+//  //!back end
+// //! A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
 // function itemHtml(burguer) {
 //     const burguerDestacado =  burguer.destaque ? `<span class="item__maiorDaCasa">Maior da casa</span>` : "" 
-//     //!Mostra a animção do item que tem no banco de dados com true//
-    
+//     //!Mostra a animacão do item que tem no banco de dados como true//
 //     const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : ""
+//    let tipoItem = "hamburguer"; // Define um valor padrão
+//     if (burguer.categoria.includes("porcoes")) {
+//         tipoItem = "porcao";
+//     } else if (burguer.categoria.includes("combo")) {
+//         tipoItem = "combo"
+//     }else if(burguer.categoria.includes('bebidas')){
+//       tipoItem = "bebidas"
+//     }
 
- 
-   
-//   return ` 
+//     // ⭐ PASSO 1: Criei uma variável para o HTML da imagem.
+//     let imagemHtml = "";
+
+//     // ⭐ PASSO 2: Verifiquei se o 'burguer' que veio do banco tem uma 'imagem_url'.
+//     // Agora que o backend está enviando, essa condição será verdadeira!
+//     if (burguer.imagem_url) {
+//         // ⭐ PASSO 3: Montei a tag <img> com o caminho correto.
+//        imagemHtml = `<img src="${burguer.imagem_url}" alt="${burguer.nome}" class="imgBebida">`;
+//     }
+
   
+   
+ 
+//   return ` 
 //     <div class="item ${burguer.indisponivel ? "indisponivel" : ""} " 
 
 //          data-id="${burguer.id}" 
 //          data-nome="${burguer.nome}" 
 //          data-valor="${burguer.preco}" 
-//          data-tipo="hamburguer">
-
+//          data-tipo="${tipoItem}">
+//     ${imagemHtml}
 //       <div class="item-info">
 //         <span class="item-name">${burguer.nome}</span>
 //         <span class="item-price">R$${parseFloat(burguer.preco).toFixed(2).replace(".", ",")}</span>
 //       </div>
+     
 //      ${itemNovo}
 //   ${burguerDestacado}
 //       <div class="item-desc">${burguer.descricao}</div>
@@ -1716,7 +1736,12 @@ if (formaPagamentoSelect) {
 
 //       const comboBurguers = todosHamburgueres
 //       .filter(burguer => burguer.categoria.includes("combo"))
-//       .sort((a,b)=> a.preco - b.preco) 
+//       .sort((a, b)=> a.preco - b.preco) 
+
+//       const bebidas = todosHamburgueres
+//       .filter(burguer => burguer.categoria.includes('bebidas'))
+//       .sort((a, b)=> a.preco - b.preco)
+
 //     // 3. MONTAR as strings de HTML usando as listas PREPARADAS
 //     let htmlSpace = "";
 //     spaceBurgers.forEach(burguer => {
@@ -1730,19 +1755,33 @@ if (formaPagamentoSelect) {
 //     let htmlCombo = ""
 // comboBurguers.forEach(burguer=>{
 //   htmlCombo += itemHtml(burguer)
+// })
+// let htmlBebidas = ""
+// bebidas.forEach(burguer=>{
 
-
+//   htmlBebidas += itemHtml(burguer)  
 // })
 
+// const porcoes = todosHamburgueres
+// .filter(burguer =>  burguer.categoria.includes("porcoes"))
+// .sort((a,b)=> a.preco - b.preco)
+// let htmlPorcoes = "";
+// porcoes.forEach(burguer => {
+//   htmlPorcoes += itemHtml(burguer)
+  
+// });
 
 //     // 4. EXIBIR o HTML na tela de uma só vez
 //     const listaSpaceDiv = document.querySelector("#space .item-container");
 //     const listaSmashDiv = document.querySelector("#smash .item-container");
 //     const listaCombo = document.querySelector("#combos .item-container");
-
+//   const listaPorcoes = document.querySelector('#porcoes .item-container')
+//   const listaBebidas = document.querySelector('#bebidas .item-container' )
 //     listaSpaceDiv.innerHTML = htmlSpace;
 //     listaSmashDiv.innerHTML = htmlSmash;
 //     listaCombo.innerHTML = htmlCombo
+//     listaPorcoes.innerHTML = htmlPorcoes
+//     listaBebidas.innerHTML = htmlBebidas
 
 //     // 5. ADICIONAR os eventos de clique aos botões
 //     document.querySelectorAll(".btn-increase").forEach(btn => btn.addEventListener("click", adicionarItem));
