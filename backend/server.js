@@ -1,17 +1,20 @@
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
+const path = require('path'); // Passo 1
 
 const express = require("express");
 const app = express();
 app.use(express.json());
 
+
 const cors = require("cors");
 app.use(cors());
-
+const pastaDasImagens = path.join(__dirname, '../../img');
+app.use('/img', express.static(pastaDasImagens));
 //!CRIAR ITEM
 app.post("/adicionar/hamburguers", async (request, response) => {
-  const { nome, descricao, preco, categoria,indisponivel, novoItem } = request.body;
+  const { nome, descricao, preco, categoria,indisponivel, novoItem,imagem_url } = request.body;
   try {
     const burguer = await prisma.item.create({
       data: {
@@ -20,7 +23,8 @@ app.post("/adicionar/hamburguers", async (request, response) => {
         preco,
         categoria,
         indisponivel,
-        novoItem
+        novoItem,
+        imagem_url
       },
     });
 
@@ -81,7 +85,7 @@ app.get("/buscar/hamburguer/:id", async (request, response) => {
 app.put("/editar/hamburguer/:id", async (request, response) => {
   try {
     const id = request.params.id;
-    const { nome, descricao, preco, destaque,categoria,indisponivel, novoItem } = request.body;
+    const { nome, descricao, preco, destaque,categoria,indisponivel, novoItem, imagem_url } = request.body;
     const hamburguerAtualizado = await prisma.item.update({
       where: { id },
       data: {
@@ -91,7 +95,8 @@ app.put("/editar/hamburguer/:id", async (request, response) => {
         destaque,
         categoria,
         indisponivel,
-        novoItem
+        novoItem,
+        imagem_url
     
       },
     });
@@ -102,6 +107,9 @@ app.put("/editar/hamburguer/:id", async (request, response) => {
   }
 });
 
+
+
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
+

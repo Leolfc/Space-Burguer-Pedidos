@@ -24,6 +24,7 @@ model Item{
 indisponivel Boolean @default(false)
   preco Float   
   novoItem Boolean  @default(false)
+  imagem_url String? 
   criadoEm DateTime @default(now())
 }
 
