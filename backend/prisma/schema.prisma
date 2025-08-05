@@ -21,7 +21,7 @@ model Item{
   descricao String 
   categoria String[]
   destaque Boolean @default(false)
-indisponivel Boolean @default(false)
+  indisponivel Boolean @default(false)
   preco Float   
   novoItem Boolean  @default(false)
   imagem_url String? 

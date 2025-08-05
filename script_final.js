@@ -1661,19 +1661,22 @@ if (formaPagamentoSelect) {
   gerenciarVisibilidadeTroco();
 }
 
-//  //!back end
+//!BACK END/////////////////////////////////////
 // //! A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
-// function itemHtml(burguer) {
-//     const burguerDestacado =  burguer.destaque ? `<span class="item__maiorDaCasa">Maior da casa</span>` : "" 
-//     //!Mostra a animacão do item que tem no banco de dados como true//
+//  function itemHtml(burguer) {
+//    const burguerDestacado =  burguer.destaque ? `<span class="item__maiorDaCasa">Maior da casa</span>` : ""  
+//    //!Mostra a animacão do item que tem no banco de dados como true//
+    
 //     const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : ""
 //    let tipoItem = "hamburguer"; // Define um valor padrão
-//     if (burguer.categoria.includes("porcoes")) {
+//     if (burguer.categoria.includes("porcoes")) { //!Verifica cada categoria no prisma
 //         tipoItem = "porcao";
 //     } else if (burguer.categoria.includes("combo")) {
 //         tipoItem = "combo"
 //     }else if(burguer.categoria.includes('bebidas')){
 //       tipoItem = "bebidas"
+//     }else if(burguer.categoria.includes('refrigerantes')){
+//       tipoItem="refrigerantes"
 //     }
 
 //     // ⭐ PASSO 1: Criei uma variável para o HTML da imagem.
@@ -1741,49 +1744,59 @@ if (formaPagamentoSelect) {
 //       const bebidas = todosHamburgueres
 //       .filter(burguer => burguer.categoria.includes('bebidas'))
 //       .sort((a, b)=> a.preco - b.preco)
+//        const porcoes = todosHamburgueres
+//       .filter(burguer =>  burguer.categoria.includes("porcoes"))
+//       .sort((a,b)=> a.preco - b.preco)
+//     const refrigerantes350 = todosHamburgueres
+//     .filter(burguer => burguer.categoria.includes("refrigerantes"))
+//     .sort((a,b)=> a.preco - b.preco)
 
-//     // 3. MONTAR as strings de HTML usando as listas PREPARADAS
+
+//     //! 3. MONTAR as strings de HTML usando as listas PREPARADAS
 //     let htmlSpace = "";
 //     spaceBurgers.forEach(burguer => {
-//       htmlSpace += itemHtml(burguer); // CHAMA a função para cada burger
+//       htmlSpace += itemHtml(burguer); // CHAMA a função para cada space burger
 //     });
 
 //     let htmlSmash = "";
 //     smashBurgers.forEach(burguer => {
-//       htmlSmash += itemHtml(burguer); // CHAMA a função para cada burger
+//       htmlSmash += itemHtml(burguer); // CHAMA a função para cada smash burguer
 //     });
 //     let htmlCombo = ""
 // comboBurguers.forEach(burguer=>{
 //   htmlCombo += itemHtml(burguer)
 // })
-// let htmlBebidas = ""
-// bebidas.forEach(burguer=>{
-
-//   htmlBebidas += itemHtml(burguer)  
-// })
-
-// const porcoes = todosHamburgueres
-// .filter(burguer =>  burguer.categoria.includes("porcoes"))
-// .sort((a,b)=> a.preco - b.preco)
 // let htmlPorcoes = "";
 // porcoes.forEach(burguer => {
-//   htmlPorcoes += itemHtml(burguer)
+//   htmlPorcoes += itemHtml(burguer)  // CHAMA a função para cada porção
   
 // });
+// let htmlBebidas = ""
+// bebidas.forEach(burguer=>{    // CHAMA a função para cada bebida
+//   htmlBebidas += itemHtml(burguer)  
+// })
+// let htmlRefrigerantes350 = ""
+// refrigerantes350.forEach(burguer=>{
+// htmlRefrigerantes350 += itemHtml(burguer)
+// })
 
-//     // 4. EXIBIR o HTML na tela de uma só vez
+
+
+//     //! 4. EXIBIR o HTML na tela de uma só vez
 //     const listaSpaceDiv = document.querySelector("#space .item-container");
 //     const listaSmashDiv = document.querySelector("#smash .item-container");
 //     const listaCombo = document.querySelector("#combos .item-container");
 //   const listaPorcoes = document.querySelector('#porcoes .item-container')
 //   const listaBebidas = document.querySelector('#bebidas .item-container' )
+//   const listaRefri350 = document.querySelector('#refrigerantes350 .item-container' )
 //     listaSpaceDiv.innerHTML = htmlSpace;
 //     listaSmashDiv.innerHTML = htmlSmash;
 //     listaCombo.innerHTML = htmlCombo
 //     listaPorcoes.innerHTML = htmlPorcoes
 //     listaBebidas.innerHTML = htmlBebidas
+//     listaRefri350.innerHTML = htmlRefrigerantes350
 
-//     // 5. ADICIONAR os eventos de clique aos botões
+//     //! 5. ADICIONAR os eventos de clique aos botões
 //     document.querySelectorAll(".btn-increase").forEach(btn => btn.addEventListener("click", adicionarItem));
 //     document.querySelectorAll(".btn-decrease").forEach(btn => btn.addEventListener("click", removerItem));
     
