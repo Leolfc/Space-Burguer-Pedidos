@@ -100,9 +100,9 @@
 @media screen  and (max-width: 576px) {
   .subtitleAtendimento{
     display: flex;
-    font-size: 10px;
+    font-size: 12px;
     justify-content: left;
-   margin-top: 50px;
+   margin-top: 45px;
 
   }
   
