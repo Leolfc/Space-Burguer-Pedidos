@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Controle - Space Burguer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styleAdm.css" />
+  </head>
+  <body>
+    <div class="painel-container">
+      <header>
+        <nav>
+          <h1>Painel de Controle</h1>
+          <button id="btn-mostrar-gerenciar" class="nav-btn">
+            Gerenciar Cardápio
+          </button>
+          <button id="btn-mostrar-adicionar" class="nav-btn">
+            Adicionar Lanche
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <div id="tela-gerenciar" class="tela">
+          <h2>Lanches Cadastrados</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Categorias</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-lanches-corpo"></tbody>
+          </table>
+        </div>
+
+        <div id="tela-adicionar" class="tela">
+          <h2>Adicionar Novo Lanche</h2>
+          <form id="form-adicionar-lanche">
+            <div class="form-group">
+              <label for="nome">Nome do Lanche</label>
+              <input type="text" id="nome" required />
+            </div>
+            <div class="form-group">
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="preco">Preço (Ex: 25.50)</label>
+              <input type="number" id="preco" step="0.01" required />
+            </div>
+            <div class="form-group">
+              <label class="category-label">Categorias</label>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="space" /><label
+                  >Space Burguer</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="smash" /><label
+                  >Smash Burguer</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="combo" /><label
+                  >Combo</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="porcoes" /><label
+                  >Porção</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="bebidas" /><label
+                  >Bebida</label
+                >
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refrigerantes"
+                /><label>Refrigerante</label>
+              </div>
+                 <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="cocaCola220"
+                /><label>Coca-cola220ml</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="imagem_url"
+                >URL da Imagem (Ex: ../img/spaceBacon.webp)</label
+              >
+              <input type="text" id="imagem_url" />
+            </div>
+            <div class="form-group">
+              <div class="checkbox-group">
+                <input type="checkbox" id="novoItem" /><label
+                  >Marcar como "Novo"</label
+                >
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="indisponivel" /><label
+                  >Marcar como "Indisponível"</label
+                >
+              </div>
+            </div>
+            <button type="submit" class="btn-submit">
+              Adicionar Lanche ao Cardápio
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

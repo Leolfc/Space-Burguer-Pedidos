@@ -1,3 +1,4 @@
+
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -21,7 +22,7 @@ app.post("/adicionar/hamburguers", async (request, response) => {
         nome,
         descricao,
         preco,
-        categoria,
+        categoria: categoria,
         indisponivel,
         novoItem,
         imagem_url
