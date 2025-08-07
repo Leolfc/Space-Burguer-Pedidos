@@ -1396,7 +1396,7 @@ async function enviarPedidoWhatsApp() {
   }
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isClosed = checkRestaurantOpen();
-  if (isClosed || isOpen) {
+  if (isClosed) {
     mostrarNotificacao("Estamos fechados no Momento!😔");
 
     return;
