@@ -1394,13 +1394,7 @@ async function enviarPedidoWhatsApp() {
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
-  //!Função para mostrar notificação quando hamburgueria estiver fechada
-  const isClosed = checkRestaurantOpen();
-  if (isClosed) {
-    mostrarNotificacao("Estamos fechados no Momento!😔");
-
-    return;
-  }
+  //!Função para mostrar notificação 
 
   if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
     mostrarNotificacao("informar troco😃 ou não precisa");
