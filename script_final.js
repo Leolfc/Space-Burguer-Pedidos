@@ -1,5 +1,3 @@
-
-
 //*Preços dos adicionais
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 9.0 },
@@ -1006,6 +1004,16 @@ function adicionarItemAoCarrinho(
     observacoes,
     uniqueId: itemUniqueKey,
   };
+  // Atualiza o contador visual do item no menu
+  try {
+    const qtySpans = document.querySelectorAll(
+      `.item[data-id="${id}"] .item-qty`
+    );
+    qtySpans.forEach((span) => {
+      const atual = parseInt(span.textContent) || 0;
+      span.textContent = String(atual + 1);
+    });
+  } catch (_) {}
   atualizarCarrinho();
   mostrarNotificacao(`${nome} adicionado ao carrinho!`);
 }
@@ -1018,18 +1026,21 @@ function removerItem(event) {
   if (quantidade > 0) {
     quantidade -= 1;
     qtySpan.textContent = quantidade;
-    const itemsToRemove = [];
-    for (const key in carrinho.itens) {
-      if (carrinho.itens[key].id === id) {
-        // Modificado para verificar carrinho.itens[key].id
-        itemsToRemove.push(key);
+    // remove o último item desse id do carrinho
+    let removed = false;
+    const keys = Object.keys(carrinho.itens).reverse();
+    for (const key of keys) {
+      if (carrinho.itens[key] && carrinho.itens[key].id === id) {
+        const itemNome = carrinho.itens[key].nome;
+        delete carrinho.itens[key];
+        mostrarNotificacao(`${itemNome} removido do carrinho`);
+        removed = true;
+        break;
       }
     }
-    if (itemsToRemove.length > 0) {
-      const itemToRemove = itemsToRemove[itemsToRemove.length - 1];
-      const itemNome = carrinho.itens[itemToRemove].nome;
-      delete carrinho.itens[itemToRemove];
-      mostrarNotificacao(`${itemNome} removido do carrinho`);
+    if (!removed) {
+      // Se não achou no carrinho, apenas atualiza UI
+      console.warn("Item para remover não encontrado no carrinho:", id);
     }
     atualizarCarrinho();
   }
@@ -1660,208 +1671,141 @@ if (formaPagamentoSelect) {
   gerenciarVisibilidadeTroco();
 }
 
-//!BACK END/////////////////////////////////////
-// A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
-// export default function itemHtml(burguer) {
-//   const burguerDestacado = burguer.destaque
-//     ? `<span class="item__maiorDaCasa">Maior da casa</span>`
-//     : "";
-//   //!Mostra a animacão do item que tem no banco de dados como true//
+// // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
+// (function () {
+//   const API_BASE = `http://${location.hostname}:3000`;
 
-//   const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
-//   let tipoItem = "hamburguer"; // Define um valor padrão
-//    //!Verifica cada categoria no prisma
-//   if (burguer.categoria.includes("porcoes")) {
-//     tipoItem = "porcao";
-//   } else if (burguer.categoria.includes("combo")) {
-//     tipoItem = "combo";
-//   } else if (burguer.categoria.includes("bebidas")) {
-//     tipoItem = "bebidas";
-//   } else if (burguer.categoria.includes("refrigerantes")) {
-//     tipoItem = "refrigerantes";
-//   } else if (burguer.categoria.includes("cocaCola220")) {
-//     tipoItem = "cocaCola220";
-//   }else if( burguer.categoria.includes("refrigerantes600")){
-//     tipoItem = "refrigerantes600";
-//   }else if(burguer.categoria.includes('refrigerantes1Litro')){
-//     tipoItem = "refrigerantes1Litro"
-//   }else if(burguer.categoria.includes('refri2Litros')){
-//     tipoItem = "refri2Litros"
-//   }else if(burguer.categoria.includes('sucos')){
-//      tipoItem = "sucos"
-//   }
-
-//   // ⭐ PASSO 1: Criei uma variável para o HTML da imagem.
-//   let imagemHtml = "";
-
-//   // ⭐ PASSO 2: Verifiquei se o 'burguer' que veio do banco tem uma 'imagem_url'.
-//   // Agora que o backend está enviando, essa condição será verdadeira!
-//   if (burguer.imagem_url) {
-//     // ⭐ PASSO 3: Montei a tag <img> com o caminho correto.
-//     imagemHtml = `<img src="${burguer.imagem_url}" alt="${burguer.nome}" class="imgBebida">`;
-//   }
-
-//   return ` 
-//     <div class="item ${burguer.indisponivel ? "indisponivel" : ""} " 
-
-//          data-id="${burguer.id}" 
-//          data-nome="${burguer.nome}" 
-//          data-valor="${burguer.preco}" 
-//          data-tipo="${tipoItem}">
-//     ${imagemHtml}
-//       <div class="item-info">
-//         <span class="item-name">${burguer.nome}</span>
-//         <span class="item-price">R$${parseFloat(burguer.preco)
-//           .toFixed(2)
-//           .replace(".", ",")}</span>
-//       </div>
-     
-//      ${itemNovo}
-//   ${burguerDestacado}
-//       <div class="item-desc">${burguer.descricao}</div>
-      
-//       <div class="item-actions">
-//         <button type="button" class="btn-decrease">Remover</button>
-//         <span class="item-qty">0</span>
-//         <button type="button" class="btn-increase">Adicionar</button>
-//       </div>
-//     </div>`;
-// }
-
-// // A função principal que orquestra tudo
-// async function carregarHamburguers() {
-//   try {
-//     // 1. BUSCAR os dados do servidor
-//     const response = await fetch("http://localhost:3000/buscar/hamburguers");
-//     if (!response.ok) {
-//       throw new Error("Falha ao buscar dados do servidor.");
+//   function resolveImagemUrl(imagemUrl) {
+//     if (!imagemUrl) return "";
+//     if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
+//       return `${API_BASE}${imagemUrl}`;
 //     }
-//     const todosHamburgueres = await response.json();
-
-//     // 2. PREPARAR os dados (filtrar e ordenar cada categoria)
-//     const spaceBurgers = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("space"))
-//       .sort((a, b) => a.preco - b.preco);
-
-//     const smashBurgers = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("smash"))
-//       .sort((a, b) => a.preco - b.preco);
-
-//     const comboBurguers = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("combo"))
-//       .sort((a, b) => a.preco - b.preco);
-
-//     const bebidas = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("bebidas"))
-//       .sort((a, b) => a.preco - b.preco);
-//     const porcoes = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("porcoes"))
-//       .sort((a, b) => a.preco - b.preco);
-//     const refrigerantes350 = todosHamburgueres
-//       .filter((burguer) => burguer.categoria.includes("refrigerantes"))
-//       .sort((a, b) => a.preco - b.preco);
-
-//     const cocaCola220 = todosHamburgueres
-//     .filter((burguer=> burguer.categoria.includes('cocaCola220')))
-//     const refri600 = todosHamburgueres
-//     .filter(burguer => burguer.categoria.includes('refrigerantes600'))
-//     .sort((a,b)=> a.preco - b.preco)
-//     const refri1Litro  = todosHamburgueres
-//     .filter(burguer => burguer.categoria.includes('refrigerantes1Litro'))
-//     .sort((a,b)=> a.preco - b.preco)
-//     const refri2Litros = todosHamburgueres
-//     .filter((burguer)=>burguer.categoria.includes('refri2Litros'))
-//     .sort((a,b)=> a.preco - b.preco)
-//     const sucos = todosHamburgueres
-//     .filter((burguer)=> burguer.categoria.includes('sucos'))
-//     .sort((a,b)=> a.preco - b.preco)
-
-//     //! 3. MONTAR as strings de HTML usando as listas PREPARADAS
-//     let htmlSpace = "";
-//     spaceBurgers.forEach((burguer) => {
-//       htmlSpace += itemHtml(burguer); // CHAMA a função para cada space burger
-//     });
-
-//     let htmlSmash = "";
-//     smashBurgers.forEach((burguer) => {
-//       htmlSmash += itemHtml(burguer); // CHAMA a função para cada smash burguer
-//     });
-//     let htmlCombo = "";
-//     comboBurguers.forEach((burguer) => {
-//       htmlCombo += itemHtml(burguer);
-//     });
-//     let htmlPorcoes = "";
-//     porcoes.forEach((burguer) => {
-//       htmlPorcoes += itemHtml(burguer); // CHAMA a função para cada porção
-//     });
-//     let htmlBebidas = "";
-//     bebidas.forEach((burguer) => {
-//       // CHAMA a função para cada bebida
-//       htmlBebidas += itemHtml(burguer);
-//     });
-//     let htmlRefrigerantes350 = "";
-//     refrigerantes350.forEach((burguer) => {
-//       htmlRefrigerantes350 += itemHtml(burguer);
-//     });
-//     let htmlCoca220 = "";
-//     cocaCola220.forEach((burguer) => {
-//       htmlCoca220 += itemHtml(burguer);
-//     });
-//     let htmlRefri600=""
-//   refri600.forEach((burguer)=>{
-//     htmlRefri600 += itemHtml(burguer)
-//   }) 
-//   let htmlRefri1Litro=""
-//   refri1Litro.forEach((burguer)=>{
-//     htmlRefri1Litro += itemHtml(burguer)
-//   })
-//   let htmlRefri2Litros = ""
-//     refri2Litros.forEach((burguer)=>{
-//       htmlRefri2Litros += itemHtml(burguer)
-//     })
-//     let htmlSucos = ''
-//     sucos.forEach((burguer)=>{
-//       htmlSucos += itemHtml(burguer)
-//     })
-
-//     //! 4. EXIBIR o HTML na tela de uma só vez
-//     const listaSpaceDiv = document.querySelector("#space .item-container");
-//     const listaSmashDiv = document.querySelector("#smash .item-container");
-//     const listaCombo = document.querySelector("#combos .item-container");
-//     const listaPorcoes = document.querySelector("#porcoes .item-container");
-//     const listaBebidas = document.querySelector("#bebidas .item-container");
-//     const listaRefri350 = document.querySelector( "#refrigerantes350 .item-container");
-//     const listaCoca220 = document.querySelector("#cocaCola220 .item-container");
-//     const listaRefri600 = document.querySelector('#refrigerantes600 .item-container')
-//     const listaRefri1Litro = document.querySelector("#refrigerantes1Litro .item-container" )
-//     const listaRefri2Litros = document.querySelector("#refri2Litros .item-container" )
-//     const listaSucos = document.querySelector('#sucos .item-container' )
-//     listaSpaceDiv.innerHTML = htmlSpace;
-//     listaSmashDiv.innerHTML = htmlSmash;
-//     listaCombo.innerHTML = htmlCombo;
-//     listaPorcoes.innerHTML = htmlPorcoes;
-//     listaBebidas.innerHTML = htmlBebidas;
-//     listaRefri350.innerHTML = htmlRefrigerantes350;
-//     listaCoca220.innerHTML = htmlCoca220;
-//     listaRefri600.innerHTML = htmlRefri600
-//     listaRefri1Litro.innerHTML = htmlRefri1Litro
-//     listaRefri2Litros.innerHTML = htmlRefri2Litros
-//     listaSucos.innerHTML = htmlSucos
-//     //! 5. ADICIONAR os eventos de clique aos botões
-//     document
-//       .querySelectorAll(".btn-increase")
-//       .forEach((btn) => btn.addEventListener("click", adicionarItem));
-//     document
-//       .querySelectorAll(".btn-decrease")
-//       .forEach((btn) => btn.addEventListener("click", removerItem));
-
-//     adicionarBotoesObservacao();
-//   } catch (error) {
-//     console.error("Erro ao carregar o cardápio:", error);
+//     return imagemUrl;
 //   }
-// }
 
-// // Garante que o script roda depois que a página carregou
-// document.addEventListener("DOMContentLoaded", () => {
-//   carregarHamburguers();
-// });
+//   function itemHtml(burguer) {
+//     const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
+
+//     let tipoItem = "hamburguer";
+//     if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
+//     else if (burguer.categoria.includes("combo")) tipoItem = "combo";
+//     else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
+//     else if (burguer.categoria.includes("refrigerantes")) tipoItem = "bebida";
+//     else if (burguer.categoria.includes("cocaCola220")) tipoItem = "bebida";
+//     else if (burguer.categoria.includes("refrigerantes600"))
+//       tipoItem = "bebida";
+//     else if (burguer.categoria.includes("refrigerantes1Litro"))
+//       tipoItem = "bebida";
+//     else if (burguer.categoria.includes("refri2Litros")) tipoItem = "bebida";
+//     else if (burguer.categoria.includes("sucos")) tipoItem = "bebida";
+
+//     let imagemHtml = "";
+//     if (burguer.imagem_url) {
+//       const url = resolveImagemUrl(burguer.imagem_url);
+//       imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
+//     }
+
+//     return `
+//       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}" 
+//            data-id="${burguer.id}"
+//            data-nome="${burguer.nome}"
+//            data-valor="${burguer.preco}"
+//            data-tipo="${tipoItem}">
+//         ${imagemHtml}
+//         <div class="item-info">
+//           <span class="item-name">${burguer.nome}</span>
+//           <span class="item-price">R$ ${parseFloat(burguer.preco)
+//             .toFixed(2)
+//             .replace(".", ",")}</span>
+//         </div>
+//         ${itemNovo}
+//         <div class="item-desc">${burguer.descricao || ""}</div>
+//         <div class="item-actions">
+//           <button type="button" class="btn-decrease">Remover</button>
+//           <span class="item-qty">0</span>
+//           <button type="button" class="btn-increase">Adicionar</button>
+//         </div>
+//       </div>`;
+//   }
+
+//   async function carregarHamburguers() {
+//     try {
+//       const response = await fetch(
+//         `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
+//         { cache: "no-store" }
+//       );
+//       if (!response.ok) throw new Error("Falha ao buscar dados do servidor.");
+//       const todosHamburgueres = await response.json();
+
+//       const porCategoria = (cat) =>
+//         todosHamburgueres
+//           .filter(
+//             (b) => Array.isArray(b.categoria) && b.categoria.includes(cat)
+//           )
+//           .sort((a, b) => a.preco - b.preco);
+
+//       const spaceBurgers = porCategoria("space");
+//       const smashBurgers = porCategoria("smash");
+//       const comboBurguers = porCategoria("combo");
+//       const porcoes = porCategoria("porcoes");
+//       const bebidas = porCategoria("bebidas");
+//       const refrigerantes350 = porCategoria("refrigerantes");
+//       const cocaCola220 = porCategoria("cocaCola220");
+//       const refri600 = porCategoria("refrigerantes600");
+//       const refri1Litro = porCategoria("refrigerantes1Litro");
+//       const refri2Litros = porCategoria("refri2Litros");
+//       const sucos = porCategoria("sucos");
+
+//       const monta = (lista) => lista.map(itemHtml).join("");
+
+//       const listaSpaceDiv = document.querySelector("#space .item-container");
+//       const listaSmashDiv = document.querySelector("#smash .item-container");
+//       const listaCombo = document.querySelector("#combos .item-container");
+//       const listaPorcoes = document.querySelector("#porcoes .item-container");
+//       const listaBebidas = document.querySelector("#bebidas .item-container");
+//       const listaRefri350 = document.querySelector(
+//         "#refrigerantes350 .item-container"
+//       );
+//       const listaCoca220 = document.querySelector(
+//         "#cocaCola220 .item-container"
+//       );
+//       const listaRefri600 = document.querySelector(
+//         "#refrigerantes600 .item-container"
+//       );
+//       const listaRefri1Litro = document.querySelector(
+//         "#refrigerantes1Litro .item-container"
+//       );
+//       const listaRefri2Litros = document.querySelector(
+//         "#refri2Litros .item-container"
+//       );
+//       const listaSucos = document.querySelector("#sucos .item-container");
+
+//       if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
+//       if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
+//       if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
+//       if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
+//       if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
+//       if (listaRefri350) listaRefri350.innerHTML = monta(refrigerantes350);
+//       if (listaCoca220) listaCoca220.innerHTML = monta(cocaCola220);
+//       if (listaRefri600) listaRefri600.innerHTML = monta(refri600);
+//       if (listaRefri1Litro) listaRefri1Litro.innerHTML = monta(refri1Litro);
+//       if (listaRefri2Litros) listaRefri2Litros.innerHTML = monta(refri2Litros);
+//       if (listaSucos) listaSucos.innerHTML = monta(sucos);
+
+//       // Reanexa eventos requeridos pelos botões recém-inseridos
+//       document
+//         .querySelectorAll(".btn-increase")
+//         .forEach((btn) => btn.addEventListener("click", adicionarItem));
+//       document
+//         .querySelectorAll(".btn-decrease")
+//         .forEach((btn) => btn.addEventListener("click", removerItem));
+//       adicionarBotoesObservacao();
+//     } catch (error) {
+//       console.error("Erro ao carregar o cardápio:", error);
+//     }
+//   }
+
+//   document.addEventListener("DOMContentLoaded", () => {
+//     carregarHamburguers();
+//   });
+// })();

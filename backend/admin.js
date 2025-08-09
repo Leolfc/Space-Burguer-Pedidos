@@ -1,5 +1,6 @@
 // Espera o HTML carregar antes de executar qualquer código
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = `http://${location.hostname}:3000`;
   // --- 1. REFERÊNCIAS AOS ELEMENTOS ---
   // Botões de navegação
   const btnMostrarGerenciar = document.getElementById("btn-mostrar-gerenciar");
@@ -69,7 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function carregarLanches() {
     try {
-      const response = await fetch("http://localhost:3000/buscar/hamburguers");
+      const response = await fetch(
+        `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
+        { cache: "no-store" }
+      );
       if (!response.ok) throw new Error("Falha ao buscar lanches.");
 
       const lanches = await response.json();
@@ -81,6 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
           .toFixed(2)
           .replace(".", ",")}`;
         const categoriasTexto = lanche.categoria.join(", ");
+        const imgSrc = lanche.imagem_url
+          ? lanche.imagem_url.startsWith("/uploads") ||
+            lanche.imagem_url.startsWith("/img")
+            ? `${API_BASE}${lanche.imagem_url}`
+            : lanche.imagem_url
+          : "";
         const statusHtml = `
                     ${
                       lanche.novoItem
@@ -95,13 +105,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
 
         linha.innerHTML = `
+                    <td>${
+                      imgSrc
+                        ? `<img src="${imgSrc}" alt="${lanche.nome}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;"/>`
+                        : ""
+                    }</td>
                     <td>${lanche.nome}</td>
                     <td>${precoFormatado}</td>
                     <td>${categoriasTexto}</td>
                     <td>${statusHtml}</td>
                     <td class="acoes">
-                        <button class="btn-editar" data-id="${lanche.id}">Editar</button>
-                        <button class="btn-deletar" data-id="${lanche.id}">Deletar</button>
+                        <button class="btn-editar" data-id="${
+                          lanche.id
+                        }">Editar</button>
+                        <button class="btn-deletar" data-id="${
+                          lanche.id
+                        }">Deletar</button>
                     </td>
                 `;
         tabelaCorpo.appendChild(linha);
@@ -128,49 +147,54 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const dadosDoLanche = {
-      nome: document.getElementById("nome").value,
-      descricao: document.getElementById("descricao").value,
-      preco: parseFloat(document.getElementById("preco").value),
-      categoria: categorias,
-      imagem_url: document.getElementById("imagem_url").value,
-      novoItem: document.getElementById("novoItem").checked,
-      indisponivel: document.getElementById("indisponivel").checked,
-    };
+    // Monta FormData para suportar upload via multer
+    const formData = new FormData();
+    formData.append("nome", document.getElementById("nome").value);
+    formData.append("descricao", document.getElementById("descricao").value);
+    formData.append("preco", document.getElementById("preco").value);
+    // Envia categorias como JSON para preservar múltiplas seleções
+    formData.append("categoria", JSON.stringify(categorias));
+    formData.append(
+      "novoItem",
+      document.getElementById("novoItem").checked ? "true" : "false"
+    );
+    formData.append(
+      "indisponivel",
+      document.getElementById("indisponivel").checked ? "true" : "false"
+    );
+    const arquivo = document.getElementById("imagem_url").files?.[0];
+    if (arquivo) {
+      formData.append("imagem", arquivo);
+    }
 
     try {
       // Se estamos editando, envia PUT; senão, POST
       if (idEmEdicao) {
         const response = await fetch(
-          `http://localhost:3000/editar/hamburguer/${idEmEdicao}`,
+          `${API_BASE}/editar/hamburguer/${idEmEdicao}`,
           {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dadosDoLanche),
+            body: formData,
           }
         );
         if (response.ok) {
           alert("Lanche atualizado com sucesso!");
           sairDoModoEdicao();
-          carregarLanches();
+          await carregarLanches();
           mostrarTela("tela-gerenciar");
         } else {
           throw new Error("Erro ao atualizar lanche.");
         }
       } else {
-        const response = await fetch(
-          "http://localhost:3000/adicionar/hamburguers",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dadosDoLanche),
-          }
-        );
+        const response = await fetch(`${API_BASE}/adicionar/hamburguers`, {
+          method: "POST",
+          body: formData,
+        });
 
         if (response.ok) {
           alert("Lanche adicionado com sucesso!");
           formAdicionar.reset();
-          carregarLanches();
+          await carregarLanches();
           mostrarTela("tela-gerenciar");
         } else {
           throw new Error("Erro ao adicionar lanche.");
@@ -193,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nome").value = lanche.nome || "";
     document.getElementById("descricao").value = lanche.descricao || "";
     document.getElementById("preco").value = lanche.preco || "";
-    document.getElementById("imagem_url").value = lanche.imagem_url || "";
+    // input type="file" não pode ter valor setado por segurança, então ignoramos.
     document.getElementById("novoItem").checked = !!lanche.novoItem;
     document.getElementById("indisponivel").checked = !!lanche.indisponivel;
 
@@ -247,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           // 4. Envia a requisição DELETE para o backend, passando o ID na URL
           const response = await fetch(
-            `http://localhost:3000/deletar/hamburguer/${idDoLanche}`,
+            `${API_BASE}/deletar/hamburguer/${idDoLanche}`,
             {
               method: "DELETE",
             }
@@ -274,7 +298,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const idDoLanche = event.target.dataset.id;
       try {
         const response = await fetch(
-          `http://localhost:3000/buscar/hamburguer/${idDoLanche}`
+          `${API_BASE}/buscar/hamburguer/${idDoLanche}?t=${Date.now()}`,
+          { cache: "no-store" }
         );
         if (!response.ok) throw new Error("Falha ao buscar lanche");
         const lanche = await response.json();
@@ -301,5 +326,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const fomularioLogin = document.getElementById('#formLogin')
-
+const fomularioLogin = document.getElementById("#formLogin");

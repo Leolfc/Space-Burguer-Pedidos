@@ -1,8 +1,29 @@
+// server.js (topo do arquivo)
+const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
 
+// --- CONFIGURAÇÃO DO MULTER ---
+const storage = multer.diskStorage({
+    // Define a pasta de destino para os arquivos
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, 'uploads');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    // Define o nome do arquivo para ser único e evitar conflitos
+    filename: function (req, file, cb) {
+        // Ex: 166273489234-spacebacon.png
+        cb(null, Date.now() + path.extname(file.originalname)); 
+    }
+});
+
+const upload = multer({ storage: storage });
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
-const path = require('path'); // Passo 1
 
 const express = require("express");
 const app = express();
@@ -13,19 +34,44 @@ const cors = require("cors");
 app.use(cors());
 const pastaDasImagens = path.join(__dirname, '../../img');
 app.use('/img', express.static(pastaDasImagens));
-//!CRIAR ITEM
-app.post("/adicionar/hamburguers", async (request, response) => {
-  const { nome, descricao, preco, categoria,indisponivel, novoItem,imagem_url } = request.body;
+// Servir arquivos enviados via upload
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//!CRIAR ITEM (com upload de imagem opcional)
+app.post("/adicionar/hamburguers", upload.single('imagem'), async (request, response) => {
   try {
+    const {
+      nome,
+      descricao,
+      preco,
+      indisponivel,
+      novoItem
+    } = request.body;
+
+    // categoria pode vir como string ou array (quando múltiplas selecionadas)
+    let { categoria } = request.body;
+    let categoriasArray;
+    try {
+      // Quando vem via FormData pode vir como string JSON
+      if (typeof categoria === 'string') {
+        const parsed = JSON.parse(categoria);
+        if (Array.isArray(parsed)) categoriasArray = parsed;
+      }
+    } catch (_) {}
+    if (!Array.isArray(categoriasArray)) categoriasArray = [];
+
+    const imagemUrl = request.file
+      ? `/uploads/${request.file.filename}`
+      : (request.body.imagem_url || null);
+
     const burguer = await prisma.item.create({
       data: {
         nome,
         descricao,
-        preco,
-        categoria: categoria,
-        indisponivel,
-        novoItem,
-        imagem_url
+        preco: parseFloat(preco),
+        categoria: categoriasArray,
+        indisponivel: String(indisponivel) === 'true' || indisponivel === 'on',
+        novoItem: String(novoItem) === 'true' || novoItem === 'on',
+        imagem_url: imagemUrl,
       },
     });
 
@@ -82,24 +128,42 @@ app.get("/buscar/hamburguer/:id", async (request, response) => {
   }
 });
 
-//!EDITAR ITEM
-app.put("/editar/hamburguer/:id", async (request, response) => {
+//!EDITAR ITEM (com upload de imagem opcional)
+app.put("/editar/hamburguer/:id", upload.single('imagem'), async (request, response) => {
   try {
     const id = request.params.id;
-    const { nome, descricao, preco, destaque,categoria,indisponivel, novoItem, imagem_url } = request.body;
+    let { nome, descricao, preco, destaque, categoria, indisponivel, novoItem, imagem_url } = request.body;
+
+    // categoria pode vir como string ou array
+    let categoriasArray;
+    try {
+      if (typeof categoria === 'string') {
+        const parsed = JSON.parse(categoria);
+        if (Array.isArray(parsed)) categoriasArray = parsed;
+      } else if (Array.isArray(categoria)) {
+        categoriasArray = categoria;
+      }
+    } catch (_) {}
+    // undefined: não altera; array: altera
+
+    // Se veio arquivo novo, define imagem_url; senão mantém a enviada (se houver)
+    if (request.file) {
+      imagem_url = `/uploads/${request.file.filename}`;
+    }
+
+    const dataAtualizacao = {};
+    if (typeof nome !== 'undefined') dataAtualizacao.nome = nome;
+    if (typeof descricao !== 'undefined') dataAtualizacao.descricao = descricao;
+    if (typeof preco !== 'undefined') dataAtualizacao.preco = parseFloat(preco);
+    if (typeof destaque !== 'undefined') dataAtualizacao.destaque = String(destaque) === 'true' || destaque === 'on';
+    if (typeof indisponivel !== 'undefined') dataAtualizacao.indisponivel = String(indisponivel) === 'true' || indisponivel === 'on';
+    if (typeof novoItem !== 'undefined') dataAtualizacao.novoItem = String(novoItem) === 'true' || novoItem === 'on';
+    if (typeof imagem_url !== 'undefined') dataAtualizacao.imagem_url = imagem_url;
+    if (typeof categoriasArray !== 'undefined') dataAtualizacao.categoria = categoriasArray;
+
     const hamburguerAtualizado = await prisma.item.update({
       where: { id },
-      data: {
-        nome,
-        descricao,
-        preco,
-        destaque,
-        categoria,
-        indisponivel,
-        novoItem,
-        imagem_url
-    
-      },
+      data: dataAtualizacao,
     });
     return response.status(200).send(hamburguerAtualizado);
   } catch (error) {
