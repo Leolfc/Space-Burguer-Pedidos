@@ -10,6 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Chewy&family=Fredoka:wght@300..700&family=Lilita+One&family=Lobster&family=Luckiest+Guy&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styleAdm.css" />
   </head>
   <body>
@@ -28,13 +32,22 @@
 
       <main>
         <div id="tela-gerenciar" class="tela">
-          <h2>Lanches Cadastrados</h2>
+          <div class="toolbar">
+            <h2>Lanches Cadastrados</h2>
+            <div class="toolbar-actions">
+              <div class="search">
+                <input type="text" id="filtro-lanches" placeholder="Buscar por nome ou categoria" />
+              </div>
+              <button id="btn-abrir-adicionar" class="btn btn-primario">+ Novo Lanche</button>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
                 <th>Nome</th>
                 <th>Preço</th>
                 <th>Categorias</th>
+                <th>Status</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -43,7 +56,7 @@
         </div>
 
         <div id="tela-adicionar" class="tela">
-          <h2>Adicionar Novo Lanche</h2>
+          <h2 id="titulo-form">Adicionar Novo Lanche</h2>
           <form id="form-adicionar-lanche">
             <div class="form-group">
               <label for="nome">Nome do Lanche</label>
@@ -89,21 +102,43 @@
                   type="checkbox"
                   name="categoria"
                   value="refrigerantes"
-                /><label>Refrigerante</label>
+                /><label>Refrigerantes 350</label>
               </div>
                  <div class="category-option">
                 <input
                   type="checkbox"
                   name="categoria"
                   value="cocaCola220"
-                /><label>Coca-cola220ml</label>
+                /><label>Coca-Cola 220ml</label>
+              </div>
+               <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refrigerantes600"
+                /><label>Refrigerantes 600</label>
+              </div>
+               
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refri2Litros"
+                /><label>Refrigerantes 2litros</label>
+              </div>
+               <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="sucos"
+                /><label>Sucos</label>
               </div>
             </div>
             <div class="form-group">
               <label for="imagem_url"
                 >URL da Imagem (Ex: ../img/spaceBacon.webp)</label
               >
-              <input type="text" id="imagem_url" />
+              <input type="file" id="imagem_url" />
             </div>
             <div class="form-group">
               <div class="checkbox-group">
@@ -117,14 +152,20 @@
                 >
               </div>
             </div>
-            <button type="submit" class="btn-submit">
-              Adicionar Lanche ao Cardápio
-            </button>
+            <div class="form-actions">
+              <button type="submit" id="btn-submit" class="btn-submit">
+                Adicionar Lanche ao Cardápio
+              </button>
+              <button type="button" id="btn-cancelar-edicao" class="btn btn-secundario" style="display:none">
+                Cancelar Edição
+              </button>
+            </div>
           </form>
         </div>
       </main>
     </div>
-
+      
+     
     <script src="admin.js"></script>
   </body>
 </html>

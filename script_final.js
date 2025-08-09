@@ -47,6 +47,7 @@ const taxasDeEntrega = {
   "Jardim Panorama": 10.0,
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
+  "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
@@ -1660,7 +1661,7 @@ if (formaPagamentoSelect) {
 }
 
 //!BACK END/////////////////////////////////////
-// //! A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
+// A função que cria o HTML fica aqui fora, limpa e pronta para ser usada.
 // export default function itemHtml(burguer) {
 //   const burguerDestacado = burguer.destaque
 //     ? `<span class="item__maiorDaCasa">Maior da casa</span>`
@@ -1669,8 +1670,8 @@ if (formaPagamentoSelect) {
 
 //   const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
 //   let tipoItem = "hamburguer"; // Define um valor padrão
+//    //!Verifica cada categoria no prisma
 //   if (burguer.categoria.includes("porcoes")) {
-//     //!Verifica cada categoria no prisma
 //     tipoItem = "porcao";
 //   } else if (burguer.categoria.includes("combo")) {
 //     tipoItem = "combo";
@@ -1680,6 +1681,14 @@ if (formaPagamentoSelect) {
 //     tipoItem = "refrigerantes";
 //   } else if (burguer.categoria.includes("cocaCola220")) {
 //     tipoItem = "cocaCola220";
+//   }else if( burguer.categoria.includes("refrigerantes600")){
+//     tipoItem = "refrigerantes600";
+//   }else if(burguer.categoria.includes('refrigerantes1Litro')){
+//     tipoItem = "refrigerantes1Litro"
+//   }else if(burguer.categoria.includes('refri2Litros')){
+//     tipoItem = "refri2Litros"
+//   }else if(burguer.categoria.includes('sucos')){
+//      tipoItem = "sucos"
 //   }
 
 //   // ⭐ PASSO 1: Criei uma variável para o HTML da imagem.
@@ -1754,7 +1763,18 @@ if (formaPagamentoSelect) {
 
 //     const cocaCola220 = todosHamburgueres
 //     .filter((burguer=> burguer.categoria.includes('cocaCola220')))
-    
+//     const refri600 = todosHamburgueres
+//     .filter(burguer => burguer.categoria.includes('refrigerantes600'))
+//     .sort((a,b)=> a.preco - b.preco)
+//     const refri1Litro  = todosHamburgueres
+//     .filter(burguer => burguer.categoria.includes('refrigerantes1Litro'))
+//     .sort((a,b)=> a.preco - b.preco)
+//     const refri2Litros = todosHamburgueres
+//     .filter((burguer)=>burguer.categoria.includes('refri2Litros'))
+//     .sort((a,b)=> a.preco - b.preco)
+//     const sucos = todosHamburgueres
+//     .filter((burguer)=> burguer.categoria.includes('sucos'))
+//     .sort((a,b)=> a.preco - b.preco)
 
 //     //! 3. MONTAR as strings de HTML usando as listas PREPARADAS
 //     let htmlSpace = "";
@@ -1787,6 +1807,22 @@ if (formaPagamentoSelect) {
 //     cocaCola220.forEach((burguer) => {
 //       htmlCoca220 += itemHtml(burguer);
 //     });
+//     let htmlRefri600=""
+//   refri600.forEach((burguer)=>{
+//     htmlRefri600 += itemHtml(burguer)
+//   }) 
+//   let htmlRefri1Litro=""
+//   refri1Litro.forEach((burguer)=>{
+//     htmlRefri1Litro += itemHtml(burguer)
+//   })
+//   let htmlRefri2Litros = ""
+//     refri2Litros.forEach((burguer)=>{
+//       htmlRefri2Litros += itemHtml(burguer)
+//     })
+//     let htmlSucos = ''
+//     sucos.forEach((burguer)=>{
+//       htmlSucos += itemHtml(burguer)
+//     })
 
 //     //! 4. EXIBIR o HTML na tela de uma só vez
 //     const listaSpaceDiv = document.querySelector("#space .item-container");
@@ -1796,6 +1832,10 @@ if (formaPagamentoSelect) {
 //     const listaBebidas = document.querySelector("#bebidas .item-container");
 //     const listaRefri350 = document.querySelector( "#refrigerantes350 .item-container");
 //     const listaCoca220 = document.querySelector("#cocaCola220 .item-container");
+//     const listaRefri600 = document.querySelector('#refrigerantes600 .item-container')
+//     const listaRefri1Litro = document.querySelector("#refrigerantes1Litro .item-container" )
+//     const listaRefri2Litros = document.querySelector("#refri2Litros .item-container" )
+//     const listaSucos = document.querySelector('#sucos .item-container' )
 //     listaSpaceDiv.innerHTML = htmlSpace;
 //     listaSmashDiv.innerHTML = htmlSmash;
 //     listaCombo.innerHTML = htmlCombo;
@@ -1803,7 +1843,10 @@ if (formaPagamentoSelect) {
 //     listaBebidas.innerHTML = htmlBebidas;
 //     listaRefri350.innerHTML = htmlRefrigerantes350;
 //     listaCoca220.innerHTML = htmlCoca220;
-
+//     listaRefri600.innerHTML = htmlRefri600
+//     listaRefri1Litro.innerHTML = htmlRefri1Litro
+//     listaRefri2Litros.innerHTML = htmlRefri2Litros
+//     listaSucos.innerHTML = htmlSucos
 //     //! 5. ADICIONAR os eventos de clique aos botões
 //     document
 //       .querySelectorAll(".btn-increase")

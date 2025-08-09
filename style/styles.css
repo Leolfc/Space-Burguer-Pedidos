@@ -1171,11 +1171,27 @@ button#btnLimparCarrinho {
   .btn-flutuante {
     width: 48px;
     height: 48px;
+    animation: rotacaoCarrinho 4s infinite; 
+   
   }
+
+  @keyframes rotacaoCarrinho {
+    0%{
+      transform:  rotate(0deg)
+    }
+    50%{
+       transform:  rotate(180deg)
+    }
+     100%{
+       transform:  rotate(360deg)
+    }
+  }
+
 
   #btn-ir-carrinho {
     bottom: 75px;
     right: 16px;
+
   }
 
   #btn-voltar-topo {
