@@ -18,21 +18,17 @@
 }
 .frase{
 
-  animation: cor infinite 5s;
+  animation: cor alternate infinite 1s;
 }
 
 @keyframes cor {
   0%{
-    color: #ff5722;
+    color: #ffff;
  
   }
-  50%{
-    color: #ff5722;
-    
-    
-  }
+
   100%{
-    color: rgb(207, 207, 14);
+    color: #ff5722;
   
   }
 }
