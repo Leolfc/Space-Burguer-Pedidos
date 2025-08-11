@@ -16,19 +16,3 @@
   }
   
 }
-.frase{
-
-  animation: cor alternate infinite 1s;
-}
-
-@keyframes cor {
-  0%{
-    color: #ffff;
- 
-  }
-
-  100%{
-    color: #ff5722;
-  
-  }
-}
