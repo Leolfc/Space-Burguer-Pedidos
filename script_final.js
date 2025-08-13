@@ -1426,6 +1426,11 @@ async function enviarPedidoWhatsApp() {
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
+  //!Mostrar notificação se input for vazio
+  if(carrinho.numeroResidencia===""){
+mostrarNotificacao('Por favor informe o número da residência!!🏠')
+return
+  }
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
   if (!isOpenNow) {
@@ -1439,6 +1444,7 @@ async function enviarPedidoWhatsApp() {
     return;
   }
 
+  
   // Envia o pedido para o nosso back-end
   try {
     const response = await fetch("/novo-pedido", {
