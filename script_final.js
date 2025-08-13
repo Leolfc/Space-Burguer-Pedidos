@@ -65,6 +65,7 @@ const carrinho = {
   itemAtual: null,
   nomeCliente: "",
   enderecoCliente: "",
+  numeroResidencia: "",
   formaPagamento: "",
   tipoServico: "entrega",
   bairroSelecionado: "",
@@ -141,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const bairroSelect = document.getElementById("bairroSelect");
   const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
   const enderecoClienteInput = document.getElementById("enderecoCliente");
-
+  const numeroResidencia = document.getElementById("numeroResidencia");
   // NOVO: Popular o select de bairros
   if (bairroSelect) {
     // Adiciona uma opção padrão "Selecione o bairro" que não está em taxasDeEntrega
@@ -221,6 +222,8 @@ document.addEventListener("DOMContentLoaded", function () {
     bairroSelect.addEventListener("change", atualizarTaxaSelecionada);
 
   const nomeClienteInput = document.getElementById("nomeCliente");
+
+
   if (nomeClienteInput) {
     nomeClienteInput.addEventListener("input", function () {
       carrinho.nomeCliente = this.value.trim();
@@ -232,6 +235,21 @@ document.addEventListener("DOMContentLoaded", function () {
       carrinho.nomeCliente = nomeSalvo;
     }
   }
+  if (numeroResidencia) {
+    numeroResidencia.addEventListener("input", function () {
+      carrinho.numeroResidencia = this.value.trim();
+      localStorage.setItem("numeroResidencia", carrinho.numeroResidencia);
+    });
+  }
+
+ 
+const numeroSalvo = localStorage.getItem("numeroResidencia");
+if (numeroSalvo && numeroResidencia) {
+  numeroResidencia.value = numeroSalvo;
+  carrinho.numeroResidencia = numeroSalvo;
+}
+
+  
 
   if (enderecoClienteInput) {
     enderecoClienteInput.addEventListener("input", function () {
@@ -1455,6 +1473,7 @@ async function enviarPedidoWhatsApp() {
   if (carrinho.tipoServico === "entrega") {
     mensagem += `*🛵 Tipo de Serviço:* Entrega\n`;
     mensagem += `*🏠 Endereço:* ${carrinho.enderecoCliente}\n`;
+    mensagem += `*🏠 Numero:* ${carrinho.numeroResidencia}\n`;
     mensagem += `*🏘️ Bairro:* ${carrinho.bairroSelecionado}\n`;
     if (carrinho.bairroSelecionado === "Outro Bairro (Consultar)") {
       mensagem += `*💰 Taxa de Entrega:* (A CONSULTAR)\n`;
@@ -1616,7 +1635,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 10 * 60 + 30;
   const fecha = 23 * 60;
   if (dia === 2) {
     return false;
