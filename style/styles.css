@@ -2172,7 +2172,7 @@ button {
 
 /* Estilos para container do troco */
 
-#container-troco{
+.container--troco{
   display: flex;
   flex-flow: row wrap;
   margin-top: 20px;
