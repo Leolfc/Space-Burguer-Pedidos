@@ -1641,7 +1641,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 10 * 60 + 30;
   const fecha = 23 * 60;
   if (dia === 2) {
     return false;
@@ -1666,8 +1666,7 @@ const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
 
 if (formaPagamentoSelect) {
-  //  Função para mostrar ou esconder troco conforme valor atual
-  function gerenciarVisibilidadeTroco() {
+  //  Função para mostrar ou esconder troco conforme valor atual  function gerenciarVisibilidadeTroco() {
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
     } else {
@@ -1694,7 +1693,7 @@ if (formaPagamentoSelect) {
 
   //
   gerenciarVisibilidadeTroco();
-}
+
 
 // // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
 // (function () {
