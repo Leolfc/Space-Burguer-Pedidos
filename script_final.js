@@ -1432,11 +1432,6 @@ mostrarNotificacao('Por favor informe o número da residência!!🏠')
 return
   }
 
-if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
-    mostrarNotificacao("informar troco😃 ou não precisa"); 
-    return;
-  }
-
 
 
   //!Função para mostrar notificação quando hamburgueria estiver fechada
