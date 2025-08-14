@@ -1498,7 +1498,7 @@ if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
 
   mensagem += `*💳 Forma de Pagamento:* ${carrinho.formaPagamento}\n\n`;
   if (carrinho.formaPagamento === "Dinheiro") {
-    //!Logica para aparecer a mensagemno whats somente quando for seleiconado dinheiro
+    //!Logica para aparecer a mensagem no whats somente quando for selecionado dinheiro
     mensagem += `*Troco pra R$ ${trocoInput.value}\n\n`;
   }
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
@@ -1645,7 +1645,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 9 * 60 + 30;
+  const abre = 18 * 60 + 30;
   const fecha = 23 * 60;
   if (dia === 2) {
     return false;
