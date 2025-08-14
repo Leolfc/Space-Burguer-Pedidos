@@ -1431,6 +1431,14 @@ async function enviarPedidoWhatsApp() {
 mostrarNotificacao('Por favor informe o número da residência!!🏠')
 return
   }
+
+if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
+    mostrarNotificacao("informar troco😃 ou não precisa"); 
+    return;
+  }
+
+
+
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
   if (!isOpenNow) {
@@ -1439,10 +1447,6 @@ return
     return;
   }
 
-  // if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
-  //   mostrarNotificacao("informar troco😃 ou não precisa");
-  //   return;
-  // }
 
   
   // Envia o pedido para o nosso back-end
@@ -1495,7 +1499,7 @@ return
   mensagem += `*💳 Forma de Pagamento:* ${carrinho.formaPagamento}\n\n`;
   if (carrinho.formaPagamento === "Dinheiro") {
     //!Logica para aparecer a mensagemno whats somente quando for seleiconado dinheiro
-    mensagem += `*Troco pra R$ ${trocoInput.value}\n`;
+    mensagem += `*Troco pra R$ ${trocoInput.value}\n\n`;
   }
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
 
@@ -1641,7 +1645,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 9 * 60 + 30;
   const fecha = 23 * 60;
   if (dia === 2) {
     return false;
@@ -1657,16 +1661,20 @@ if (estaFechada) {
 } else {
   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
   atendimentoInfo.style.backgroundColor = "#d32525ff";
+
 }
 
-//!Função para o troco/////
 
-const formaPagamentoSelect = document.getElementById("formaPagamento");
+
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
 
-if (formaPagamentoSelect) {
-  //  Função para mostrar ou esconder troco conforme valor atual  function gerenciarVisibilidadeTroco() {
+//!Função para o troco/////
+function gerenciarVisibilidadeTroco(){
+const formaPagamentoSelect = document.getElementById("formaPagamento");
+
+
+  if(formaPagamentoSelect){
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
     } else {
@@ -1674,25 +1682,34 @@ if (formaPagamentoSelect) {
       trocoInput.value = ""; //*limpa o input
     }
   }
-
-  formaPagamentoSelect.addEventListener("change", () => {
-    carrinho.formaPagamento = this.value;
-
-    if (this.value) {
-      localStorage.setItem("formaPagamento", this.value);
-    }
-
-    gerenciarVisibilidadeTroco();
-  });
-
+  
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
   if (formaPagamentoSalva) {
     formaPagamentoSelect.value = formaPagamentoSalva;
     carrinho.formaPagamento = formaPagamentoSalva;
   }
+  
+ 
+  
+}
+  const formaPagamentoSelect = document.getElementById("formaPagamento");
+  if (formaPagamentoSelect) {
+    formaPagamentoSelect.addEventListener("change", function () {
+      carrinho.formaPagamento = this.value;
+      if (this.value) {
+        localStorage.setItem("formaPagamento", this.value);
+      }
+      gerenciarVisibilidadeTroco(); // Chama sempre que muda!
+    });
 
-  //
-  gerenciarVisibilidadeTroco();
+    const formaPagamentoSalva = localStorage.getItem("formaPagamento");
+    if (formaPagamentoSalva) {
+      formaPagamentoSelect.value = formaPagamentoSalva;
+      carrinho.formaPagamento = formaPagamentoSalva;
+    }
+    gerenciarVisibilidadeTroco(); // Chama ao carregar!
+  }
+   
 
 
 // // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
