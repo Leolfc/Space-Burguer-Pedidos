@@ -1426,11 +1426,8 @@ async function enviarPedidoWhatsApp() {
     if (formaPagamentoSelect) formaPagamentoSelect.focus();
     return;
   }
-  //!Mostrar notificação se input for vazio
-  if(carrinho.numeroResidencia===""){
-mostrarNotificacao('Por favor informe o número da residência!!🏠')
-return
-  }
+  //!Mostrar notificação se input for
+ 
 
 if(carrinho.formaPagamento==="Dinheiro" && trocoInput.value === ""){
   mostrarNotificacao('Informe valor do troco ou não precisa!!!')
