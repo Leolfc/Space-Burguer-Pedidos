@@ -1057,7 +1057,7 @@ function removerItem(event) {
       }
     }
     if (!removed) {
-      // Se não achou no carrinho, apenas atualiza UI
+      
       console.warn("Item para remover não encontrado no carrinho:", id);
     }
     atualizarCarrinho();
@@ -1087,7 +1087,7 @@ function removerItemDoCarrinho(uniqueId) {
 function limparCarrinho() {
   if (Object.keys(carrinho.itens).length > 0) {
     carrinho.itens = {};
-    // MODIFICADO: Resetar informações de entrega/retirada
+    //  Resetar informações de entrega/retirada
     carrinho.tipoServico = "entrega";
     const radioEntrega = document.getElementById("tipoServicoEntrega");
     if (radioEntrega) radioEntrega.checked = true;
@@ -1123,11 +1123,11 @@ function atualizarContadorCarrinho() {
   }
 }
 
-// MODIFICADO: Função para atualizar o carrinho e o total
+//  Função para atualizar o carrinho e o total
 function atualizarCarrinho() {
   console.log("Atualizando carrinho:", carrinho);
 
-  const itensCarrinhoDiv = document.getElementById("itens-carrinho"); // Renomeado para evitar conflito
+  const itensCarrinhoDiv = document.getElementById("itens-carrinho"); 
   const valorTotalSpan = document.getElementById("valorTotal");
 
   if (!itensCarrinhoDiv || !valorTotalSpan) {
@@ -1427,7 +1427,7 @@ async function enviarPedidoWhatsApp() {
     return;
   }
   //!Mostrar notificação se input for vazio
-  if(carrinho.numeroResidencia===""){
+  if(carrinho.tipoServico === "entrega" && carrinho.numeroResidencia===""){
 mostrarNotificacao('Por favor informe o número da residência!!🏠')
 return
   }
@@ -1643,7 +1643,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 10 * 60 + 30;
   const fecha = 23 * 60;
   if (dia === 2) {
     return false;
