@@ -58,7 +58,6 @@ body {
 
 /* Estilos do cabeçalho */
 header {
-  /* background-color: var(--header-bg); */
   color: var(--header-text);
   padding: 15px 10px;
   text-align: center;
@@ -66,7 +65,7 @@ header {
   /* position: sticky; */
   top: 0;
   z-index:500;
-  /* background-image: url('../img/imgHamburguer.jpg'); */
+  background-image: url('../img/imgHamburguer.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
