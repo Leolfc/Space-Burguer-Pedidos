@@ -36,7 +36,7 @@ const pastaDasImagens = path.join(__dirname, '../../img');
 app.use('/img', express.static(pastaDasImagens));
 // Servir arquivos enviados via upload
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-//!CRIAR ITEM (com upload de imagem opcional)
+//!CRIAR ITEM (
 app.post("/adicionar/hamburguers", upload.single('imagem'), async (request, response) => {
   try {
     const {
