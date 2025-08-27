@@ -223,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const nomeClienteInput = document.getElementById("nomeCliente");
 
-
   if (nomeClienteInput) {
     nomeClienteInput.addEventListener("input", function () {
       carrinho.nomeCliente = this.value.trim();
@@ -242,14 +241,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
- 
-const numeroSalvo = localStorage.getItem("numeroResidencia");
-if (numeroSalvo && numeroResidencia) {
-  numeroResidencia.value = numeroSalvo;
-  carrinho.numeroResidencia = numeroSalvo;
-}
-
-  
+  const numeroSalvo = localStorage.getItem("numeroResidencia");
+  if (numeroSalvo && numeroResidencia) {
+    numeroResidencia.value = numeroSalvo;
+    carrinho.numeroResidencia = numeroSalvo;
+  }
 
   if (enderecoClienteInput) {
     enderecoClienteInput.addEventListener("input", function () {
@@ -711,7 +707,7 @@ function mostrarPerguntaAdicionais(
       ? "Deseja personalizar ou adicionar observações ao combo?"
       : "Deseja adicionais ou alguma observação?";
   let btnNaoTexto =
-    tipo === "combo" ? "Sem personalização" : "Adicionar Direto";
+    tipo === "combo" ? "Sem personalização" : "Adicionar ";
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
@@ -1057,7 +1053,6 @@ function removerItem(event) {
       }
     }
     if (!removed) {
-      
       console.warn("Item para remover não encontrado no carrinho:", id);
     }
     atualizarCarrinho();
@@ -1127,7 +1122,7 @@ function atualizarContadorCarrinho() {
 function atualizarCarrinho() {
   console.log("Atualizando carrinho:", carrinho);
 
-  const itensCarrinhoDiv = document.getElementById("itens-carrinho"); 
+  const itensCarrinhoDiv = document.getElementById("itens-carrinho");
   const valorTotalSpan = document.getElementById("valorTotal");
 
   if (!itensCarrinhoDiv || !valorTotalSpan) {
@@ -1347,6 +1342,7 @@ function configurarBotoesFlutuantes() {
   const resumoPedido = document.getElementById("resumoPedido");
   if (!btnIrCarrinho || !btnVoltarTopo || !resumoPedido) return;
   btnIrCarrinho.addEventListener("click", function () {
+    ;
     const carrinhoPos =
       resumoPedido.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
@@ -1357,6 +1353,8 @@ function configurarBotoesFlutuantes() {
   btnVoltarTopo.addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
+ 
+
   window.addEventListener("scroll", function () {
     if (window.pageYOffset > 300) {
       btnVoltarTopo.classList.add("visivel");
@@ -1376,6 +1374,7 @@ function configurarBotaoWhatsApp() {
     btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
   }
 }
+
 
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
@@ -1427,15 +1426,15 @@ async function enviarPedidoWhatsApp() {
     return;
   }
   //!Mostrar notificação se input for vazio
-  if(carrinho.tipoServico === "entrega" && carrinho.numeroResidencia===""){
-mostrarNotificacao('Por favor informe o número da residência!!🏠')
-return
+  if (carrinho.tipoServico === "entrega" && carrinho.numeroResidencia === "") {
+    mostrarNotificacao("Por favor informe o número da residência!!🏠");
+    return;
   }
 
-if(carrinho.formaPagamento==="Dinheiro" && trocoInput.value === ""){
-  mostrarNotificacao('Informe valor do troco ou não precisa!!!')
-  return;
-}
+  if (carrinho.formaPagamento === "Dinheiro" && trocoInput.value === "") {
+    mostrarNotificacao("Informe valor do troco ou não precisa!!!");
+    return;
+  }
 
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
@@ -1445,8 +1444,6 @@ if(carrinho.formaPagamento==="Dinheiro" && trocoInput.value === ""){
     return;
   }
 
-
-  
   // Envia o pedido para o nosso back-end
   try {
     const response = await fetch("/novo-pedido", {
@@ -1659,20 +1656,16 @@ if (estaFechada) {
 } else {
   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
   atendimentoInfo.style.backgroundColor = "#d32525ff";
-
 }
-
-
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
 
 //!Função para o troco/////
-function gerenciarVisibilidadeTroco(){
-const formaPagamentoSelect = document.getElementById("formaPagamento");
+function gerenciarVisibilidadeTroco() {
+  const formaPagamentoSelect = document.getElementById("formaPagamento");
 
-
-  if(formaPagamentoSelect){
+  if (formaPagamentoSelect) {
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
     } else {
@@ -1680,35 +1673,32 @@ const formaPagamentoSelect = document.getElementById("formaPagamento");
       trocoInput.value = ""; //*limpa o input
     }
   }
-  
+
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
   if (formaPagamentoSalva) {
     formaPagamentoSelect.value = formaPagamentoSalva;
     carrinho.formaPagamento = formaPagamentoSalva;
   }
-  
- return
-  
+
+  return;
 }
-  const formaPagamentoSelect = document.getElementById("formaPagamento");
-  if (formaPagamentoSelect) {
-    formaPagamentoSelect.addEventListener("change", function () {
-      carrinho.formaPagamento = this.value;
-      if (this.value) {
-        localStorage.setItem("formaPagamento", this.value);
-      }
-      gerenciarVisibilidadeTroco(); // Chama sempre que muda!
-    });
-
-    const formaPagamentoSalva = localStorage.getItem("formaPagamento");
-    if (formaPagamentoSalva) {
-      formaPagamentoSelect.value = formaPagamentoSalva;
-      carrinho.formaPagamento = formaPagamentoSalva;
+const formaPagamentoSelect = document.getElementById("formaPagamento");
+if (formaPagamentoSelect) {
+  formaPagamentoSelect.addEventListener("change", function () {
+    carrinho.formaPagamento = this.value;
+    if (this.value) {
+      localStorage.setItem("formaPagamento", this.value);
     }
-    gerenciarVisibilidadeTroco(); // Chama ao carregar!
-  }
-   
+    gerenciarVisibilidadeTroco(); // Chama sempre que muda!
+  });
 
+  const formaPagamentoSalva = localStorage.getItem("formaPagamento");
+  if (formaPagamentoSalva) {
+    formaPagamentoSelect.value = formaPagamentoSalva;
+    carrinho.formaPagamento = formaPagamentoSalva;
+  }
+  gerenciarVisibilidadeTroco(); // Chama ao carregar!
+}
 
 // // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
 // (function () {
@@ -1745,7 +1735,7 @@ const formaPagamentoSelect = document.getElementById("formaPagamento");
 //     }
 
 //     return `
-//       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}" 
+//       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
 //            data-id="${burguer.id}"
 //            data-nome="${burguer.nome}"
 //            data-valor="${burguer.preco}"
@@ -1848,5 +1838,4 @@ const formaPagamentoSelect = document.getElementById("formaPagamento");
 //     carregarHamburguers();
 //   });
 // })();
-
 

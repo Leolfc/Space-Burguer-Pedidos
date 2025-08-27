@@ -11,13 +11,15 @@
     bottom: 0;
     left: 0;
     gap: 8px;
-    margin:20px 50px;
-    margin-top: 50px;
+    margin: 40px auto;
     border-radius: 8px;
+    width: 80%;
+    height:100%;
 }
 @media (max-width: 600px) {
     .rodape {
        margin-top: 100px;
+     
     }
 }
 .rodape a{
@@ -29,4 +31,8 @@
 }
 i{
     margin: 3px;
+}
+
+.rodape .linkInsta:hover {
+    color:#9943B7;
 }
