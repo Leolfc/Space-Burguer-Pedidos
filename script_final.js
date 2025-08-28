@@ -530,7 +530,7 @@ function criarModalAdicionais() {
     });
   adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
 
-// então, para marcar indisponível:
+//!para marcar indisponível em um adicional
 if (adicionalItem.dataset.id === "molhoChesse") {
   adicionalItem.classList.add("indisponivel");
 }
