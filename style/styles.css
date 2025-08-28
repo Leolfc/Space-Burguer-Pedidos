@@ -2034,7 +2034,7 @@ button {
   font-size: 0.95rem; /* Tamanho um pouco maior */
 }
 
-/* Classe para ocultar elementos (já deve existir, mas garantindo) */
+
 .hidden {
   display: none !important;
 }
@@ -2057,14 +2057,12 @@ button {
   color: #ff9800;
 }
 
-/* Se você tinha .cart-info-taxa-entrega, pode remover ou adaptar.
-   A div #taxaEntregaInfo já mostra a taxa. */
+
 
 /* Garante que o select de bairro use o estilo base .forma-pagamento */
 #bairroSelect.forma-pagamento {
-  /* Herda estilos de .forma-pagamento */
-  /* Você pode adicionar ou sobrescrever estilos específicos aqui se necessário */
-  margin-top: 5px; /* Pequeno espaço acima do select */
+ 
+  margin-top: 5px; 
 }
 
 .item_promocao {

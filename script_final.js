@@ -4,7 +4,7 @@ const adicionais = {
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.5 },
   bacon: { nome: "Bacon", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
-  queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
+  queijoMussarela:  { nome: "Queijo Mussarela", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
   ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
@@ -55,6 +55,7 @@ const taxasDeEntrega = {
   Papagaio: 8.0,
   "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
 };
+
 // FIM NOVO
 
 // Armazenar itens do carrinho
@@ -492,6 +493,7 @@ function criarModalAdicionais() {
   adicionaisContainer.appendChild(adicionaisList);
   for (const [key, adicional] of Object.entries(adicionais)) {
     const adicionalItem = document.createElement("div");
+    
     adicionalItem.className = "adicional-item";
     adicionalItem.dataset.id = key;
     adicionalItem.style.border = "1px solid #ff5722";
@@ -526,6 +528,12 @@ function criarModalAdicionais() {
         atualizarResumoAdicionais();
       }
     });
+  adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
+
+// então, para marcar indisponível:
+if (adicionalItem.dataset.id === "molhoChesse") {
+  adicionalItem.classList.add("indisponivel");
+}
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
     qtySpan.className = "adicional-qty";
