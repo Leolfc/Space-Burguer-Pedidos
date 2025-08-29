@@ -313,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Filtro de busca em tempo real
   document.addEventListener("DOMContentLoaded", () => {
+  
     const inputFiltro = document.getElementById("filtro-lanches");
     const tabelaCorpo = document.getElementById("tabela-lanches-corpo");
     if (!inputFiltro || !tabelaCorpo) return;
@@ -324,6 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+  
 });
 
 const fomularioLogin = document.getElementById("#formLogin");

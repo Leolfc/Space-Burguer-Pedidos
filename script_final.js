@@ -1708,142 +1708,144 @@ if (formaPagamentoSelect) {
   gerenciarVisibilidadeTroco(); // Chama ao carregar!
 }
 
-// // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
-// (function () {
-//   const API_BASE = `http://${location.hostname}:3000`;
+// !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
+(function () {
+  const API_BASE = `http://${location.hostname}:3000`;
 
-//   function resolveImagemUrl(imagemUrl) {
-//     if (!imagemUrl) return "";
-//     if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
-//       return `${API_BASE}${imagemUrl}`;
-//     }
-//     return imagemUrl;
-//   }
+  function resolveImagemUrl(imagemUrl) {
+    if (!imagemUrl) return "";
+    if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
+      return `${API_BASE}${imagemUrl}`;
+    }
+    return imagemUrl;
+  }
 
-//   function itemHtml(burguer) {
-//     const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
+  function itemHtml(burguer) {
+    const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
 
-//     let tipoItem = "hamburguer";
-//     if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
-//     else if (burguer.categoria.includes("combo")) tipoItem = "combo";
-//     else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
-//     else if (burguer.categoria.includes("refrigerantes")) tipoItem = "bebida";
-//     else if (burguer.categoria.includes("cocaCola220")) tipoItem = "bebida";
-//     else if (burguer.categoria.includes("refrigerantes600"))
-//       tipoItem = "bebida";
-//     else if (burguer.categoria.includes("refrigerantes1Litro"))
-//       tipoItem = "bebida";
-//     else if (burguer.categoria.includes("refri2Litros")) tipoItem = "bebida";
-//     else if (burguer.categoria.includes("sucos")) tipoItem = "bebida";
+    let tipoItem = "hamburguer";
+    if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
+    else if (burguer.categoria.includes("combo")) tipoItem = "combo";
+    else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
+    else if (burguer.categoria.includes("refrigerantes")) tipoItem = "bebida";
+    else if (burguer.categoria.includes("cocaCola220")) tipoItem = "bebida";
+    else if (burguer.categoria.includes("refrigerantes600"))
+      tipoItem = "bebida";
+    else if (burguer.categoria.includes("refrigerantes1Litro"))
+      tipoItem = "bebida";
+    else if (burguer.categoria.includes("refri2Litros")) tipoItem = "bebida";
+    else if (burguer.categoria.includes("sucos")) tipoItem = "bebida";
 
-//     let imagemHtml = "";
-//     if (burguer.imagem_url) {
-//       const url = resolveImagemUrl(burguer.imagem_url);
-//       imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
-//     }
+    let imagemHtml = "";
+    if (burguer.imagem_url) {
+      const url = resolveImagemUrl(burguer.imagem_url);
+      imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
+    }
 
-//     return `
-//       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
-//            data-id="${burguer.id}"
-//            data-nome="${burguer.nome}"
-//            data-valor="${burguer.preco}"
-//            data-tipo="${tipoItem}">
-//         ${imagemHtml}
-//         <div class="item-info">
-//           <span class="item-name">${burguer.nome}</span>
-//           <span class="item-price">R$ ${parseFloat(burguer.preco)
-//             .toFixed(2)
-//             .replace(".", ",")}</span>
-//         </div>
-//         ${itemNovo}
-//         <div class="item-desc">${burguer.descricao || ""}</div>
-//         <div class="item-actions">
-//           <button type="button" class="btn-decrease">Remover</button>
-//           <span class="item-qty">0</span>
-//           <button type="button" class="btn-increase">Adicionar</button>
-//         </div>
-//       </div>`;
-//   }
+    return `
+      <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
+           data-id="${burguer.id}"
+           data-nome="${burguer.nome}"
+           data-valor="${burguer.preco}"
+           data-tipo="${tipoItem}">
+        ${imagemHtml}
+        <div class="item-info">
+          <span class="item-name">${burguer.nome}</span>
+          <span class="item-price">R$ ${parseFloat(burguer.preco)
+            .toFixed(2)
+            .replace(".", ",")}</span>
+        </div>
+        ${itemNovo}
+        <div class="item-desc">${burguer.descricao || ""}</div>
+        <div class="item-actions">
+          <button type="button" class="btn-decrease">Remover</button>
+          <span class="item-qty">0</span>
+          <button type="button" class="btn-increase">Adicionar</button>
+        </div>
+      </div>`;
+  }
 
-//   async function carregarHamburguers() {
-//     try {
-//       const response = await fetch(
-//         `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
-//         { cache: "no-store" }
-//       );
-//       if (!response.ok) throw new Error("Falha ao buscar dados do servidor.");
-//       const todosHamburgueres = await response.json();
+  async function carregarHamburguers() {
+    try {
+      const response = await fetch(
+        `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
+        { cache: "no-store" }
+      );
+      if (!response.ok) throw new Error("Falha ao buscar dados do servidor.");
+      const todosHamburgueres = await response.json();
 
-//       const porCategoria = (cat) =>
-//         todosHamburgueres
-//           .filter(
-//             (b) => Array.isArray(b.categoria) && b.categoria.includes(cat)
-//           )
-//           .sort((a, b) => a.preco - b.preco);
+      const porCategoria = (cat) =>
+        todosHamburgueres
+          .filter(
+            (b) => Array.isArray(b.categoria) && b.categoria.includes(cat)
+          )
+          .sort((a, b) => a.preco - b.preco);
 
-//       const spaceBurgers = porCategoria("space");
-//       const smashBurgers = porCategoria("smash");
-//       const comboBurguers = porCategoria("combo");
-//       const porcoes = porCategoria("porcoes");
-//       const bebidas = porCategoria("bebidas");
-//       const refrigerantes350 = porCategoria("refrigerantes");
-//       const cocaCola220 = porCategoria("cocaCola220");
-//       const refri600 = porCategoria("refrigerantes600");
-//       const refri1Litro = porCategoria("refrigerantes1Litro");
-//       const refri2Litros = porCategoria("refri2Litros");
-//       const sucos = porCategoria("sucos");
+      const spaceBurgers = porCategoria("space");
+      const smashBurgers = porCategoria("smash");
+      const comboBurguers = porCategoria("combo");
+      const porcoes = porCategoria("porcoes");
+      const bebidas = porCategoria("bebidas");
+      const refrigerantes350 = porCategoria("refrigerantes");
+      const cocaCola220 = porCategoria("cocaCola220");
+      const refri600 = porCategoria("refrigerantes600");
+      const refri1Litro = porCategoria("refrigerantes1Litro");
+      const refri2Litros = porCategoria("refri2Litros");
+      const sucos = porCategoria("sucos");
 
-//       const monta = (lista) => lista.map(itemHtml).join("");
+      const monta = (lista) => lista.map(itemHtml).join("");
 
-//       const listaSpaceDiv = document.querySelector("#space .item-container");
-//       const listaSmashDiv = document.querySelector("#smash .item-container");
-//       const listaCombo = document.querySelector("#combos .item-container");
-//       const listaPorcoes = document.querySelector("#porcoes .item-container");
-//       const listaBebidas = document.querySelector("#bebidas .item-container");
-//       const listaRefri350 = document.querySelector(
-//         "#refrigerantes350 .item-container"
-//       );
-//       const listaCoca220 = document.querySelector(
-//         "#cocaCola220 .item-container"
-//       );
-//       const listaRefri600 = document.querySelector(
-//         "#refrigerantes600 .item-container"
-//       );
-//       const listaRefri1Litro = document.querySelector(
-//         "#refrigerantes1Litro .item-container"
-//       );
-//       const listaRefri2Litros = document.querySelector(
-//         "#refri2Litros .item-container"
-//       );
-//       const listaSucos = document.querySelector("#sucos .item-container");
+      const listaSpaceDiv = document.querySelector("#space .item-container");
+      const listaSmashDiv = document.querySelector("#smash .item-container");
+      const listaCombo = document.querySelector("#combos .item-container");
+      const listaPorcoes = document.querySelector("#porcoes .item-container");
+      const listaBebidas = document.querySelector("#bebidas .item-container");
+      const listaRefri350 = document.querySelector(
+        "#refrigerantes350 .item-container"
+      );
 
-//       if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
-//       if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
-//       if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
-//       if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
-//       if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
-//       if (listaRefri350) listaRefri350.innerHTML = monta(refrigerantes350);
-//       if (listaCoca220) listaCoca220.innerHTML = monta(cocaCola220);
-//       if (listaRefri600) listaRefri600.innerHTML = monta(refri600);
-//       if (listaRefri1Litro) listaRefri1Litro.innerHTML = monta(refri1Litro);
-//       if (listaRefri2Litros) listaRefri2Litros.innerHTML = monta(refri2Litros);
-//       if (listaSucos) listaSucos.innerHTML = monta(sucos);
+      listaPorcoes.sort(a.preco - b.preco) // colocando as fritas primeiro na lista
+      const listaCoca220 = document.querySelector(
+        "#cocaCola220 .item-container"
+      );
+      const listaRefri600 = document.querySelector(
+        "#refrigerantes600 .item-container"
+      );
+      const listaRefri1Litro = document.querySelector(
+        "#refrigerantes1Litro .item-container"
+      );
+      const listaRefri2Litros = document.querySelector(
+        "#refri2Litros .item-container"
+      );
+      const listaSucos = document.querySelector("#sucos .item-container");
 
-//       // Reanexa eventos requeridos pelos botões recém-inseridos
-//       document
-//         .querySelectorAll(".btn-increase")
-//         .forEach((btn) => btn.addEventListener("click", adicionarItem));
-//       document
-//         .querySelectorAll(".btn-decrease")
-//         .forEach((btn) => btn.addEventListener("click", removerItem));
-//       adicionarBotoesObservacao();
-//     } catch (error) {
-//       console.error("Erro ao carregar o cardápio:", error);
-//     }
-//   }
+      if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
+      if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
+      if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
+      if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
+      if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
+      if (listaRefri350) listaRefri350.innerHTML = monta(refrigerantes350);
+      if (listaCoca220) listaCoca220.innerHTML = monta(cocaCola220);
+      if (listaRefri600) listaRefri600.innerHTML = monta(refri600);
+      if (listaRefri1Litro) listaRefri1Litro.innerHTML = monta(refri1Litro);
+      if (listaRefri2Litros) listaRefri2Litros.innerHTML = monta(refri2Litros);
+      if (listaSucos) listaSucos.innerHTML = monta(sucos);
 
-//   document.addEventListener("DOMContentLoaded", () => {
-//     carregarHamburguers();
-//   });
-// })();
+      // Reanexa eventos requeridos pelos botões recém-inseridos
+      document
+        .querySelectorAll(".btn-increase")
+        .forEach((btn) => btn.addEventListener("click", adicionarItem));
+      document
+        .querySelectorAll(".btn-decrease")
+        .forEach((btn) => btn.addEventListener("click", removerItem));
+      adicionarBotoesObservacao();
+    } catch (error) {
+      console.error("Erro ao carregar o cardápio:", error);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    carregarHamburguers();
+  });
+})();
 
