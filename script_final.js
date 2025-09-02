@@ -4,7 +4,7 @@ const adicionais = {
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.5 },
   bacon: { nome: "Bacon", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
-  queijoMussarela:  { nome: "Queijo Mussarela", preco: 3.0 },
+  queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
   ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
@@ -493,7 +493,7 @@ function criarModalAdicionais() {
   adicionaisContainer.appendChild(adicionaisList);
   for (const [key, adicional] of Object.entries(adicionais)) {
     const adicionalItem = document.createElement("div");
-    
+
     adicionalItem.className = "adicional-item";
     adicionalItem.dataset.id = key;
     adicionalItem.style.border = "1px solid #ff5722";
@@ -528,12 +528,12 @@ function criarModalAdicionais() {
         atualizarResumoAdicionais();
       }
     });
-  adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
+    adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
 
-//!para marcar indisponível em um adicional
-if (adicionalItem.dataset.id === "molhoChesse") {
-  adicionalItem.classList.add("indisponivel");
-}
+    //!para marcar indisponível em um adicional
+    if (adicionalItem.dataset.id === "molhoChesse") {
+      adicionalItem.classList.add("indisponivel");
+    }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
     qtySpan.className = "adicional-qty";
@@ -714,8 +714,7 @@ function mostrarPerguntaAdicionais(
     tipo === "combo"
       ? "Deseja personalizar ou adicionar observações ao combo?"
       : "Deseja adicionais ou alguma observação?";
-  let btnNaoTexto =
-    tipo === "combo" ? "Sem personalização" : "Adicionar ";
+  let btnNaoTexto = tipo === "combo" ? "Sem personalização" : "Adicionar ";
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
@@ -1350,7 +1349,6 @@ function configurarBotoesFlutuantes() {
   const resumoPedido = document.getElementById("resumoPedido");
   if (!btnIrCarrinho || !btnVoltarTopo || !resumoPedido) return;
   btnIrCarrinho.addEventListener("click", function () {
-    ;
     const carrinhoPos =
       resumoPedido.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
@@ -1360,8 +1358,8 @@ function configurarBotoesFlutuantes() {
   });
   btnVoltarTopo.addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    botaoSmash.style.opacity = "1";
   });
- 
 
   window.addEventListener("scroll", function () {
     if (window.pageYOffset > 300) {
@@ -1382,7 +1380,6 @@ function configurarBotaoWhatsApp() {
     btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
   }
 }
-
 
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
@@ -1707,6 +1704,24 @@ if (formaPagamentoSelect) {
   }
   gerenciarVisibilidadeTroco(); // Chama ao carregar!
 }
+const botaoSmash = document.querySelector("#botao-flutuante-smash");
+const botaoCombos = document.querySelector("#botao-flutuante-combos");
+const resumoPedido = document.querySelector('#resumoPedido')
+const containerBotoes = document.querySelector('.containerBotoes')
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry)=>{
+    if(entry.isIntersecting){
+      containerBotoes.style.display = "none"
+    }else{
+       containerBotoes.style.display = "flex"
+    }
+    
+  })
+},{threshold:0.2})
+observer.observe(resumoPedido)
+
+
+
 
 // // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
 // (function () {
@@ -1846,4 +1861,3 @@ if (formaPagamentoSelect) {
 //     carregarHamburguers();
 //   });
 // })();
-

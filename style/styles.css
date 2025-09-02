@@ -182,8 +182,6 @@ main {
   grid-template-columns: 2fr 1fr;
   gap: 20px;
   width: 100%;
-
-
 }
 
 /* Contêiner de menu e carrinho */
@@ -193,7 +191,6 @@ main {
   border-radius: 8px;
   box-shadow: 0 2px 10px var(--shadow-color);
   padding: 20px;
-   
 }
 
 .cart-container {
@@ -1185,7 +1182,6 @@ button#btnLimparCarrinho {
     right: 16px;
     animation: pulse 2s infinite;
   }
-  
 
   #btn-voltar-topo {
     bottom: 16px;
@@ -1193,11 +1189,11 @@ button#btnLimparCarrinho {
   }
 }
 @keyframes pulse {
-  0%{
-    transform: translateY(0)
+  0% {
+    transform: translateY(0);
   }
-  100%{
-    transform: translateY(30px)
+  100% {
+    transform: translateY(30px);
   }
 }
 /* Smartphones pequenos */
@@ -2037,7 +2033,6 @@ button {
   font-size: 0.95rem; /* Tamanho um pouco maior */
 }
 
-
 .hidden {
   display: none !important;
 }
@@ -2060,12 +2055,9 @@ button {
   color: #ff9800;
 }
 
-
-
 /* Garante que o select de bairro use o estilo base .forma-pagamento */
 #bairroSelect.forma-pagamento {
- 
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .item_promocao {
@@ -2176,3 +2168,37 @@ button {
 #bebidas {
   padding: 5px;
 }
+.containerBotoes{
+  position: fixed;
+  top: 65%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  flex-direction:column;
+  gap:15px;
+ text-align:center;
+}
+
+
+
+.botoes-flutuante-style{
+text-decoration: none;
+color:white;
+  background-color: var(--red-dark);
+  border-radius:90px;
+ width: 53px;
+height: 54px;
+  border:none;
+
+   
+ 
+}
+.a{
+color:white;
+text-decoration:none;
+}
+
