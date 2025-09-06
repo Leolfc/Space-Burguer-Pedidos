@@ -1804,7 +1804,7 @@ if (formaPagamentoSelect) {
         "#refrigerantes350 .item-container"
       );
 
-      listaPorcoes.sort(a.preco - b.preco) // colocando as fritas primeiro na lista
+      // listaPorcoes.sort(a.preco - b.preco) // colocando as fritas primeiro na lista
       const listaCoca220 = document.querySelector(
         "#cocaCola220 .item-container"
       );
