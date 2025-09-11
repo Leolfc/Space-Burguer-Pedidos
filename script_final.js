@@ -45,15 +45,16 @@ const taxasDeEntrega = {
   "Jardim Panorama": 10.0,
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
+  "Parque dos Mirantes": 7.0,
+  "Parque dos Estudantes":8.0,
   "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
-  "Parque dos Mirantes": 7.0,
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I, II": 8.0,
   Papagaio: 8.0,
-  "Outro Bairro (Consultar)": 0, // Valor 0 para indicar que precisa de consulta
+  "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
 // FIM NOVO
