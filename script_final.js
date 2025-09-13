@@ -716,12 +716,17 @@ function mostrarPerguntaAdicionais(
       ? "Deseja personalizar ou adicionar observações ao combo?"
       : "Deseja adicionais ou alguma observação?";
   let btnNaoTexto =
-    tipo === "combo" ? "Sem personalização" : "Adicionar ";
+    tipo === "combo" ? "Sem personalização" : "Adicionar ao Carrinho ";
   let btnSimTexto = tipo === "combo" ? "Personalizar combo" : "Personalizar";
   const perguntaDiv = document.createElement("div");
   perguntaDiv.className = "pergunta-adicionais";
   perguntaDiv.style.position = "relative";
-  perguntaDiv.innerHTML = `<p>${perguntaTexto}</p><div class="pergunta-botoes"><button type="button" class="btn-nao">${btnNaoTexto}</button><button type="button" class="btn-sim">${btnSimTexto}</button></div>`;
+  perguntaDiv.innerHTML = `<p>${perguntaTexto}</p>
+  <div class="pergunta-botoes">
+    <button type="button" class="btn-sim">${btnSimTexto}</button>
+  <button type="button" class="btn-nao">${btnNaoTexto}</button>
+
+  </div>`;
   // Adiciona o botão de fechar (X)
   const btnFechar = document.createElement("button");
   btnFechar.type = "button";
