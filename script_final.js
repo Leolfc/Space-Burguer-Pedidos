@@ -1,7 +1,7 @@
 //*Preços dos adicionais
 const adicionais = {
-  hamburguer160g: { nome: "Hambúrguer 160g", preco: 9.0 },
-  hamburguer95g: { nome: "Hambúrguer 95g", preco: 6.5 },
+  hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
+  hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
   bacon: { nome: "Bacon", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela:  { nome: "Queijo Mussarela", preco: 3.0 },
@@ -20,7 +20,7 @@ const adicionais = {
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
-  Centro: 6.0,
+  "Centro": 6.0,
   "Campo Belo": 8.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
@@ -33,7 +33,9 @@ const taxasDeEntrega = {
   "Vila Rosa": 6.0,
   "Villa Aggeu": 8.0,
   "Vila Rural": 15.0,
-  "Residencial Pompeia I, II, III ": 8.0,
+  "Residencial Pompeia I": 8.0,
+  "Residencial Pompeia II": 8.0,
+  "Residencial Pompeia III": 8.0,
   "Jardim Miguel Afonso": 7.0,
   "Jardim Scylla Peixoto": 8.0,
   "Jardim Alves": 7.0,
@@ -53,7 +55,7 @@ const taxasDeEntrega = {
   "Vila Leão": 10.0,
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I, II": 8.0,
-  Papagaio: 8.0,
+  "Papagaio": 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
