@@ -503,8 +503,8 @@ section h2 {
 }
 
 .pergunta-botoes .btn-sim {
-  background: linear-gradient(45deg, #ff5722, #ff7043);
-  color: white;
+  background: #FFAA00;
+  color: black;
   box-shadow: 0 4px 10px rgba(255, 87, 34, 0.25);
 }
 
