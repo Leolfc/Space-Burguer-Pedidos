@@ -25,7 +25,7 @@
 
 /* Modo Escuro */
 .dark-mode {
-  --bg-color: #121212;
+  --bg-color: #252424;
   --text-color: #f0f0f0;
   --header-bg: #ff6b01;
   --header-text: #fff;
@@ -53,6 +53,8 @@ body {
   overflow-x: hidden;
   padding-bottom: 80px; /* Espaço para notificações */
   transition: background-color 0.3s, color 0.3s;
+
+ 
 }
 
 /* Estilos do cabeçalho */
