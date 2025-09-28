@@ -77,7 +77,7 @@ const carrinho = {
 };
 
 // !MAIONESE VERDE ---
-const VALOR_MAIONESE_VERDE = 0.5;
+const VALOR_MAIONESE_VERDE = 0.75;
 const MAX_MAIONESE_VERDE = 5;
 let qtdMaioneseVerde = 0;
 
