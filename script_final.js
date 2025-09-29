@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
   botoesAdicionar.forEach((botao) => {
-    botao.textContent = "Adicionar";
+    botao.textContent = "Adicionar 🖊";
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
