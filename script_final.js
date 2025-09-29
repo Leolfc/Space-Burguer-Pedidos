@@ -1753,11 +1753,13 @@ if (formaPagamentoSelect) {
     return `
       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
            data-id="${burguer.id}"
+          
            data-nome="${burguer.nome}"
            data-valor="${burguer.preco}"
            data-tipo="${tipoItem}">
-        ${imagemHtml}
+       
         <div class="item-info">
+         ${imagemHtml}
           <span class="item-name">${burguer.nome}</span>
           <span class="item-price">R$ ${parseFloat(burguer.preco)
             .toFixed(2)
@@ -1771,6 +1773,7 @@ if (formaPagamentoSelect) {
           <button type="button" class="btn-increase">Adicionar</button>
         </div>
       </div>`;
+      
   }
 
   async function carregarHamburguers() {

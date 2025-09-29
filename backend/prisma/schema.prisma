@@ -28,3 +28,9 @@ model Item{
   criadoEm DateTime @default(now())
 }
 
+model Usuario{
+id String @id @default(auto()) @map("_id") @db.ObjectId
+email String @unique
+senha String
+criadoEm DateTime @default(now())
+}
