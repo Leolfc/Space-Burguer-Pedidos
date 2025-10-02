@@ -571,7 +571,7 @@ section h2 {
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 20px;
-  max-height: 300px;
+  max-height: 350px;
   overflow-y: auto;
 }
 
@@ -590,7 +590,7 @@ section h2 {
 /* Nome do adicional */
 .adicional-nome {
   font-weight: bold !important;
-  font-size: 16px !important;
+  font-size: 19px !important;
   color: #333 !important;
   display: block;
   margin-bottom: 5px;
@@ -600,7 +600,8 @@ section h2 {
 .adicional-preco {
   font-weight: bold !important;
   color: #ff5722 !important;
-  font-size: 15px !important;
+  font-size: 18px !important;
+  
 }
 
 /* Controles de quantidade */

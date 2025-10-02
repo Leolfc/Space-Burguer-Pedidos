@@ -2,25 +2,25 @@
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
-  bacon: { nome: "Bacon", preco: 8.0 },
+  bacon: { nome: "Bacon 🥓", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
-  queijoMussarela:  { nome: "Queijo Mussarela", preco: 3.0 },
+  queijoMussarela: { nome: "Queijo Mussarela 🧀", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
-  ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
+  ovoFrito: { nome: "Ovo Frito 🥚", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
-  tomate: { nome: "Tomate", preco: 2.0 },
-  alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
+  tomate: { nome: "Tomate 🍅", preco: 2.0 },
+  alfaceAmericana: { nome: "Alface Americana 🥬 ", preco: 2.0 },
   cebolaRoxa: { nome: "Cebola Roxa", preco: 2.5 },
   catupiry: { nome: "Catupiry", preco: 8.0 },
   doritos: { nome: "Doritos", preco: 5.0 },
-  picles: { nome: "Picles", preco: 7.0 },
+  picles: { nome: "Picles 🥒", preco: 7.0 },
 };
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
-  "Centro": 6.0,
+  Centro: 6.0,
   "Campo Belo": 8.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
@@ -48,14 +48,14 @@ const taxasDeEntrega = {
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
   "Parque dos Mirantes": 7.0,
-  "Parque dos Estudantes":8.0,
+  "Parque dos Estudantes": 8.0,
   "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I, II": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -496,7 +496,7 @@ function criarModalAdicionais() {
   adicionaisContainer.appendChild(adicionaisList);
   for (const [key, adicional] of Object.entries(adicionais)) {
     const adicionalItem = document.createElement("div");
-    
+
     adicionalItem.className = "adicional-item";
     adicionalItem.dataset.id = key;
     adicionalItem.style.border = "1px solid #ff5722";
@@ -512,6 +512,7 @@ function criarModalAdicionais() {
     adicionalPreco.className = "adicional-preco";
     adicionalPreco.textContent = `R$ ${adicional.preco.toFixed(2)}`;
     adicionalPreco.style.cssText = "font-weight:bold;color:#ff5722;";
+    
     adicionalInfo.appendChild(adicionalPreco);
     const quantidadeControle = document.createElement("div");
     quantidadeControle.className = "quantidade-controle";
@@ -531,12 +532,12 @@ function criarModalAdicionais() {
         atualizarResumoAdicionais();
       }
     });
-  adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
+    adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
 
-// //!para marcar indisponível em um adicional
-// if (adicionalItem.dataset.id === "molhoChesse") {
-//   adicionalItem.classList.add("indisponivel");
-// }
+    // //!para marcar indisponível em um adicional
+    // if (adicionalItem.dataset.id === "molhoChesse") {
+    //   adicionalItem.classList.add("indisponivel");
+    // }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
     qtySpan.className = "adicional-qty";
@@ -1358,7 +1359,6 @@ function configurarBotoesFlutuantes() {
   const resumoPedido = document.getElementById("resumoPedido");
   if (!btnIrCarrinho || !btnVoltarTopo || !resumoPedido) return;
   btnIrCarrinho.addEventListener("click", function () {
-    ;
     const carrinhoPos =
       resumoPedido.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
@@ -1369,7 +1369,6 @@ function configurarBotoesFlutuantes() {
   btnVoltarTopo.addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
- 
 
   window.addEventListener("scroll", function () {
     if (window.pageYOffset > 300) {
@@ -1390,7 +1389,6 @@ function configurarBotaoWhatsApp() {
     btnWhatsApp.addEventListener("click", enviarPedidoWhatsApp);
   }
 }
-
 
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
@@ -1773,7 +1771,6 @@ if (formaPagamentoSelect) {
           <button type="button" class="btn-increase">Adicionar</button>
         </div>
       </div>`;
-      
   }
 
   async function carregarHamburguers() {
@@ -1859,4 +1856,3 @@ if (formaPagamentoSelect) {
     carregarHamburguers();
   });
 })();
-
