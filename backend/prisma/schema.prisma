@@ -34,3 +34,19 @@ email String @unique
 senha String
 criadoEm DateTime @default(now())
 }
+
+// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/backend/prisma/schema.prisma
+
+// ... (seus modelos Item e Usuario existentes)
+
+model Admin {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  email String @unique
+  senha String
+}
+
+model Configuracao {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  lojaAberta Boolean  @default(false)
+  // Adicione outros campos de configuração aqui no futuro, se precisar
+}
