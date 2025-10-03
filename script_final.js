@@ -1651,38 +1651,64 @@ function itemEmBreve(event) {
 // leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/script_final.js
 
 // SUBSTITUA a função checkRestaurantOpen inteira por esta nova versão
-async function checkRestaurantOpen() {
-  try {
-    const API_BASE = `http://${location.hostname}:3000`;
-    const response = await fetch(`${API_BASE}/status-loja`);
-    if (!response.ok) {
-      return false; // Se falhar a comunicação, assume que está fechada
-    }
-    const data = await response.json();
-    return data.lojaAberta;
-  } catch (error) {
-    console.error("Erro ao verificar status da loja:", error);
-    return false; // Em caso de erro, assume que está fechada
+// async function checkRestaurantOpen() {
+//   try {
+//     const API_BASE = `http://${location.hostname}:3000`;
+//     const response = await fetch(`${API_BASE}/status-loja`);
+//     if (!response.ok) {
+//       return false; // Se falhar a comunicação, assume que está fechada
+//     }
+//     const data = await response.json();
+//     return data.lojaAberta;
+//   } catch (error) {
+//     console.error("Erro ao verificar status da loja:", error);
+//     return false; // Em caso de erro, assume que está fechada
+//   }
+// }
+
+// // MODIFIQUE a parte final do script para lidar com a função assíncrona
+// async function atualizarStatusVisivel() {
+//   const isOpen = await checkRestaurantOpen();
+//   const elementoStatus = document.querySelector("#estaAberta");
+//   const atendimentoInfo = document.querySelector(".atendimento-info");
+
+//   if (isOpen) {
+//     elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+//     atendimentoInfo.style.backgroundColor = "green";
+//   } else {
+//     elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+//     atendimentoInfo.style.backgroundColor = "#d32525ff";
+//   }
+// }
+
+// // Chame a nova função quando o DOM carregar
+//  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
+
+function checkRestaurantOpen() {
+  const data = new Date();
+  const dia = data.getDay();
+  const hours = data.getHours();
+  const minutes = data.getMinutes();
+  const totalMinutes = hours * 60 + minutes;
+  const abre = 18 * 60 + 30;
+  const fecha = 23 * 60;
+  if (dia === 2) {
+    return false;
   }
+  return totalMinutes >= abre && totalMinutes <= fecha;
+}
+const estaFechada = checkRestaurantOpen();
+const isOpen = document.querySelector("#estaAberta");
+const atendimentoInfo = document.querySelector(".atendimento-info");
+if (estaFechada) {
+  isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
+  atendimentoInfo.style.backgroundColor = "green";
+} else {
+  isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
+  atendimentoInfo.style.backgroundColor = "#d32525ff";
 }
 
-// MODIFIQUE a parte final do script para lidar com a função assíncrona
-async function atualizarStatusVisivel() {
-  const isOpen = await checkRestaurantOpen();
-  const elementoStatus = document.querySelector("#estaAberta");
-  const atendimentoInfo = document.querySelector(".atendimento-info");
 
-  if (isOpen) {
-    elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-    atendimentoInfo.style.backgroundColor = "green";
-  } else {
-    elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-    atendimentoInfo.style.backgroundColor = "#d32525ff";
-  }
-}
-
-// Chame a nova função quando o DOM carregar
-document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
