@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login - Painel Space Burguer</title>
+    <link rel="stylesheet" href="styleAdm.css" />
+  </head>
+  <body>
+    <div class="painel-container" style="max-width: 400px">
+      <h1 style="text-align: center; color: #ff5722">Login do Painel</h1>
+      <form id="form-login">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required value="admin@space.com" />
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" required value="senhaforte123" />
+        </div>
+        <button type="submit" class="btn-submit">Entrar</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("form-login")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("email").value;
+          const senha = document.getElementById("senha").value;
+
+          try {
+            const response = await fetch(
+              `http://${location.hostname}:3000/login`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, senha }),
+              }
+            );
+
+            if (response.ok) {
+              // **ETAPA 1: Salva a "chave" no navegador**
+              sessionStorage.setItem('isLoggedIn', 'true');
+              
+              // **ETAPA 2: Redireciona para o painel de admin**
+              window.location.href = "admin.html";
+            } else {
+              alert("Email ou senha incorretos!");
+            }
+          } catch (error) {
+            alert("Erro ao tentar fazer login.");
+          }
+        });
+    </script>
+  </body>
+</html>

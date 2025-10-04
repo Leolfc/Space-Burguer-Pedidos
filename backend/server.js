@@ -178,3 +178,58 @@ app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
 
+// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/backend/server.js
+
+// ... (importações existentes no topo)
+
+// ROTA PÚBLICA: Para o cliente saber se a loja está aberta
+app.get("/status-loja", async (req, res) => {
+  try {
+    // Busca a primeira (e única) configuração. Se não existir, cria uma.
+    let config = await prisma.configuracao.findFirst();
+    if (!config) {
+      config = await prisma.configuracao.create({
+        data: { lojaAberta: false }, // Por padrão, a loja começa fechada
+      });
+    }
+    res.json({ lojaAberta: config.lojaAberta });
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao buscar status da loja" });
+  }
+});
+
+// ROTA PROTEGIDA: Para o admin alterar o status da loja
+app.post("/alterar-status-loja", async (req, res) => {
+  // ATENÇÃO: Aqui precisaremos adicionar uma verificação de login (token) no futuro.
+  // Por enquanto, vamos deixar simples para você entender a lógica.
+  const { lojaAberta } = req.body; // Espera receber { "lojaAberta": true } ou { "lojaAberta": false }
+
+  try {
+    const config = await prisma.configuracao.findFirst();
+    const configAtualizada = await prisma.configuracao.update({
+      where: { id: config.id },
+      data: { lojaAberta: lojaAberta },
+    });
+    res.json(configAtualizada);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao alterar status da loja" });
+  }
+});
+
+
+// ROTA DE LOGIN (Exemplo simples)
+app.post("/login", async (req, res) => {
+    const { email, senha } = req.body;
+
+    // Em um projeto real, você deve criar um usuário admin primeiro e criptografar a senha!
+    // Exemplo: if (email === 'admin@space.com' && senhaCriptografadaCorresponde(senha, hashDoBanco))
+    if (email === "admin@space.com" && senha === "senhaforte123") {
+        // Lógica de sucesso. Em um app real, você geraria um Token JWT aqui.
+        res.status(200).json({ message: "Login bem-sucedido!" });
+    } else {
+        res.status(401).json({ message: "Credenciais inválidas." });
+    }
+});
+
+
+// ... (resto do seu código do server.js)

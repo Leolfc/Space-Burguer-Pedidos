@@ -2,25 +2,25 @@
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
-  bacon: { nome: "Bacon", preco: 8.0 },
+  bacon: { nome: "Bacon 🥓", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
-  queijoMussarela: { nome: "Queijo Mussarela", preco: 3.0 },
+  queijoMussarela: { nome: "Queijo Mussarela 🧀", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
-  ovoFrito: { nome: "Ovo Frito", preco: 3.0 },
+  ovoFrito: { nome: "Ovo Frito 🥚", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
-  tomate: { nome: "Tomate", preco: 2.0 },
-  alfaceAmericana: { nome: "Alface Americana", preco: 2.0 },
+  tomate: { nome: "Tomate 🍅", preco: 2.0 },
+  alfaceAmericana: { nome: "Alface Americana 🥬 ", preco: 2.0 },
   cebolaRoxa: { nome: "Cebola Roxa", preco: 2.5 },
   catupiry: { nome: "Catupiry", preco: 8.0 },
   doritos: { nome: "Doritos", preco: 5.0 },
-  picles: { nome: "Picles", preco: 7.0 },
+  picles: { nome: "Picles 🥒", preco: 7.0 },
 };
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
-  "Centro": 6.0,
+  Centro: 6.0,
   "Campo Belo": 8.0,
   "Parque Bela Vista": 6.0,
   "Nova Jacarezinho": 8.0,
@@ -48,14 +48,14 @@ const taxasDeEntrega = {
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
   "Parque dos Mirantes": 7.0,
-  "Parque dos Estudantes":8.0,
+  "Parque dos Estudantes": 8.0,
   "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I, II": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -77,7 +77,7 @@ const carrinho = {
 };
 
 // !MAIONESE VERDE ---
-const VALOR_MAIONESE_VERDE = 0.5;
+const VALOR_MAIONESE_VERDE = 0.75;
 const MAX_MAIONESE_VERDE = 5;
 let qtdMaioneseVerde = 0;
 
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
   botoesAdicionar.forEach((botao) => {
-    botao.textContent = "Adicionar";
+    botao.textContent = "Adicionar ✏️";
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
@@ -512,6 +512,7 @@ function criarModalAdicionais() {
     adicionalPreco.className = "adicional-preco";
     adicionalPreco.textContent = `R$ ${adicional.preco.toFixed(2)}`;
     adicionalPreco.style.cssText = "font-weight:bold;color:#ff5722;";
+
     adicionalInfo.appendChild(adicionalPreco);
     const quantidadeControle = document.createElement("div");
     quantidadeControle.className = "quantidade-controle";
@@ -533,10 +534,10 @@ function criarModalAdicionais() {
     });
     adicionalItem.dataset.id = key; // -> cria data-id="molhoChesse"
 
-// //!para marcar indisponível em um adicional
-// if (adicionalItem.dataset.id === "molhoChesse") {
-//   adicionalItem.classList.add("indisponivel");
-// }
+    // //!para marcar indisponível em um adicional
+    // if (adicionalItem.dataset.id === "molhoChesse") {
+    //   adicionalItem.classList.add("indisponivel");
+    // }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
     qtySpan.className = "adicional-qty";
@@ -1648,6 +1649,42 @@ function itemEmBreve(event) {
 }
 
 //!função que indentifica o dia da hamburgueria fechada
+// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/script_final.js
+
+// SUBSTITUA a função checkRestaurantOpen inteira por esta nova versão
+// async function checkRestaurantOpen() {
+//   try {
+//     const API_BASE = `http://${location.hostname}:3000`;
+//     const response = await fetch(`${API_BASE}/status-loja`);
+//     if (!response.ok) {
+//       return false; // Se falhar a comunicação, assume que está fechada
+//     }
+//     const data = await response.json();
+//     return data.lojaAberta;
+//   } catch (error) {
+//     console.error("Erro ao verificar status da loja:", error);
+//     return false; // Em caso de erro, assume que está fechada
+//   }
+// }
+
+// // MODIFIQUE a parte final do script para lidar com a função assíncrona
+// async function atualizarStatusVisivel() {
+//   const isOpen = await checkRestaurantOpen();
+//   const elementoStatus = document.querySelector("#estaAberta");
+//   const atendimentoInfo = document.querySelector(".atendimento-info");
+
+//   if (isOpen) {
+//     elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+//     atendimentoInfo.style.backgroundColor = "green";
+//   } else {
+//     elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+//     atendimentoInfo.style.backgroundColor = "#d32525ff";
+//   }
+// }
+
+// // Chame a nova função quando o DOM carregar
+//  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
+
 function checkRestaurantOpen() {
   const data = new Date();
   const dia = data.getDay();
@@ -1671,6 +1708,8 @@ if (estaFechada) {
   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
   atendimentoInfo.style.backgroundColor = "#d32525ff";
 }
+
+
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
@@ -1751,11 +1790,13 @@ if (formaPagamentoSelect) {
     return `
       <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
            data-id="${burguer.id}"
+          
            data-nome="${burguer.nome}"
            data-valor="${burguer.preco}"
            data-tipo="${tipoItem}">
-        ${imagemHtml}
+       
         <div class="item-info">
+         ${imagemHtml}
           <span class="item-name">${burguer.nome}</span>
           <span class="item-price">R$ ${parseFloat(burguer.preco)
             .toFixed(2)
@@ -1854,4 +1895,3 @@ if (formaPagamentoSelect) {
     carregarHamburguers();
   });
 })();
-
