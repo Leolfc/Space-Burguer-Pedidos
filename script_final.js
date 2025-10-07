@@ -1485,10 +1485,10 @@ async function enviarPedidoWhatsApp() {
   }
   // FIM NOVO
 
+
   const numeroWhatsApp = "5543996114268";
   let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
-
   if (carrinho.tipoServico === "entrega") {
     mensagem += `*🛵 Tipo de Serviço:* Entrega\n`;
     mensagem += `*🏠 Endereço:* ${carrinho.enderecoCliente}\n`;
@@ -1510,8 +1510,14 @@ async function enviarPedidoWhatsApp() {
     //!Logica para aparecer a mensagem no whats somente quando for selecionado dinheiro
     mensagem += `*Troco pra R$ ${trocoInput.value}\n\n`;
   }
-  mensagem += `*📝 ITENS DO PEDIDO:*\n`;
 
+  if(formaPagamentoSelect.value=== "PIX"){
+    mensagem += `*Nossa chave Pix: 43996114268 - *\n\n`;
+  } //!logica para aparecer chave pix quando for selecionado pix 
+
+
+  mensagem += `*📝 ITENS DO PEDIDO:*\n`;
+ 
   let contadorItensMsg = 1;
   for (const itemId in carrinho.itens) {
     const item = carrinho.itens[itemId];
@@ -1692,7 +1698,7 @@ function checkRestaurantOpen() {
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
   const fecha = 23 * 60;
-  if (dia === 1) {
+  if (dia === 2) {
     return false;
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
@@ -1725,6 +1731,7 @@ function gerenciarVisibilidadeTroco() {
       trocoInput.value = ""; //*limpa o input
     }
   }
+
 
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
   if (formaPagamentoSalva) {
