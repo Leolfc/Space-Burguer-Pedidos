@@ -1485,7 +1485,6 @@ async function enviarPedidoWhatsApp() {
   }
   // FIM NOVO
 
-
   const numeroWhatsApp = "5543996114268";
   let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
@@ -1511,13 +1510,12 @@ async function enviarPedidoWhatsApp() {
     mensagem += `*Troco pra R$ ${trocoInput.value}\n\n`;
   }
 
-  if(formaPagamentoSelect.value=== "PIX"){
+  if (formaPagamentoSelect.value === "PIX") {
     mensagem += `*Nossa chave Pix: 43996114268 - *\n\n`;
-  } //!logica para aparecer chave pix quando for selecionado pix 
-
+  } //!logica para aparecer chave pix quando for selecionado pix
 
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
- 
+
   let contadorItensMsg = 1;
   for (const itemId in carrinho.itens) {
     const item = carrinho.itens[itemId];
@@ -1653,7 +1651,6 @@ function itemEmBreve(event) {
   }
 }
 
-
 // !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
 //   try {
@@ -1695,10 +1692,13 @@ function checkRestaurantOpen() {
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
-  const fecha = 23 * 60;
-  const duranteSemana = data.getDay()
+  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+
   if (dia === 2) {
     return false;
+  }
+  if (dia === 1 || dia === 3 || dia === 4) {
+    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1712,8 +1712,6 @@ if (estaFechada) {
   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
   atendimentoInfo.style.backgroundColor = "#d32525ff";
 }
-
-
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
@@ -1730,7 +1728,6 @@ function gerenciarVisibilidadeTroco() {
       trocoInput.value = ""; //*limpa o input
     }
   }
-
 
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
   if (formaPagamentoSalva) {
