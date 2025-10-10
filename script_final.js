@@ -1698,6 +1698,7 @@ function checkRestaurantOpen() {
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
   const fecha = 23 * 60;
+  const duranteSemana = data.getDay()
   if (dia === 2) {
     return false;
   }
