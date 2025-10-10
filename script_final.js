@@ -1653,10 +1653,8 @@ function itemEmBreve(event) {
   }
 }
 
-//!função que indentifica o dia da hamburgueria fechada
-// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/script_final.js
 
-// SUBSTITUA a função checkRestaurantOpen inteira por esta nova versão
+// !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
 //   try {
 //     const API_BASE = `http://${location.hostname}:3000`;
@@ -1687,7 +1685,7 @@ function itemEmBreve(event) {
 //   }
 // }
 
-// // Chame a nova função quando o DOM carregar
+// Chame a nova função quando o DOM carregar
 //  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 function checkRestaurantOpen() {
