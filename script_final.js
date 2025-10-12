@@ -1484,9 +1484,21 @@ async function enviarPedidoWhatsApp() {
     );
   }
   // FIM NOVO
+  const horaDoPedido = new Date();
+  const hora = horaDoPedido.toLocaleString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
 
   const numeroWhatsApp = "5543996114268";
-  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
+
+  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔
+  
+  *🕓 Hora do Pedido:* ${hora}
+  \n\n`;
+
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
   if (carrinho.tipoServico === "entrega") {
     mensagem += `*🛵 Tipo de Serviço:* Entrega\n`;
@@ -1691,7 +1703,7 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 9 * 60 + 30;
   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
   if (dia === 2) {
