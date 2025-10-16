@@ -1,7 +1,7 @@
 {
   "name": "spaceburguerpedido",
-  "version": "1.0.0",
-  "description": "Projeto desenvolvido com Html5, Css3 e Javascript",
+  "version": "1.1.1",
+  "description": "Projeto desenvolvido com Html5, Css3 e Javascript Puro",
   "main": "script_final.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Leolfc/Space-Burguer-Pedidos#readme",
   "dependencies": {
     "@prisma/client": "^6.12.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "multer": "^2.0.2"
   },

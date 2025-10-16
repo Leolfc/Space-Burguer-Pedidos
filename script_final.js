@@ -1485,11 +1485,22 @@ async function enviarPedidoWhatsApp() {
     );
   }
   // FIM NOVO
+  const horaDoPedido = new Date();
+  const hora = horaDoPedido.toLocaleString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
 
   const numeroWhatsApp = "5543996114268";
-  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔*\n\n`;
-  mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
 
+  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔
+  
+  *🕓 Hora do Pedido:* ${hora}
+  \n\n`;
+
+  mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
   if (carrinho.tipoServico === "entrega") {
     mensagem += `*🛵 Tipo de Serviço:* Entrega\n`;
     mensagem += `*🏠 Endereço:* ${carrinho.enderecoCliente}\n`;
@@ -1511,6 +1522,11 @@ async function enviarPedidoWhatsApp() {
     //!Logica para aparecer a mensagem no whats somente quando for selecionado dinheiro
     mensagem += `*Troco pra R$ ${trocoInput.value}\n\n`;
   }
+
+  if (formaPagamentoSelect.value === "PIX") {
+    mensagem += `*Nossa chave Pix: 43996114268 - *\n\n`;
+  } //!logica para aparecer chave pix quando for selecionado pix
+
   mensagem += `*📝 ITENS DO PEDIDO:*\n`;
 
   let contadorItensMsg = 1;
@@ -1648,10 +1664,7 @@ function itemEmBreve(event) {
   }
 }
 
-//!função que indentifica o dia da hamburgueria fechada
-// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/script_final.js
-
-// SUBSTITUA a função checkRestaurantOpen inteira por esta nova versão
+// !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
 //   try {
 //     const API_BASE = `http://${location.hostname}:3000`;
@@ -1682,7 +1695,7 @@ function itemEmBreve(event) {
 //   }
 // }
 
-// // Chame a nova função quando o DOM carregar
+// Chame a nova função quando o DOM carregar
 //  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 function checkRestaurantOpen() {
@@ -1692,9 +1705,13 @@ function checkRestaurantOpen() {
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
-  const fecha = 23 * 60;
+  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+
   if (dia === 2) {
     return false;
+  }
+  if (dia === 1 || dia === 3 || dia === 4) {
+    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1708,8 +1725,6 @@ if (estaFechada) {
   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
   atendimentoInfo.style.backgroundColor = "#d32525ff";
 }
-
-
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
