@@ -1663,6 +1663,22 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
+const containerBotoes = document.querySelector(".containerBotoes")
+const containerCarrinho = document.querySelector(".cart-container")
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach((entry)=>{
+if(entry.isIntersecting){
+  containerBotoes.style.display= "none"
+}else{
+  containerBotoes.style.display= "flex"
+}
+  })
+})
+observer.observe(containerCarrinho)
+
+
+
+
 
 // !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
