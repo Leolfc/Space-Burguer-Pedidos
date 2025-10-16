@@ -1663,9 +1663,12 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
+
+
+//FUNÇÃO PARA QUANDO USUARIO ESTIVER NO CARRINHO, OS BOTÕES DESPAARECEM
 const containerBotoes = document.querySelector(".containerBotoes")
 const containerCarrinho = document.querySelector(".cart-container")
-const observer = new IntersectionObserver((entries)=>{
+const observer = new IntersectionObserver((entries)=>{ 
   entries.forEach((entry)=>{
 if(entry.isIntersecting){
   containerBotoes.style.display= "none"
