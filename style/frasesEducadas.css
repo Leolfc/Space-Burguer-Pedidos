@@ -16,3 +16,16 @@
   }
   
 }
+
+
+.frasebAbencoada{
+  font-size: 12px;
+  position: absolute;
+  right:20px;
+  top:80%;
+
+  
+}
+.frasebAbencoada:hover{
+color: rgb(151, 151, 236);
+}
