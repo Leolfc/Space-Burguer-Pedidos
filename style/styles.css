@@ -5,16 +5,16 @@
   padding: 0;
 }
 
-
 :root {
   /* Variáveis de cores - Modo Claro */
-  --bg-color: #f5ebdc;
+  --bg-color: #fff8e1;
   --text-color: #333;
   --header-bg: #ff6b01;
   --header-text: #fff;
   --card-bg: #fff;
   --card-border: #ddd;
-  --button-primary: #ffcb01;
+  --button-add: #d32f2f;
+  --button-primary: #ff6b01;
   --button-hover: #e05a00;
   --button-text: #fff;
   --container-bg: #fff;
@@ -93,8 +93,7 @@ h1 {
   font-weight: 700;
   font-size: 2.1rem;
   margin-top: 10px;
-  text-shadow: 0 0 8px #ff6f00;;
-  
+  text-shadow: 0 0 8px #ff6f00;
 }
 .atendimento-info {
   margin: 0 auto;
@@ -186,8 +185,6 @@ main {
   grid-template-columns: 2fr 1fr;
   gap: 20px;
   width: 100%;
-
-
 }
 
 /* Contêiner de menu e carrinho */
@@ -197,7 +194,6 @@ main {
   border-radius: 8px;
   box-shadow: 0 2px 10px var(--shadow-color);
   padding: 20px;
-   
 }
 
 .cart-container {
@@ -276,7 +272,6 @@ section h2 {
   color: #ff5722;
   font-weight: bold;
   font-size: 1.1rem;
-  
 }
 
 .preco-promocional {
@@ -346,7 +341,7 @@ section h2 {
 }
 
 .btn-increase {
-  background: var(--button-primary);
+  background:var(--button-add);
   color: white;
   box-shadow: 0 2px 4px rgba(255, 87, 34, 0.2);
 }
@@ -509,7 +504,7 @@ section h2 {
 }
 
 .pergunta-botoes .btn-sim {
-  background: #FFAA00;
+  background: #ffaa00;
   color: black;
   box-shadow: 0 4px 10px rgba(255, 87, 34, 0.25);
 }
@@ -605,7 +600,6 @@ section h2 {
   font-weight: bold !important;
   color: #ff5722 !important;
   font-size: 18px !important;
-  
 }
 
 /* Controles de quantidade */
@@ -1191,7 +1185,6 @@ button#btnLimparCarrinho {
     right: 16px;
     animation: pulse 2s infinite;
   }
-  
 
   #btn-voltar-topo {
     bottom: 16px;
@@ -1199,11 +1192,11 @@ button#btnLimparCarrinho {
   }
 }
 @keyframes pulse {
-  0%{
-    transform: translateY(0)
+  0% {
+    transform: translateY(0);
   }
-  100%{
-    transform: translateY(30px)
+  100% {
+    transform: translateY(30px);
   }
 }
 /* Smartphones pequenos */
@@ -1560,7 +1553,7 @@ button {
 
 /* Estilo do botão de aumentar no modo escuro */
 .dark-mode .btn-increase {
-  background:var(--button-add);
+  background: var(--button-add);
   color: white;
   box-shadow: 0 2px 8px rgba(255, 87, 34, 0.5);
   font-weight: bold;
@@ -2043,7 +2036,6 @@ button {
   font-size: 0.95rem; /* Tamanho um pouco maior */
 }
 
-
 .hidden {
   display: none !important;
 }
@@ -2066,12 +2058,9 @@ button {
   color: #ff9800;
 }
 
-
-
 /* Garante que o select de bairro use o estilo base .forma-pagamento */
 #bairroSelect.forma-pagamento {
- 
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .item_promocao {
