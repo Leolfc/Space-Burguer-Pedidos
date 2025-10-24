@@ -8,13 +8,13 @@
 
 :root {
   /* Variáveis de cores - Modo Claro */
-  --bg-color: #f5f5f5;
+  --bg-color: #f5ebdc;
   --text-color: #333;
   --header-bg: #ff6b01;
   --header-text: #fff;
   --card-bg: #fff;
   --card-border: #ddd;
-  --button-primary: #ff6b01;
+  --button-primary: #ffcb01;
   --button-hover: #e05a00;
   --button-text: #fff;
   --container-bg: #fff;
@@ -24,7 +24,7 @@
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Modo Escuro */
+/*!Modo Escuro */
 .dark-mode {
   --bg-color: #121212;
   --text-color: #f0f0f0;
@@ -32,6 +32,7 @@
   --header-text: #fff;
   --card-bg: #1e1e1e;
   --card-border: #333;
+  --button-add: #d32f2f;
   --button-primary: #ff6b01;
   --button-hover: #e05a00;
   --button-text: #fff;
@@ -343,7 +344,7 @@ section h2 {
 }
 
 .btn-increase {
-  background: linear-gradient(45deg, #ff5722, #ff7043);
+  background: var(--button-primary);
   color: white;
   box-shadow: 0 2px 4px rgba(255, 87, 34, 0.2);
 }
@@ -1557,7 +1558,7 @@ button {
 
 /* Estilo do botão de aumentar no modo escuro */
 .dark-mode .btn-increase {
-  background: linear-gradient(45deg, #e74c3c, #ff5722);
+  background:var(--button-add);
   color: white;
   box-shadow: 0 2px 8px rgba(255, 87, 34, 0.5);
   font-weight: bold;
