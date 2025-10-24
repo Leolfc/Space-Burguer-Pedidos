@@ -1,111 +1,228 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel de Controle - Space Burguer</title>
     <link rel="stylesheet" href="styleAdm.css" />
     <style>
-        .nav-btn-logout { background-color: #f44336; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; margin-left: auto; }
-        .status-loja-container { background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 2rem; text-align: center; border: 1px solid #eee; }
-        .status-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px;}
-        .btn-sucesso { background-color: #4CAF50; color: white; }
-        .btn-perigo { background-color: #f44336; color: white; }
+      .nav-btn-logout {
+        background-color: #f44336;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: auto;
+      }
+      .status-loja-container {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        text-align: center;
+        border: 1px solid #eee;
+      }
+      .status-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      .btn-sucesso {
+        background-color: #4caf50;
+        color: white;
+      }
+      .btn-perigo {
+        background-color: #f44336;
+        color: white;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <script>
-      if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'login.html';
+      if (sessionStorage.getItem("isLoggedIn") !== "true") {
+        window.location.href = "login.html";
       }
     </script>
 
     <div class="painel-container">
-        <header>
-            <nav>
-                <h1>Painel de Controle</h1>
-                <button id="btn-mostrar-gerenciar" class="nav-btn active">Gerenciar Cardápio</button>
-                <button id="btn-mostrar-adicionar" class="nav-btn">Adicionar Lanche</button>
-                <button id="btn-logout" class="nav-btn-logout">Sair</button>
-            </nav>
-        </header>
+      <header>
+        <nav>
+          <h1>Painel de Controle</h1>
+          <button id="btn-mostrar-gerenciar" class="nav-btn active">
+            Gerenciar Cardápio
+          </button>
+          <button id="btn-mostrar-adicionar" class="nav-btn">
+            Adicionar Lanche
+          </button>
+          <button id="btn-logout" class="nav-btn-logout">Sair</button>
+        </nav>
+      </header>
 
-        <main>
-            <div class="status-loja-container">
-                <h2>Status da Loja</h2>
-                <p>Atualmente a loja está: <strong id="status-atual-texto" style="font-size: 1.2rem;">Carregando...</strong></p>
-                <div class="status-actions">
-                    <button id="btn-abrir-loja" class="btn btn-sucesso">ABRIR LOJA</button>
-                    <button id="btn-fechar-loja" class="btn btn-perigo">FECHAR LOJA</button>
-                </div>
+      <main>
+        <div class="status-loja-container">
+          <h2>Status da Loja</h2>
+          <p>
+            Atualmente a loja está:
+            <strong id="status-atual-texto" style="font-size: 1.2rem"
+              >Carregando...</strong
+            >
+          </p>
+          <div class="status-actions">
+            <button id="btn-abrir-loja" class="btn btn-sucesso">
+              ABRIR LOJA
+            </button>
+            <button id="btn-fechar-loja" class="btn btn-perigo">
+              FECHAR LOJA
+            </button>
+          </div>
+        </div>
+
+        <div id="tela-gerenciar" class="tela">
+          <div class="toolbar">
+            <h2>Lanches Cadastrados</h2>
+            <div class="toolbar-actions">
+              <div class="search">
+                <input
+                  type="text"
+                  id="filtro-lanches"
+                  placeholder="Buscar por nome..."
+                />
+              </div>
+              <button id="btn-abrir-adicionar" class="btn btn-primario">
+                + Novo Lanche
+              </button>
+            </div>
+          </div>
+          <!-- Container que receberá, via JS, seções separadas por categoria -->
+          <div id="tabela-lanches-corpo" class="lanches-por-categoria"></div>
+        </div>
+
+        <div id="tela-adicionar" class="tela">
+          <h2 id="titulo-form">Adicionar Novo Lanche</h2>
+          <form id="form-adicionar-lanche">
+            <div class="form-group">
+              <label for="nome">Nome do Lanche</label>
+              <input type="text" id="nome" required />
+            </div>
+            <div class="form-group">
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="preco">Preço (Ex: 25.50)</label>
+              <input type="number" id="preco" step="0.01" required />
             </div>
 
-            <div id="tela-gerenciar" class="tela">
-                <div class="toolbar">
-                    <h2>Lanches Cadastrados</h2>
-                    <div class="toolbar-actions">
-                        <div class="search"><input type="text" id="filtro-lanches" placeholder="Buscar por nome..." /></div>
-                        <button id="btn-abrir-adicionar" class="btn btn-primario">+ Novo Lanche</button>
-                    </div>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Imagem</th> <th>Nome</th> <th>Preço</th> <th>Categorias</th> <th>Status</th> <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-lanches-corpo"></tbody>
-                </table>
+            <div class="form-group">
+              <label class="category-label">Categorias</label>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="space" /><label
+                  >Space Burguer</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="smash" /><label
+                  >Smash Burguer</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="combo" /><label
+                  >Combo</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="porcoes" /><label
+                  >Porção</label
+                >
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="bebidas" /><label
+                  >Bebida</label
+                >
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refrigerantes"
+                /><label>Refrigerantes 350</label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="cocaCola220"
+                /><label>Coca-Cola 220ml</label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refrigerantes600"
+                /><label>Refrigerantes 600</label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refrigerantes1Litro"
+                /><label>Refrigerantes 1 Litro</label>
+              </div>
+              <div class="category-option">
+                <input
+                  type="checkbox"
+                  name="categoria"
+                  value="refri2Litros"
+                /><label>Refrigerantes 2litros</label>
+              </div>
+              <div class="category-option">
+                <input type="checkbox" name="categoria" value="sucos" /><label
+                  >Sucos</label
+                >
+              </div>
             </div>
 
-            <div id="tela-adicionar" class="tela">
-                <h2 id="titulo-form">Adicionar Novo Lanche</h2>
-                <form id="form-adicionar-lanche">
-                    <div class="form-group">
-                        <label for="nome">Nome do Lanche</label>
-                        <input type="text" id="nome" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="descricao">Descrição</label>
-                        <textarea id="descricao"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="preco">Preço (Ex: 25.50)</label>
-                        <input type="number" id="preco" step="0.01" required />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="category-label">Categorias</label>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="space" /><label>Space Burguer</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="smash" /><label>Smash Burguer</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="combo" /><label>Combo</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="porcoes" /><label>Porção</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="bebidas" /><label>Bebida</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="refrigerantes" /><label>Refrigerantes 350</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="cocaCola220" /><label>Coca-Cola 220ml</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="refrigerantes600" /><label>Refrigerantes 600</label></div>
-                         <div class="category-option"><input type="checkbox" name="categoria" value="refrigerantes1Litro" /><label>Refrigerantes 1 Litro</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="refri2Litros" /><label>Refrigerantes 2litros</label></div>
-                        <div class="category-option"><input type="checkbox" name="categoria" value="sucos" /><label>Sucos</label></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="imagem_url">Imagem do Lanche</label>
-                        <input type="file" id="imagem_url" name="imagem" accept="image/*" />
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox-group"><input type="checkbox" id="novoItem" /><label>Marcar como "Novo"</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="indisponivel" /><label>Marcar como "Indisponível"</label></div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" id="btn-submit" class="btn-submit">Adicionar Lanche</button>
-                        <button type="button" id="btn-cancelar-edicao" class="btn btn-secundario" style="display:none">Cancelar Edição</button>
-                    </div>
-                </form>
+            <div class="form-group">
+              <label for="imagem_url">Imagem do Lanche</label>
+              <input
+                type="file"
+                id="imagem_url"
+                name="imagem"
+                accept="image/*"
+              />
             </div>
-        </main>
+            <div class="form-group">
+              <div class="checkbox-group">
+                <input type="checkbox" id="novoItem" /><label
+                  >Marcar como "Novo"</label
+                >
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="indisponivel" /><label
+                  >Marcar como "Indisponível"</label
+                >
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" id="btn-submit" class="btn-submit">
+                Adicionar Lanche
+              </button>
+              <button
+                type="button"
+                id="btn-cancelar-edicao"
+                class="btn btn-secundario"
+                style="display: none"
+              >
+                Cancelar Edição
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
-    
+
     <script src="admin.js"></script>
-</body>
+  </body>
 </html>

@@ -54,8 +54,9 @@ const taxasDeEntrega = {
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
   "Novo Aeroporto": 14.0,
-  "Jardim São Luis I, II": 8.0,
-  Papagaio: 8.0,
+  "Jardim São Luis I": 8.0,
+  "Jardim São Luis II": 8.0,
+  "Papagaio": 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -1503,7 +1504,8 @@ async function enviarPedidoWhatsApp() {
   let mensagem = `
   
   *🍔 NOVO PEDIDO - SPACE BURGUER 🍔
-  *🕓 Data:* ${data} - Hora: ${hora}
+  *🕓 Data:* ${data}
+    Hora: ${hora}
   \n\n`;
 
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
@@ -1701,7 +1703,7 @@ function itemEmBreve(event) {
 //   }
 // }
 
-// Chame a nova função quando o DOM carregar
+// // Chame a nova função quando o DOM carregar
 //  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 function checkRestaurantOpen() {
