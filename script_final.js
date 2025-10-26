@@ -49,6 +49,7 @@ const taxasDeEntrega = {
   "Dom Pedro Filipack": 7.0,
   "Parque dos Mirantes": 7.0,
   "Parque dos Estudantes": 8.0,
+  "Pedro Scandolo": 7.0,
   "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
