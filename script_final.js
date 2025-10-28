@@ -47,6 +47,7 @@ const taxasDeEntrega = {
   "Jardim Panorama": 10.0,
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
+  "Parque Alvorada": 6.0,
   "Parque dos Mirantes": 7.0,
   "Parque dos Estudantes": 8.0,
   "Pedro Scandolo": 7.0,
