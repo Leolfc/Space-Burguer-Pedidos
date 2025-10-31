@@ -54,8 +54,9 @@ const taxasDeEntrega = {
   "Bairro Estação": 10.0,
   "Vila Leão": 10.0,
   "Novo Aeroporto": 14.0,
-  "Jardim São Luis I, II": 8.0,
-  Papagaio: 8.0,
+  "Jardim São Luis I": 8.0,
+  "Jardim São Luis II": 8.0,
+  "Papagaio": 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -1486,18 +1487,26 @@ async function enviarPedidoWhatsApp() {
   }
   // FIM NOVO
   const horaDoPedido = new Date();
-  const hora = horaDoPedido.toLocaleString("pt-BR", {
+  const data = horaDoPedido.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    
+  });
+  const hora = horaDoPedido.toLocaleTimeString('pt-BR',{
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-  });
+  })
 
   const numeroWhatsApp = "5543996114268";
 
-  let mensagem = `*🍔 NOVO PEDIDO - SPACE BURGUER 🍔
+  let mensagem = `
   
-  *🕓 Hora do Pedido:* ${hora}
+  *🍔 NOVO PEDIDO - SPACE BURGUER 🍔
+  *🕓 Data:* ${data}
+    Hora: ${hora}
   \n\n`;
 
   mensagem += `*👤 Cliente:* ${carrinho.nomeCliente}\n`;
@@ -1714,7 +1723,7 @@ observer.observe(containerCarrinho)
 //   }
 // }
 
-// Chame a nova função quando o DOM carregar
+// // Chame a nova função quando o DOM carregar
 //  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 function checkRestaurantOpen() {
@@ -1730,7 +1739,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 23 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
