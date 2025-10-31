@@ -1102,7 +1102,7 @@ function removerItemDoCarrinho(uniqueId) {
 function limparCarrinho() {
   if (Object.keys(carrinho.itens).length > 0) {
     carrinho.itens = {};
-    //  Resetar informações de entrega/retirada
+    
     carrinho.tipoServico = "entrega";
     const radioEntrega = document.getElementById("tipoServicoEntrega");
     if (radioEntrega) radioEntrega.checked = true;
@@ -1117,7 +1117,7 @@ function limparCarrinho() {
     carrinho.taxaEntrega = 0;
     const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
     if (taxaEntregaInfoDiv) taxaEntregaInfoDiv.textContent = "";
-    // FIM MODIFICADO
+   
 
     const qtySpans = document.querySelectorAll(".item-qty");
     qtySpans.forEach((span) => (span.textContent = "0"));
@@ -1396,7 +1396,7 @@ function configurarBotaoWhatsApp() {
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
 async function enviarPedidoWhatsApp() {
-  // Adicionamos 'async' para usar 'await'
+  
   if (Object.keys(carrinho.itens).length === 0) {
     mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
@@ -1721,7 +1721,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 21 * 60 ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60 + 30 ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
