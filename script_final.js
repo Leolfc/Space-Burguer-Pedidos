@@ -1714,10 +1714,10 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
+  const abre = 15 * 60 + 30;
   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
-  if (dia === 2) {
+  if (dia === 6) {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
