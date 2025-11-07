@@ -1,5 +1,11 @@
 //*Preços dos adicionais
+
+
+ 
+
 const adicionais = {
+  fritasP_extra: { nome: "Batata Frita P (Extra) 🍟", preco: 4.0 },
+  fritasM_extra: { nome: "Batata Frita M (Extra) 🍟", preco: 5.5 },
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
   bacon: { nome: "Bacon 🥓", preco: 8.0 },
@@ -16,6 +22,9 @@ const adicionais = {
   doritos: { nome: "Doritos", preco: 5.0 },
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
+
+
+
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
@@ -473,6 +482,7 @@ function criarModalAdicionais() {
   if (document.querySelector(".adicionais-modal-overlay")) {
     return;
   }
+  
   const modalOverlay = document.createElement("div");
   modalOverlay.className = "adicionais-modal-overlay";
   const adicionaisContainer = document.createElement("div");
@@ -543,23 +553,58 @@ function criarModalAdicionais() {
     // }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
+   
     qtySpan.className = "adicional-qty";
     qtySpan.dataset.id = key;
     qtySpan.textContent = "0";
     quantidadeControle.appendChild(qtySpan);
     const btnIncrease = document.createElement("button");
+    
     btnIncrease.type = "button";
     btnIncrease.className = "btn-increase-adicional";
     btnIncrease.textContent = "+";
     btnIncrease.dataset.id = key;
-    btnIncrease.addEventListener("click", function () {
-      const qtySpan = quantidadeControle.querySelector(
-        `.adicional-qty[data-id="${key}"]`
-      );
-      let quantidade = parseInt(qtySpan.textContent) + 1;
-      qtySpan.textContent = quantidade;
-      atualizarResumoAdicionais();
-    });
+   btnIncrease.addEventListener("click", function () {
+  const qtySpan = quantidadeControle.querySelector(
+    `.adicional-qty[data-id="${key}"]`
+  );
+
+  let quantidadeAtual = parseInt(qtySpan.textContent);
+
+  // Verifica se é uma fritas (P ou M)
+  const ehFritas =
+    key === "fritasP_extra" || key === "fritasM_extra";
+
+  // Se for fritas e já tiver 1, bloqueia visualmente e mostra alerta
+  if (ehFritas && quantidadeAtual >= 1) {
+    alert("Você só pode adicionar 1 unidade de fritas (P ou M) por lanche.");
+
+    // deixa o botão visualmente desativado
+    this.disabled = true;
+    this.style.opacity = "0.5";
+    this.style.cursor = "not-allowed";
+    return;
+  }
+
+  quantidadeAtual++;
+  qtySpan.textContent = quantidadeAtual;
+  atualizarResumoAdicionais();
+
+  // se adicionou 1 fritas, desativa o botão
+  if (ehFritas && quantidadeAtual >= 1) {
+    this.disabled = true;
+    this.style.opacity = "0.5";
+    this.style.cursor = "not-allowed";
+  }
+});
+
+
+
+
+
+
+
+
     quantidadeControle.appendChild(btnIncrease);
     adicionalItem.appendChild(adicionalInfo);
     adicionalItem.appendChild(quantidadeControle);
@@ -901,6 +946,10 @@ function confirmarAdicionais() {
   const modalOverlay = document.querySelector(".adicionais-modal-overlay");
   if (!modalOverlay) return;
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
+  const fritasP  = adicionais.fritasP_extra;
+
+
+
   const adicionaisSelecionados = [];
   qtySpans.forEach((span) => {
     const quantidade = parseInt(span.textContent);
@@ -1673,6 +1722,8 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
+ 
+
 
 // !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
@@ -1920,3 +1971,4 @@ if (formaPagamentoSelect) {
     carregarHamburguers();
   });
 })();
+ 
