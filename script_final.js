@@ -1765,8 +1765,8 @@ function checkRestaurantOpen() {
   const hours = data.getHours();
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const abre = 15 * 60 + 30;
-  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+  const abre = 18 * 60 + 30;
+  let fecha = 22 * 60 + 30; //horário padrão de fechamento finais de semana
 
   if (dia === 6) {
     return false;
