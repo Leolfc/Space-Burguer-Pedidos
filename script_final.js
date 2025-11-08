@@ -4,8 +4,6 @@
  
 
 const adicionais = {
-  fritasP_extra: { nome: "Batata Frita P (Extra) 🍟", preco: 4.0 },
-  fritasM_extra: { nome: "Batata Frita M (Extra) 🍟", preco: 5.5 },
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
   bacon: { nome: "Bacon 🥓", preco: 8.0 },
@@ -571,31 +569,38 @@ function criarModalAdicionais() {
 
   let quantidadeAtual = parseInt(qtySpan.textContent);
 
-  // Verifica se é uma fritas (P ou M)
-  const ehFritas =
-    key === "fritasP_extra" || key === "fritasM_extra";
+  // // Verifica se é uma fritas (P ou M)
+  // const ehFritas =
+  //   key === "fritasP_extra" || key === "fritasM_extra";
 
-  // Se for fritas e já tiver 1, bloqueia visualmente e mostra alerta
-  if (ehFritas && quantidadeAtual >= 1) {
-    alert("Você só pode adicionar 1 unidade de fritas (P ou M) por lanche.");
+  // // Se for fritas e já tiver 1, bloqueia visualmente e mostra alerta
+  // if (ehFritas && quantidadeAtual >= 1) {
+  //   alert("Você só pode adicionar 1 unidade de fritas (P ou M) por lanche.");
 
-    // deixa o botão visualmente desativado
-    this.disabled = true;
-    this.style.opacity = "0.5";
-    this.style.cursor = "not-allowed";
-    return;
-  }
+  //   // deixa o botão visualmente desativado
+  //   this.disabled = true;
+  //   this.style.opacity = "0.5";
+  //   this.style.cursor = "not-allowed";
+  //   return;
+  // }
 
   quantidadeAtual++;
   qtySpan.textContent = quantidadeAtual;
   atualizarResumoAdicionais();
-
-  // se adicionou 1 fritas, desativa o botão
-  if (ehFritas && quantidadeAtual >= 1) {
-    this.disabled = true;
-    this.style.opacity = "0.5";
-    this.style.cursor = "not-allowed";
+  if(quantidadeAtual >=4){
+    qtySpan.style.opacity = "0.4"
+    this.disabled = true
+    this.style.cursor = "not-allowed"
+    return
+    
   }
+
+  // // se adicionou 1 fritas, desativa o botão
+  // if (ehFritas && quantidadeAtual >= 1) {
+  //   this.disabled = true;
+  //   this.style.opacity = "0.5";
+  //   this.style.cursor = "not-allowed";
+  // }
 });
 
 
