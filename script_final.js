@@ -177,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       camposEntregaDiv.style.display = "none";
       carrinho.tipoServico = "retirada";
-      carrinho.bairroSelecionado = ""; 
-      carrinho.taxaEntrega = 0; 
+      carrinho.bairroSelecionado = "";
+      carrinho.taxaEntrega = 0;
       taxaEntregaInfoDiv.textContent = "";
     }
     atualizarCarrinho();
@@ -200,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
           )}`;
         }
       } else {
-       
         taxaEntregaInfoDiv.textContent = "Bairro inválido";
         carrinho.taxaEntrega = 0;
       }
@@ -560,19 +559,16 @@ function criarModalAdicionais() {
       const qtySpan = quantidadeControle.querySelector(
         `.adicional-qty[data-id="${key}"]`
       );
-
+ let maximoAdicional = 4;
       let quantidadeAtual = parseInt(qtySpan.textContent);
-     let maximoAdicional = 4
-      quantidadeAtual++;
-      qtySpan.textContent = quantidadeAtual;
-      atualizarResumoAdicionais();
-      if(quantidadeAtual===maximoAdicional){
-        btnIncrease.disabled = true
-      }else{
-        btnIncrease.disabled = false
+    if (quantidadeAtual < maximoAdicional) {
+        quantidadeAtual++;
+        qtySpan.textContent = quantidadeAtual;
       }
-      
-      
+      if (quantidadeAtual >= maximoAdicional) {
+            btnIncrease.disabled = false; // Reabilita o botão "+"
+        }
+      atualizarResumoAdicionais();
     });
 
     quantidadeControle.appendChild(btnIncrease);
@@ -802,7 +798,7 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
   }
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
   qtySpans.forEach((span) => (span.textContent = "0"));
-    const botoesMais = modalOverlay.querySelectorAll(".btn-increase-adicional");
+  const botoesMais = modalOverlay.querySelectorAll(".btn-increase-adicional");
   botoesMais.forEach((btn) => {
     btn.disabled = false;
     btn.style.opacity = "0.9";
@@ -1733,7 +1729,7 @@ function checkRestaurantOpen() {
   const dia = data.getDay();
   const hours = data.getHours();
   const minutes = data.getMinutes();
-  const totalMinutes = hours  * 60 + minutes;
+  const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
   let fecha = 22 * 60 + 30; //horário padrão de fechamento finais de semana
 
