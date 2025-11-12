@@ -1,8 +1,5 @@
 //*Preços dos adicionais
 
-
- 
-
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
@@ -20,9 +17,6 @@ const adicionais = {
   doritos: { nome: "Doritos", preco: 5.0 },
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
-
-
-
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
@@ -65,7 +59,7 @@ const taxasDeEntrega = {
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I": 8.0,
   "Jardim São Luis II": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -183,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       camposEntregaDiv.style.display = "none";
       carrinho.tipoServico = "retirada";
-      carrinho.bairroSelecionado = ""; // Limpa bairro ao mudar para retirada
-      carrinho.taxaEntrega = 0; // Zera taxa ao mudar para retirada
+      carrinho.bairroSelecionado = ""; 
+      carrinho.taxaEntrega = 0; 
       taxaEntregaInfoDiv.textContent = "";
     }
     atualizarCarrinho();
@@ -206,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
           )}`;
         }
       } else {
-        // Isso não deveria acontecer se o select só tiver bairros válidos, mas é uma salvaguarda
+       
         taxaEntregaInfoDiv.textContent = "Bairro inválido";
         carrinho.taxaEntrega = 0;
       }
@@ -480,7 +474,7 @@ function criarModalAdicionais() {
   if (document.querySelector(".adicionais-modal-overlay")) {
     return;
   }
-  
+
   const modalOverlay = document.createElement("div");
   modalOverlay.className = "adicionais-modal-overlay";
   const adicionaisContainer = document.createElement("div");
@@ -551,64 +545,35 @@ function criarModalAdicionais() {
     // }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
-   
+
     qtySpan.className = "adicional-qty";
     qtySpan.dataset.id = key;
     qtySpan.textContent = "0";
     quantidadeControle.appendChild(qtySpan);
     const btnIncrease = document.createElement("button");
-    
+
     btnIncrease.type = "button";
     btnIncrease.className = "btn-increase-adicional";
     btnIncrease.textContent = "+";
     btnIncrease.dataset.id = key;
-   btnIncrease.addEventListener("click", function () {
-  const qtySpan = quantidadeControle.querySelector(
-    `.adicional-qty[data-id="${key}"]`
-  );
+    btnIncrease.addEventListener("click", function () {
+      const qtySpan = quantidadeControle.querySelector(
+        `.adicional-qty[data-id="${key}"]`
+      );
 
-  let quantidadeAtual = parseInt(qtySpan.textContent);
-
-  // // Verifica se é uma fritas (P ou M)
-  // const ehFritas =
-  //   key === "fritasP_extra" || key === "fritasM_extra";
-
-  // // Se for fritas e já tiver 1, bloqueia visualmente e mostra alerta
-  // if (ehFritas && quantidadeAtual >= 1) {
-  //   alert("Você só pode adicionar 1 unidade de fritas (P ou M) por lanche.");
-
-  //   // deixa o botão visualmente desativado
-  //   this.disabled = true;
-  //   this.style.opacity = "0.5";
-  //   this.style.cursor = "not-allowed";
-  //   return;
-  // }
-
-  quantidadeAtual++;
-  qtySpan.textContent = quantidadeAtual;
-  atualizarResumoAdicionais();
-  if(quantidadeAtual >=4){
-    qtySpan.style.opacity = "0.4"
-    this.disabled = true
-    this.style.cursor = "not-allowed"
-    return
-    
-  }
-
-  // // se adicionou 1 fritas, desativa o botão
-  // if (ehFritas && quantidadeAtual >= 1) {
-  //   this.disabled = true;
-  //   this.style.opacity = "0.5";
-  //   this.style.cursor = "not-allowed";
-  // }
-});
-
-
-
-
-
-
-
+      let quantidadeAtual = parseInt(qtySpan.textContent);
+     let maximoAdicional = 4
+      quantidadeAtual++;
+      qtySpan.textContent = quantidadeAtual;
+      atualizarResumoAdicionais();
+      if(quantidadeAtual===maximoAdicional){
+        btnIncrease.disabled = true
+      }else{
+        btnIncrease.disabled = false
+      }
+      
+      
+    });
 
     quantidadeControle.appendChild(btnIncrease);
     adicionalItem.appendChild(adicionalInfo);
@@ -837,6 +802,12 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
   }
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
   qtySpans.forEach((span) => (span.textContent = "0"));
+    const botoesMais = modalOverlay.querySelectorAll(".btn-increase-adicional");
+  botoesMais.forEach((btn) => {
+    btn.disabled = false;
+    btn.style.opacity = "0.9";
+    btn.style.cursor = "pointer";
+  });
   const observacoesInput = document.getElementById("observacoes-pedido");
   if (observacoesInput) observacoesInput.value = observacao;
   const selecionadosDiv = modalOverlay.querySelector(
@@ -951,9 +922,7 @@ function confirmarAdicionais() {
   const modalOverlay = document.querySelector(".adicionais-modal-overlay");
   if (!modalOverlay) return;
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
-  const fritasP  = adicionais.fritasP_extra;
-
-
+  const fritasP = adicionais.fritasP_extra;
 
   const adicionaisSelecionados = [];
   qtySpans.forEach((span) => {
@@ -1156,7 +1125,7 @@ function removerItemDoCarrinho(uniqueId) {
 function limparCarrinho() {
   if (Object.keys(carrinho.itens).length > 0) {
     carrinho.itens = {};
-    
+
     carrinho.tipoServico = "entrega";
     const radioEntrega = document.getElementById("tipoServicoEntrega");
     if (radioEntrega) radioEntrega.checked = true;
@@ -1171,7 +1140,6 @@ function limparCarrinho() {
     carrinho.taxaEntrega = 0;
     const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
     if (taxaEntregaInfoDiv) taxaEntregaInfoDiv.textContent = "";
-   
 
     const qtySpans = document.querySelectorAll(".item-qty");
     qtySpans.forEach((span) => (span.textContent = "0"));
@@ -1450,7 +1418,6 @@ function configurarBotaoWhatsApp() {
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
 async function enviarPedidoWhatsApp() {
-  
   if (Object.keys(carrinho.itens).length === 0) {
     mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
@@ -1546,14 +1513,13 @@ async function enviarPedidoWhatsApp() {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    
   });
-  const hora = horaDoPedido.toLocaleTimeString('pt-BR',{
+  const hora = horaDoPedido.toLocaleTimeString("pt-BR", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-  })
+  });
 
   const numeroWhatsApp = "5543996114268";
 
@@ -1727,8 +1693,6 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
- 
-
 
 // !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
@@ -1777,7 +1741,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60 + 30 ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1976,4 +1940,3 @@ if (formaPagamentoSelect) {
     carregarHamburguers();
   });
 })();
- 
