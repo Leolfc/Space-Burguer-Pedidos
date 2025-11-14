@@ -566,7 +566,7 @@ function criarModalAdicionais() {
         qtySpan.textContent = quantidadeAtual;
       }
       if (quantidadeAtual >= maximoAdicional) {
-            btnIncrease.disabled = false; // Reabilita o botão "+"
+            btnIncrease.disabled = false; // Reabilitar o botão "+"
         }
       atualizarResumoAdicionais();
     });
