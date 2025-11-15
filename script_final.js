@@ -120,7 +120,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
   botoesAdicionar.forEach((botao) => {
-    botao.textContent = "Adicionar ✏️";
+    const secaoBebidas = botao.closest(".item");
+    if (secaoBebidas && secaoBebidas.dataset.tipo === "bebida") {
+      // 3. Se for bebida, define o texto SEM o lápis
+      botao.textContent = "Adicionar";
+    } else {
+      // 4. Se for qualquer outra coisa (hambúrguer, combo), define COM o lápis
+      botao.textContent = "Adicionar ✏️";
+    }
+    
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
