@@ -144,9 +144,7 @@ app.put("/editar/hamburguer/:id", upload.single('imagem'), async (request, respo
         categoriasArray = categoria;
       }
     } catch (_) {}
-    // undefined: não altera; array: altera
-
-    // Se veio arquivo novo, define imagem_url; senão mantém a enviada (se houver)
+   
     if (request.file) {
       imagem_url = `/uploads/${request.file.filename}`;
     }
@@ -173,14 +171,6 @@ app.put("/editar/hamburguer/:id", upload.single('imagem'), async (request, respo
 });
 
 
-
-app.listen(3000, () => {
-  console.log("Servidor rodando na porta 3000");
-});
-
-// leolfc/space-burguer-pedidos/Space-Burguer-Pedidos-87c2483ea4b474ef8f24e87bf62be83b8a177c2d/backend/server.js
-
-// ... (importações existentes no topo)
 
 // ROTA PÚBLICA: Para o cliente saber se a loja está aberta
 app.get("/status-loja", async (req, res) => {
@@ -232,3 +222,6 @@ app.post("/login", async (req, res) => {
 });
 
 
+app.listen(3000, () => {
+  console.log("Servidor rodando na porta 3000");
+});

@@ -1731,7 +1731,7 @@ function checkRestaurantOpen() {
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
-  let fecha = 22 * 60 + 30; //horário padrão de fechamento finais de semana
+  let fecha = 23 * 60 ; //horário padrão de fechamento finais de semana
 
   if (dia === 3) {
     return false;
@@ -1861,12 +1861,16 @@ if (formaPagamentoSelect) {
           )
           .sort((a, b) => a.preco - b.preco);
 
+          
+
+
       const spaceBurgers = porCategoria("space");
       const smashBurgers = porCategoria("smash");
       const comboBurguers = porCategoria("combo");
       const porcoes = porCategoria("porcoes");
       const bebidas = porCategoria("bebidas");
-     
+
+     bebidas.sort((a,b)=> a.preco -b.preco)
 
       const monta = (lista) => lista.map(itemHtml).join("");
 
