@@ -1,4 +1,5 @@
 //*Preços dos adicionais
+
 const adicionais = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
@@ -47,8 +48,10 @@ const taxasDeEntrega = {
   "Jardim Panorama": 10.0,
   "Jardim Morada do Sol": 8.0,
   "Dom Pedro Filipack": 7.0,
+  "Parque Alvorada": 6.0,
   "Parque dos Mirantes": 7.0,
   "Parque dos Estudantes": 8.0,
+  "Pedro Scandolo": 7.0,
   "Jardim Marina": 7.0,
   "Bairro Aeroporto": 12.0,
   "Bairro Estação": 10.0,
@@ -56,7 +59,7 @@ const taxasDeEntrega = {
   "Novo Aeroporto": 14.0,
   "Jardim São Luis I": 8.0,
   "Jardim São Luis II": 8.0,
-  "Papagaio": 8.0,
+  Papagaio: 8.0,
   "Outro bairro?(Consultar valor no WhatsApp)": 0, // Valor 0 para indicar que precisa de consulta
 };
 
@@ -174,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       camposEntregaDiv.style.display = "none";
       carrinho.tipoServico = "retirada";
-      carrinho.bairroSelecionado = ""; // Limpa bairro ao mudar para retirada
-      carrinho.taxaEntrega = 0; // Zera taxa ao mudar para retirada
+      carrinho.bairroSelecionado = "";
+      carrinho.taxaEntrega = 0;
       taxaEntregaInfoDiv.textContent = "";
     }
     atualizarCarrinho();
@@ -197,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
           )}`;
         }
       } else {
-        // Isso não deveria acontecer se o select só tiver bairros válidos, mas é uma salvaguarda
         taxaEntregaInfoDiv.textContent = "Bairro inválido";
         carrinho.taxaEntrega = 0;
       }
@@ -471,6 +473,7 @@ function criarModalAdicionais() {
   if (document.querySelector(".adicionais-modal-overlay")) {
     return;
   }
+
   const modalOverlay = document.createElement("div");
   modalOverlay.className = "adicionais-modal-overlay";
   const adicionaisContainer = document.createElement("div");
@@ -541,11 +544,13 @@ function criarModalAdicionais() {
     // }
     quantidadeControle.appendChild(btnDecrease);
     const qtySpan = document.createElement("span");
+
     qtySpan.className = "adicional-qty";
     qtySpan.dataset.id = key;
     qtySpan.textContent = "0";
     quantidadeControle.appendChild(qtySpan);
     const btnIncrease = document.createElement("button");
+
     btnIncrease.type = "button";
     btnIncrease.className = "btn-increase-adicional";
     btnIncrease.textContent = "+";
@@ -554,10 +559,18 @@ function criarModalAdicionais() {
       const qtySpan = quantidadeControle.querySelector(
         `.adicional-qty[data-id="${key}"]`
       );
-      let quantidade = parseInt(qtySpan.textContent) + 1;
-      qtySpan.textContent = quantidade;
+ let maximoAdicional = 4;
+      let quantidadeAtual = parseInt(qtySpan.textContent);
+    if (quantidadeAtual < maximoAdicional) {
+        quantidadeAtual++;
+        qtySpan.textContent = quantidadeAtual;
+      }
+      if (quantidadeAtual >= maximoAdicional) {
+            btnIncrease.disabled = false; // Reabilitar o botão "+"
+        }
       atualizarResumoAdicionais();
     });
+
     quantidadeControle.appendChild(btnIncrease);
     adicionalItem.appendChild(adicionalInfo);
     adicionalItem.appendChild(quantidadeControle);
@@ -785,6 +798,12 @@ function abrirModalAdicionais(itemDiv, id, nome, valor, tipo, observacao = "") {
   }
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
   qtySpans.forEach((span) => (span.textContent = "0"));
+  const botoesMais = modalOverlay.querySelectorAll(".btn-increase-adicional");
+  botoesMais.forEach((btn) => {
+    btn.disabled = false;
+    btn.style.opacity = "0.9";
+    btn.style.cursor = "pointer";
+  });
   const observacoesInput = document.getElementById("observacoes-pedido");
   if (observacoesInput) observacoesInput.value = observacao;
   const selecionadosDiv = modalOverlay.querySelector(
@@ -899,6 +918,8 @@ function confirmarAdicionais() {
   const modalOverlay = document.querySelector(".adicionais-modal-overlay");
   if (!modalOverlay) return;
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
+  const fritasP = adicionais.fritasP_extra;
+
   const adicionaisSelecionados = [];
   qtySpans.forEach((span) => {
     const quantidade = parseInt(span.textContent);
@@ -1100,7 +1121,7 @@ function removerItemDoCarrinho(uniqueId) {
 function limparCarrinho() {
   if (Object.keys(carrinho.itens).length > 0) {
     carrinho.itens = {};
-    //  Resetar informações de entrega/retirada
+
     carrinho.tipoServico = "entrega";
     const radioEntrega = document.getElementById("tipoServicoEntrega");
     if (radioEntrega) radioEntrega.checked = true;
@@ -1115,7 +1136,6 @@ function limparCarrinho() {
     carrinho.taxaEntrega = 0;
     const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
     if (taxaEntregaInfoDiv) taxaEntregaInfoDiv.textContent = "";
-    // FIM MODIFICADO
 
     const qtySpans = document.querySelectorAll(".item-qty");
     qtySpans.forEach((span) => (span.textContent = "0"));
@@ -1395,7 +1415,6 @@ function configurarBotaoWhatsApp() {
 // MODIFICADO: Função para enviar o pedido via WhatsApp
 // MODIFICADO: Função para enviar o pedido via WhatsApp E PARA O BACK-END
 async function enviarPedidoWhatsApp() {
-  // Adicionamos 'async' para usar 'await'
   if (Object.keys(carrinho.itens).length === 0) {
     mostrarNotificacao(
       "Adicione itens ao carrinho antes de finalizar o pedido"
@@ -1491,14 +1510,13 @@ async function enviarPedidoWhatsApp() {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    
   });
-  const hora = horaDoPedido.toLocaleTimeString('pt-BR',{
+  const hora = horaDoPedido.toLocaleTimeString("pt-BR", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-  })
+  });
 
   const numeroWhatsApp = "5543996114268";
 
@@ -1733,13 +1751,13 @@ function checkRestaurantOpen() {
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
-  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+  let fecha = 23 * 60 ; //horário padrão de fechamento finais de semana
 
-  if (dia === 2) {
+  if (dia === 3) {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 23 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1815,14 +1833,6 @@ if (formaPagamentoSelect) {
     if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
     else if (burguer.categoria.includes("combo")) tipoItem = "combo";
     else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
-    else if (burguer.categoria.includes("refrigerantes")) tipoItem = "bebida";
-    else if (burguer.categoria.includes("cocaCola220")) tipoItem = "bebida";
-    else if (burguer.categoria.includes("refrigerantes600"))
-      tipoItem = "bebida";
-    else if (burguer.categoria.includes("refrigerantes1Litro"))
-      tipoItem = "bebida";
-    else if (burguer.categoria.includes("refri2Litros")) tipoItem = "bebida";
-    else if (burguer.categoria.includes("sucos")) tipoItem = "bebida";
 
     let imagemHtml = "";
     if (burguer.imagem_url) {
@@ -1871,17 +1881,16 @@ if (formaPagamentoSelect) {
           )
           .sort((a, b) => a.preco - b.preco);
 
+          
+
+
       const spaceBurgers = porCategoria("space");
       const smashBurgers = porCategoria("smash");
       const comboBurguers = porCategoria("combo");
       const porcoes = porCategoria("porcoes");
       const bebidas = porCategoria("bebidas");
-      const refrigerantes350 = porCategoria("refrigerantes");
-      const cocaCola220 = porCategoria("cocaCola220");
-      const refri600 = porCategoria("refrigerantes600");
-      const refri1Litro = porCategoria("refrigerantes1Litro");
-      const refri2Litros = porCategoria("refri2Litros");
-      const sucos = porCategoria("sucos");
+
+     bebidas.sort((a,b)=> a.preco -b.preco)
 
       const monta = (lista) => lista.map(itemHtml).join("");
 
@@ -1890,38 +1899,18 @@ if (formaPagamentoSelect) {
       const listaCombo = document.querySelector("#combos .item-container");
       const listaPorcoes = document.querySelector("#porcoes .item-container");
       const listaBebidas = document.querySelector("#bebidas .item-container");
-      const listaRefri350 = document.querySelector(
-        "#refrigerantes350 .item-container"
-      );
+   
 
-      // listaPorcoes.sort(a.preco - b.preco) // colocando as fritas primeiro na lista
-      const listaCoca220 = document.querySelector(
-        "#cocaCola220 .item-container"
-      );
-      const listaRefri600 = document.querySelector(
-        "#refrigerantes600 .item-container"
-      );
-      const listaRefri1Litro = document.querySelector(
-        "#refrigerantes1Litro .item-container"
-      );
-      const listaRefri2Litros = document.querySelector(
-        "#refri2Litros .item-container"
-      );
-      const listaSucos = document.querySelector("#sucos .item-container");
-
+     
+     
       if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
       if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
       if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
       if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
       if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
-      if (listaRefri350) listaRefri350.innerHTML = monta(refrigerantes350);
-      if (listaCoca220) listaCoca220.innerHTML = monta(cocaCola220);
-      if (listaRefri600) listaRefri600.innerHTML = monta(refri600);
-      if (listaRefri1Litro) listaRefri1Litro.innerHTML = monta(refri1Litro);
-      if (listaRefri2Litros) listaRefri2Litros.innerHTML = monta(refri2Litros);
-      if (listaSucos) listaSucos.innerHTML = monta(sucos);
+      
 
-      // Reanexa eventos requeridos pelos botões recém-inseridos
+      // Reanexa eventos requeridos pelos botões recém-inseridos"
       document
         .querySelectorAll(".btn-increase")
         .forEach((btn) => btn.addEventListener("click", adicionarItem));

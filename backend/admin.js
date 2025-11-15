@@ -88,13 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Limpa container
       tabelaCorpo.innerHTML = "";
 
-      // Definir grupos de categorias com aliases — assim várias chaves (ex: refrigerantes, cocaCola220)
-      // serão tratadas como "Bebidas" e não ficarão em 'Outros'.
       const grupos = {
         space: { label: "Space Burguer", aliases: ["space"] },
         smash: { label: "Smash Burguer", aliases: ["smash"] },
         combo: { label: "Combo", aliases: ["combo"] },
-        bebidas: { label: "Bebidas", aliases: ["bebidas", "refrigerantes", "refrigerantes600", "refrigerantes1Litro", "refri2Litros", "cocaCola220", "sucos"] },
+        bebidas: { label: "Bebidas", aliases: ["bebidas"] },
         porcoes: { label: "Porções", aliases: ["porcoes"] },
       };
 

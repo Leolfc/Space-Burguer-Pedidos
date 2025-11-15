@@ -1,6 +1,6 @@
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #999a9c;
+  background-color: #1a1918;
   color: #333;
   margin: 0;
 }
@@ -94,6 +94,9 @@ th {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
+}
+input{
+  padding:10px;
 }
 .form-group input[type="text"],
 .form-group input[type="number"],
