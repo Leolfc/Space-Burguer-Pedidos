@@ -119,8 +119,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
-  botoesAdicionar.forEach((botao) => {
-    botao.textContent = "Adicionar ✏️";
+   botoesAdicionar.forEach((botao) => {
+    const secaoBebidas = botao.closest(".item");
+    if (secaoBebidas && secaoBebidas.dataset.tipo === "bebida") {
+      
+      botao.textContent = "Adicionar";
+    } else {
+     
+      botao.textContent = "Adicionar ✏️";
+    }
+    
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
