@@ -18,12 +18,13 @@ const adicionais = {
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
 
+//função para poder copiar a chave pix
 const chavePix = document.querySelector('.chavepix')
 const botao = document.querySelector('.botaoPix')
 botao.addEventListener("click",()=>{
   navigator.clipboard.writeText(chavePix.textContent)
   .then(()=>{
-    alert('Chave pix copiada😉')
+    mostrarNotificacao("Chave PIX copiada com sucesso!😉");
   })
 })
 
@@ -1799,10 +1800,10 @@ const trocoContainer = document.querySelector("#container-troco");
   
 function gerenciarVisibilidadePix(){
 
-  if(formaPagamentoSelect.value === "PIX"){
-     containerPix.style.display = "flex";
-  }else{
+  if(formaPagamentoSelect.value !== "PIX"){
      containerPix.style.display = "none";
+  }else{
+     containerPix.style.display = "flex";
   }
      
 }
@@ -1827,6 +1828,7 @@ function gerenciarVisibilidadeTroco() {
   if (formaPagamentoSalva) {
     formaPagamentoSelect.value = formaPagamentoSalva;
     carrinho.formaPagamento = formaPagamentoSalva;
+    gerenciarVisibilidadePix()
   }
 
   return;
@@ -1847,7 +1849,8 @@ if (formaPagamentoSelect) {
     formaPagamentoSelect.value = formaPagamentoSalva;
     carrinho.formaPagamento = formaPagamentoSalva;
   }
-  gerenciarVisibilidadeTroco(); // Chama ao carregar!
+  gerenciarVisibilidadeTroco();
+  gerenciarVisibilidadePix() // Chama ao carregar!
 }
 
 // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
