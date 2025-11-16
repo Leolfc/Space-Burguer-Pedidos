@@ -119,16 +119,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
-   botoesAdicionar.forEach((botao) => {
+  botoesAdicionar.forEach((botao) => {
     const secaoBebidas = botao.closest(".item");
     if (secaoBebidas && secaoBebidas.dataset.tipo === "bebida") {
-      
       botao.textContent = "Adicionar";
     } else {
-     
       botao.textContent = "Adicionar ✏️";
     }
-    
+
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
@@ -158,6 +156,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const bairroSelect = document.getElementById("bairroSelect");
   const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
   const enderecoClienteInput = document.getElementById("enderecoCliente");
+
+
   const numeroResidencia = document.getElementById("numeroResidencia");
   // NOVO: Popular o select de bairros
   if (bairroSelect) {
@@ -237,11 +237,13 @@ document.addEventListener("DOMContentLoaded", function () {
     bairroSelect.addEventListener("change", atualizarTaxaSelecionada);
 
   const nomeClienteInput = document.getElementById("nomeCliente");
+   
 
   if (nomeClienteInput) {
     nomeClienteInput.addEventListener("input", function () {
       carrinho.nomeCliente = this.value.trim();
       localStorage.setItem("nomeCliente", carrinho.nomeCliente);
+      this.value = this.value.toUpperCase()
     });
     const nomeSalvo = localStorage.getItem("nomeCliente");
     if (nomeSalvo) {
@@ -266,6 +268,9 @@ document.addEventListener("DOMContentLoaded", function () {
     enderecoClienteInput.addEventListener("input", function () {
       carrinho.enderecoCliente = this.value.trim();
       localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
+        
+    this.value = this.value.toUpperCase();
+  
     });
     const enderecoSalvo = localStorage.getItem("enderecoCliente");
     if (enderecoSalvo) {
@@ -567,15 +572,15 @@ function criarModalAdicionais() {
       const qtySpan = quantidadeControle.querySelector(
         `.adicional-qty[data-id="${key}"]`
       );
- let maximoAdicional = 4;
+      let maximoAdicional = 4;
       let quantidadeAtual = parseInt(qtySpan.textContent);
-    if (quantidadeAtual < maximoAdicional) {
+      if (quantidadeAtual < maximoAdicional) {
         quantidadeAtual++;
         qtySpan.textContent = quantidadeAtual;
       }
       if (quantidadeAtual >= maximoAdicional) {
-            btnIncrease.disabled = false; // Reabilitar o botão "+"
-        }
+        btnIncrease.disabled = false; // Reabilitar o botão "+"
+      }
       atualizarResumoAdicionais();
     });
 
@@ -1739,7 +1744,7 @@ function checkRestaurantOpen() {
   const minutes = data.getMinutes();
   const totalMinutes = hours * 60 + minutes;
   const abre = 18 * 60 + 30;
-  let fecha = 23 * 60 ; //horário padrão de fechamento finais de semana
+  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
   if (dia === 3) {
     return false;
@@ -1869,16 +1874,13 @@ if (formaPagamentoSelect) {
           )
           .sort((a, b) => a.preco - b.preco);
 
-          
-
-
       const spaceBurgers = porCategoria("space");
       const smashBurgers = porCategoria("smash");
       const comboBurguers = porCategoria("combo");
       const porcoes = porCategoria("porcoes");
       const bebidas = porCategoria("bebidas");
 
-     bebidas.sort((a,b)=> a.preco -b.preco)
+      bebidas.sort((a, b) => a.preco - b.preco);
 
       const monta = (lista) => lista.map(itemHtml).join("");
 
@@ -1887,16 +1889,12 @@ if (formaPagamentoSelect) {
       const listaCombo = document.querySelector("#combos .item-container");
       const listaPorcoes = document.querySelector("#porcoes .item-container");
       const listaBebidas = document.querySelector("#bebidas .item-container");
-   
 
-     
-     
       if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
       if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
       if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
       if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
       if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
-      
 
       // Reanexa eventos requeridos pelos botões recém-inseridos"
       document
