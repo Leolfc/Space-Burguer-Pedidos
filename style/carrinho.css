@@ -1,0 +1,19 @@
+.chavePix{
+    display: flex;
+    flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+   font-size: 8px;
+   margin-bottom: 8px;
+}
+
+.botao-pix{
+    padding:5px 10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+.botao-pix:hover{
+    background: linear-gradient(to left, rgb(216, 76, 76), rgb(255, 187, 0));
+}
