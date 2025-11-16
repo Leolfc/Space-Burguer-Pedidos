@@ -18,6 +18,16 @@ const adicionais = {
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
 
+const chavePix = document.querySelector('.chavepix')
+const botao = document.querySelector('.botaoPix')
+botao.addEventListener("click",()=>{
+  navigator.clipboard.writeText(chavePix.textContent)
+  .then(()=>{
+    alert('Chave pix copiada😉')
+  })
+})
+
+
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
   "Anita Moreira": 8.0,
@@ -1479,6 +1489,7 @@ async function enviarPedidoWhatsApp() {
     return;
   }
 
+
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
   if (!isOpenNow) {
@@ -1784,15 +1795,31 @@ const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
 
 //!Função para o troco/////
+  const containerPix = document.querySelector(".containerChavePix")
+  
+function gerenciarVisibilidadePix(){
+
+  if(formaPagamentoSelect.value === "PIX"){
+     containerPix.style.display = "flex";
+  }else{
+     containerPix.style.display = "none";
+  }
+     
+}
+
+
+
 function gerenciarVisibilidadeTroco() {
   const formaPagamentoSelect = document.getElementById("formaPagamento");
 
   if (formaPagamentoSelect) {
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
+      
     } else {
       trocoContainer.style.display = "none";
       trocoInput.value = ""; //*limpa o input
+      
     }
   }
 
@@ -1811,7 +1838,8 @@ if (formaPagamentoSelect) {
     if (this.value) {
       localStorage.setItem("formaPagamento", this.value);
     }
-    gerenciarVisibilidadeTroco(); // Chama sempre que muda!
+    gerenciarVisibilidadeTroco();
+    gerenciarVisibilidadePix() // Chama sempre que muda!
   });
 
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
