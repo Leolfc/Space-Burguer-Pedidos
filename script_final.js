@@ -18,15 +18,32 @@ const adicionais = {
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
 
-const chavePix = document.querySelector('.chavepix')
-const botao = document.querySelector('.botaoPix')
-botao.addEventListener("click",()=>{
-  navigator.clipboard.writeText(chavePix.textContent)
-  .then(()=>{
-    mostrarNotificacao("Chave PIX copiada com sucesso!😉")
-  })
-})
+const chavePix = document.querySelector(".chavepix");
+const botao = document.querySelector(".botaoPix");
+botao.addEventListener("click", () => {
+  navigator.clipboard.writeText(chavePix.textContent).then(() => {
+    notification("Chave PIX copiada com sucesso!😉");
+  });
+});
 
+function notification(mensagem) {
+  const NotificationPix = document.querySelector(".containerNotification");
+
+ 
+  const existing = NotificationPix.querySelector(".cardNotification");
+  if (existing) {
+    existing.remove();
+  }
+  const card = document.createElement("span");
+    card.classList.add("cardNotification");
+  card.innerHTML = mensagem;
+   NotificationPix.appendChild(card);
+  setTimeout(() => {
+  }, 2500);
+  setTimeout(() => {
+    card.remove();
+  }, 3000);
+}
 
 // *NOVO: Taxas de Entrega por Bairro
 const taxasDeEntrega = {
@@ -167,7 +184,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const taxaEntregaInfoDiv = document.getElementById("taxaEntregaInfo");
   const enderecoClienteInput = document.getElementById("enderecoCliente");
 
-
   const numeroResidencia = document.getElementById("numeroResidencia");
   // NOVO: Popular o select de bairros
   if (bairroSelect) {
@@ -247,13 +263,12 @@ document.addEventListener("DOMContentLoaded", function () {
     bairroSelect.addEventListener("change", atualizarTaxaSelecionada);
 
   const nomeClienteInput = document.getElementById("nomeCliente");
-   
 
   if (nomeClienteInput) {
     nomeClienteInput.addEventListener("input", function () {
       carrinho.nomeCliente = this.value.trim();
       localStorage.setItem("nomeCliente", carrinho.nomeCliente);
-      this.value = this.value.toUpperCase()
+      this.value = this.value.toUpperCase();
     });
     const nomeSalvo = localStorage.getItem("nomeCliente");
     if (nomeSalvo) {
@@ -278,9 +293,8 @@ document.addEventListener("DOMContentLoaded", function () {
     enderecoClienteInput.addEventListener("input", function () {
       carrinho.enderecoCliente = this.value.trim();
       localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
-        
-    this.value = this.value.toUpperCase();
-  
+
+      this.value = this.value.toUpperCase();
     });
     const enderecoSalvo = localStorage.getItem("enderecoCliente");
     if (enderecoSalvo) {
@@ -1493,7 +1507,6 @@ async function enviarPedidoWhatsApp() {
     return;
   }
 
-
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
   if (!isOpenNow) {
@@ -1780,19 +1793,15 @@ const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
 
 //!Função para o troco/////
-  const containerPix = document.querySelector(".containerChavePix")
-  
-function gerenciarVisibilidadePix(){
+const containerPix = document.querySelector(".containerChavePix");
 
-  if(formaPagamentoSelect.value!== "PIX"){
-     containerPix.style.display = "none";
-  }else{
-     containerPix.style.display = "flex";
+function gerenciarVisibilidadePix() {
+  if (formaPagamentoSelect.value !== "PIX") {
+    containerPix.style.display = "none";
+  } else {
+    containerPix.style.display = "flex";
   }
-     
 }
-
-
 
 function gerenciarVisibilidadeTroco() {
   const formaPagamentoSelect = document.getElementById("formaPagamento");
@@ -1800,11 +1809,9 @@ function gerenciarVisibilidadeTroco() {
   if (formaPagamentoSelect) {
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
-      
     } else {
       trocoContainer.style.display = "none";
       trocoInput.value = ""; //*limpa o input
-      
     }
   }
 
@@ -1824,7 +1831,7 @@ if (formaPagamentoSelect) {
       localStorage.setItem("formaPagamento", this.value);
     }
     gerenciarVisibilidadeTroco();
-    gerenciarVisibilidadePix() // Chama sempre que muda!
+    gerenciarVisibilidadePix(); // Chama sempre que muda!
   });
 
   const formaPagamentoSalva = localStorage.getItem("formaPagamento");
@@ -1833,7 +1840,7 @@ if (formaPagamentoSelect) {
     carrinho.formaPagamento = formaPagamentoSalva;
   }
   gerenciarVisibilidadeTroco();
-   gerenciarVisibilidadePix(); // Chama ao carregar!
+  gerenciarVisibilidadePix(); // Chama ao carregar!
 }
 
 // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
