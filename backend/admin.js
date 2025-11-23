@@ -114,20 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sectionTbodyMap[key] = section.querySelector('tbody');
       });
 
-      // seção para categorias não listadas
-      const outrosSection = document.createElement("section");
-      outrosSection.className = "categoria-section";
-      outrosSection.innerHTML = `
-        <h3>Outros</h3>
-        <table class="tabela-categoria">
-          <thead>
-            <tr><th>Imagem</th><th>Nome</th><th>Preço</th><th>Categorias</th><th>Status</th><th>Ações</th></tr>
-          </thead>
-          <tbody data-categoria="outros"></tbody>
-        </table>
-      `;
-      tabelaCorpo.appendChild(outrosSection);
-      sectionTbodyMap.outros = outrosSection.querySelector('tbody');
+    
 
       
       function criarLinha(lanche) {
