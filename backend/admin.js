@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnFecharLoja = document.getElementById("btn-fechar-loja");
   let idEmEdicao = null;
 
+   
   // --- 2. FUNÇÕES ---
+
 
   function fazerLogout() {
     sessionStorage.removeItem("isLoggedIn");
@@ -77,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function carregarLanches() {
+    
     try {
       const response = await fetch(
         `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
@@ -102,7 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const section = document.createElement("section");
         section.className = "categoria-section";
         section.innerHTML = `
-          <h3>${grupos[key].label}</h3>
+        <div class="container-category">
+          <button ><img class="setaCima" src="../img/icons/setaCima.png" alt=""></button>
+            <h3>${grupos[key].label}</h3>
+        </div>
+          
           <table class="tabela-categoria">
             <thead>
               <tr><th>Imagem</th><th>Nome</th><th>Preço</th><th>Categorias</th><th>Status</th><th>Ações</th></tr>
@@ -112,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         tabelaCorpo.appendChild(section);
         sectionTbodyMap[key] = section.querySelector('tbody');
+       
       });
 
     
@@ -381,6 +389,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- 4. INICIALIZAÇÃO DA PÁGINA ---
   verificarStatusLoja();
+ 
   carregarLanches();
   mostrarTela("tela-gerenciar");
 });
+
+
