@@ -1728,39 +1728,7 @@ function itemEmBreve(event) {
   }
 }
 
-// !função para abirir a loja pelo painel
-async function checkRestaurantOpen() {
-  try {
-    const API_BASE = `http://${location.hostname}:3000`;
-    const response = await fetch(`${API_BASE}/status-loja`);
-    if (!response.ok) {
-      return false; // Se falhar a comunicação, assume que está fechada
-    }
-    const data = await response.json();
-    return data.lojaAberta;
-  } catch (error) {
-    console.error("Erro ao verificar status da loja:", error);
-    return false; // Em caso de erro, assume que está fechada
-  }
-}
 
-// MODIFIQUE a parte final do script para lidar com a função assíncrona
-async function atualizarStatusVisivel() {
-  const isOpen = await checkRestaurantOpen();
-  const elementoStatus = document.querySelector("#estaAberta");
-  const atendimentoInfo = document.querySelector(".atendimento-info");
-
-  if (isOpen) {
-    elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-    atendimentoInfo.style.backgroundColor = "green";
-  } else {
-    elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-    atendimentoInfo.style.backgroundColor = "#d32525ff";
-  }
-}
-
-// Chame a nova função quando o DOM carregar
- document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
 
 // function checkRestaurantOpen() {
 //   const data = new Date();
