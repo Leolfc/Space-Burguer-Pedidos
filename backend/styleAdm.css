@@ -191,3 +191,17 @@ tbody tr:nth-child(odd) {
   display: flex;
   gap: 0.75rem;
 }
+
+.setaCima{
+  width: 20px;         /* Largura igual à altura */
+  height: 20px;        /* Altura igual à largura */
+  
+  border-radius: 50%;
+}
+
+.container-category{
+  display:flex;
+  flex-flow: row nowrap;
+  gap:5px;
+  max-width: 100%;
+}

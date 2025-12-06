@@ -5,7 +5,7 @@
 
 ## ✨ Sobre o Projeto
 
-O **Space Burguer Delivery** nasceu de uma necessidade real observada no meu dia a dia de trabalho na hamburgueria **Space Burger Delivery**. A ideia foi criar uma solução tecnológica para um problema comum: otimizar e digitalizar o processo de recebimento de pedidos.
+O **Space Burguer Delivery** nasceu de uma necessidade real observada no meu dia a dia de trabalho na hamburgueria **Space Burguer Delivery**. A ideia foi criar uma solução tecnológica para um problema comum: otimizar e digitalizar o processo de recebimento de pedidos.
 
 Este projeto é um cardápio digital completo e interativo, desenvolvido para oferecer aos clientes uma experiência fluida e moderna. A aplicação está **hospedada na Vercel e em uso real**, permitindo que os clientes montem seus pedidos e os enviem diretamente para o WhatsApp da loja, de forma detalhada e sem erros.
 
