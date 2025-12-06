@@ -1729,66 +1729,66 @@ function itemEmBreve(event) {
 }
 
 // !função para abirir a loja pelo painel
-// async function checkRestaurantOpen() {
-//   try {
-//     const API_BASE = `http://${location.hostname}:3000`;
-//     const response = await fetch(`${API_BASE}/status-loja`);
-//     if (!response.ok) {
-//       return false; // Se falhar a comunicação, assume que está fechada
-//     }
-//     const data = await response.json();
-//     return data.lojaAberta;
-//   } catch (error) {
-//     console.error("Erro ao verificar status da loja:", error);
-//     return false; // Em caso de erro, assume que está fechada
-//   }
-// }
-
-// // MODIFIQUE a parte final do script para lidar com a função assíncrona
-// async function atualizarStatusVisivel() {
-//   const isOpen = await checkRestaurantOpen();
-//   const elementoStatus = document.querySelector("#estaAberta");
-//   const atendimentoInfo = document.querySelector(".atendimento-info");
-
-//   if (isOpen) {
-//     elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-//     atendimentoInfo.style.backgroundColor = "green";
-//   } else {
-//     elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-//     atendimentoInfo.style.backgroundColor = "#d32525ff";
-//   }
-// }
-
-// // Chame a nova função quando o DOM carregar
-//  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
-
-function checkRestaurantOpen() {
-  const data = new Date();
-  const dia = data.getDay();
-  const hours = data.getHours();
-  const minutes = data.getMinutes();
-  const totalMinutes = hours * 60 + minutes;
-  const abre = 8 * 60 + 30;
-  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
-
-  if (dia === 2) {
-    return false;
+async function checkRestaurantOpen() {
+  try {
+    const API_BASE = `http://${location.hostname}:3000`;
+    const response = await fetch(`${API_BASE}/status-loja`);
+    if (!response.ok) {
+      return false; // Se falhar a comunicação, assume que está fechada
+    }
+    const data = await response.json();
+    return data.lojaAberta;
+  } catch (error) {
+    console.error("Erro ao verificar status da loja:", error);
+    return false; // Em caso de erro, assume que está fechada
   }
-  if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+}
+
+// MODIFIQUE a parte final do script para lidar com a função assíncrona
+async function atualizarStatusVisivel() {
+  const isOpen = await checkRestaurantOpen();
+  const elementoStatus = document.querySelector("#estaAberta");
+  const atendimentoInfo = document.querySelector(".atendimento-info");
+
+  if (isOpen) {
+    elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+    atendimentoInfo.style.backgroundColor = "green";
+  } else {
+    elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+    atendimentoInfo.style.backgroundColor = "#d32525ff";
   }
-  return totalMinutes >= abre && totalMinutes <= fecha;
 }
-const estaFechada = checkRestaurantOpen();
-const isOpen = document.querySelector("#estaAberta");
-const atendimentoInfo = document.querySelector(".atendimento-info");
-if (estaFechada) {
-  isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
-  atendimentoInfo.style.backgroundColor = "green";
-} else {
-  isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
-  atendimentoInfo.style.backgroundColor = "#d32525ff";
-}
+
+// Chame a nova função quando o DOM carregar
+ document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
+
+// function checkRestaurantOpen() {
+//   const data = new Date();
+//   const dia = data.getDay();
+//   const hours = data.getHours();
+//   const minutes = data.getMinutes();
+//   const totalMinutes = hours * 60 + minutes;
+//   const abre = 8 * 60 + 30;
+//   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+
+//   if (dia === 2) {
+//     return false;
+//   }
+//   if (dia === 1 || dia === 3 || dia === 4) {
+//     fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+//   }
+//   return totalMinutes >= abre && totalMinutes <= fecha;
+// }
+// const estaFechada = checkRestaurantOpen();
+// const isOpen = document.querySelector("#estaAberta");
+// const atendimentoInfo = document.querySelector(".atendimento-info");
+// if (estaFechada) {
+//   isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
+//   atendimentoInfo.style.backgroundColor = "green";
+// } else {
+//   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
+//   atendimentoInfo.style.backgroundColor = "#d32525ff";
+// }
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
@@ -1895,6 +1895,8 @@ if (formaPagamentoSelect) {
       </div>`;
   }
 
+  // ... (código anterior da função itemHtml permanece igual)
+
   async function carregarHamburguers() {
     try {
       const response = await fetch(
@@ -1921,19 +1923,30 @@ if (formaPagamentoSelect) {
 
       const monta = (lista) => lista.map(itemHtml).join("");
 
-      const listaSpaceDiv = document.querySelector("#space .item-container");
-      const listaSmashDiv = document.querySelector("#smash .item-container");
-      const listaCombo = document.querySelector("#combos .item-container");
-      const listaPorcoes = document.querySelector("#porcoes .item-container");
-      const listaBebidas = document.querySelector("#bebidas .item-container");
+      // Função auxiliar para atualizar a lista e esconder a seção se estiver vazia
+      function atualizarSecao(seletorLista, itens) {
+        const divLista = document.querySelector(seletorLista);
+        if (divLista) {
+          const sectionPai = divLista.closest('section');
+          
+          if (itens.length > 0) {
+            divLista.innerHTML = monta(itens);
+            if (sectionPai) sectionPai.style.display = 'block'; // Mostra a seção
+          } else {
+            divLista.innerHTML = '';
+            if (sectionPai) sectionPai.style.display = 'none'; // Esconde a seção inteira
+          }
+        }
+      }
 
-      if (listaSpaceDiv) listaSpaceDiv.innerHTML = monta(spaceBurgers);
-      if (listaSmashDiv) listaSmashDiv.innerHTML = monta(smashBurgers);
-      if (listaCombo) listaCombo.innerHTML = monta(comboBurguers);
-      if (listaPorcoes) listaPorcoes.innerHTML = monta(porcoes);
-      if (listaBebidas) listaBebidas.innerHTML = monta(bebidas);
+      // Atualiza todas as seções usando a nova lógica
+      atualizarSecao("#space .item-container", spaceBurgers);
+      atualizarSecao("#smash .item-container", smashBurgers);
+      atualizarSecao("#combos .item-container", comboBurguers);
+      atualizarSecao("#porcoes .item-container", porcoes);
+      atualizarSecao("#bebidas .item-container", bebidas);
 
-      // Reanexa eventos requeridos pelos botões recém-inseridos"
+      // Reanexa eventos requeridos pelos botões recém-inseridos
       document
         .querySelectorAll(".btn-increase")
         .forEach((btn) => btn.addEventListener("click", adicionarItem));
