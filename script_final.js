@@ -1966,10 +1966,13 @@ if (formaPagamentoSelect) {
 
 const flocoNeve = document.querySelector(".floco")
 
-for(let floco=0; floco<=50; floco++){
+for(let floco=0; floco<50; floco++){
 const flocoRepeat = flocoNeve.cloneNode(true)
-flocoNeve.parentElement.appendChild(flocoRepeat)
+
+
 const flocosAleatorios=(Math.random()*100) + "%";
-flocoNeve.style.left = flocosAleatorios
+
+flocoNeve.style.animationDelay = (Math.random()*5) + "s";
+flocoNeve.parentElement.appendChild(flocoRepeat)
 }
 
