@@ -1737,7 +1737,7 @@ function itemEmBreve(event) {
 //   const minutes = data.getMinutes();
 //   const totalMinutes = hours * 60 + minutes;
 //   const abre = 18 * 60 
-//   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+//   let fecha = 22 * 60; //horário padrão de fechamento finais de semana
 
 //   if (dia === 2) {
 //     return false;
