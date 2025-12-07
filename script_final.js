@@ -1973,6 +1973,9 @@ const flocoRepeat = flocoNeve.cloneNode(true)
 const flocosAleatorios=(Math.random()*100) + "%";
 
 flocoNeve.style.animationDelay = (Math.random()*5) + "s";
+
+flocoNeve.style.left= flocosAleatorios;
+
 flocoNeve.parentElement.appendChild(flocoRepeat)
 }
 
