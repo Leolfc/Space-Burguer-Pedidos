@@ -21,11 +21,12 @@ header {
 }
 
 .fraseNatal {
-  color: #b9241f;
-  text-shadow: 2px 2px 1px #ffffff;
-  font-family: "Bungee", sans-serif;
+  color: white;
+ font-family: "Roboto", sans-serif;
+text-decoration: underline red;
+ font-weight: 700;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 576px) {
   .fraseNatal {
     font-size: 11px;
     margin: 0 8px;
@@ -35,12 +36,12 @@ header {
   display: flex;
   justify-content: left;
   margin-top: 10px;
-  font-size: 10px;
+  font-size: 9px;
 }
 @media screen and (max-width: 576px) {
   .subtitleAtendimento {
     display: flex;
-    font-size: 12px;
+    font-size: 9px;
     justify-content: left;
     margin-bottom: 45px;
   }
@@ -48,11 +49,13 @@ header {
 
 .floco {
   position: absolute;
-  top: 0;
-  left: 20px;
+  top: -25px;
+  left: 0;
   color: white; /* Para a neve aparecer */
   font-size: 20px;
   animation: cair 5s linear infinite;
+  z-index:10;
+  gap:8px;
 }
 
 @keyframes cair {
