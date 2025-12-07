@@ -24,12 +24,12 @@ header {
   color: white;
  font-family: "Roboto", sans-serif;
 text-decoration: underline red;
- font-weight: 700;
+ font-weight: bold;
 }
 @media screen and (max-width: 576px) {
   .fraseNatal {
     font-size: 11px;
-    margin: 8px 8px;
+    margin: 10px 8px;
   }
 }
 .subtitleAtendimento {
@@ -50,7 +50,7 @@ text-decoration: underline red;
 .floco {
   position: absolute;
   top: -25px;
-  left: 0;
+  left: 5px;
   color: white; /* Para a neve aparecer */
   font-size: 20px;
   animation: cair 5s linear infinite;
