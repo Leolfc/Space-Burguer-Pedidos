@@ -1963,3 +1963,13 @@ if (formaPagamentoSelect) {
     carregarHamburguers();
   });
 })();
+
+const flocoNeve = document.querySelector(".floco")
+
+for(let floco=0; floco<=50; floco++){
+const flocoRepeat = flocoNeve.cloneNode(true)
+flocoNeve.parentElement.appendChild(flocoRepeat)
+const flocosAleatorios=(Math.random()*100) + "%";
+
+}
+
