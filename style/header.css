@@ -23,7 +23,6 @@ header {
 .fraseNatal {
   color: white;
  font-family: "Roboto", sans-serif;
-text-decoration: underline red;
  font-weight: 700;
 }
 @media screen and (max-width: 576px) {
