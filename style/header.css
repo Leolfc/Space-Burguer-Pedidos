@@ -27,8 +27,8 @@ header {
 }
 @media screen and (max-width: 576px) {
   .fraseNatal {
-    font-size: 11px;
-    margin: 0 8px;
+    font-size: 14px;
+    margin: 10px 8px;
   }
 }
 .subtitleAtendimento {
@@ -49,12 +49,12 @@ header {
 .floco {
   position: absolute;
   top: -25px;
-  left: 0;
+  left: 5px;
   color: white; /* Para a neve aparecer */
   font-size: 20px;
   animation: cair 5s linear infinite;
   z-index:10;
-  gap:8px;
+  gap:10px;
 }
 
 @keyframes cair {

@@ -1775,7 +1775,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 21 * 60 ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1966,10 +1966,16 @@ if (formaPagamentoSelect) {
 
 const flocoNeve = document.querySelector(".floco")
 
-for(let floco=0; floco<=50; floco++){
+for(let floco=0; floco<50; floco++){
 const flocoRepeat = flocoNeve.cloneNode(true)
-flocoNeve.parentElement.appendChild(flocoRepeat)
+
+
 const flocosAleatorios=(Math.random()*100) + "%";
-flocoNeve.style.left = flocosAleatorios
+
+flocoNeve.style.animationDelay = (Math.random()*5) + "s";
+
+flocoNeve.style.left= flocosAleatorios;
+
+flocoNeve.parentElement.appendChild(flocoRepeat)
 }
 
