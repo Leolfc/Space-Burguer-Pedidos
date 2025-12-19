@@ -1775,7 +1775,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 23 * 60  ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60  ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
