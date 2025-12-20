@@ -59,7 +59,7 @@ const taxasDeEntrega = {
   "Vila Maria": 8.0,
   "Vila Esperança": 8.0,
   "Vila Rondon": 7.0,
-  "Vila Rosa": 6.0,
+  "Vila Rosa": 7.0,
   "Villa Aggeu": 8.0,
   "Vila Rural": 15.0,
   "Residencial Pompeia I": 8.0,
@@ -293,9 +293,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (enderecoClienteInput) {
     enderecoClienteInput.addEventListener("input", function () {
       carrinho.enderecoCliente = this.value.trim();
+      
       localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
 
-      this.value = this.value.toUpperCase();
+     
     });
     const enderecoSalvo = localStorage.getItem("enderecoCliente");
     if (enderecoSalvo) {
