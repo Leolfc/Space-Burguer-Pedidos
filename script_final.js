@@ -1772,7 +1772,7 @@ function checkRestaurantOpen() {
   const abre = 18 * 60 + 30;
   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
-  if (dia === 3) {
+  if (dia === 2) {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
