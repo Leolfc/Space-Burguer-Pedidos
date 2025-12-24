@@ -1,21 +1,6 @@
 
 /* Frase de horário de atendimento */
-.subtitleAtendimento{
- 
-  display: flex;
-  justify-content: left;
-  margin-top: 12px;
-}
-@media screen  and (max-width: 576px) {
-  .subtitleAtendimento{
-    display: flex;
-    font-size: 12px;
-    justify-content: left;
-   margin-top: 45px;
 
-  }
-  
-}
 
 
 .frasebAbencoada{
