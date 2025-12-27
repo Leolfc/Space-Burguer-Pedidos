@@ -1,6 +1,6 @@
 @import"carrinho.css";
 @import "header.css";
-
+@import "carrossel.css";
 *{
   box-sizing: border-box;
   margin: 0;

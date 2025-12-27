@@ -51,12 +51,12 @@
       </div>
 
       <h1>🎄Space Burguer Delivery🚀🎄</h1>
-    <span class="floco">❄</span>
+      <span class="floco">❄</span>
       <p class="subtitle">Escolha, monte e saboreie do seu jeito!</p>
-      <p class="fraseNatal">Space Burguer deseja um Feliz Natal e um
-        próspero ano novo a todos os nossos clientes e amigos🎄🎅.
+      <p class="fraseNatal">
+        Space Burguer deseja um Feliz Natal e um próspero ano novo a todos os
+        nossos clientes e amigos🎄🎅.
       </p>
-      
 
       <!-- <p class="subtitleAtendimento">
         Atendimento de Quarta a Segunda!<br />
@@ -100,9 +100,21 @@
     </div>
 
     <main>
+       <nav class="navegacao-categorias">
+      
       <div class="container">
+        
         <div class="menu-container">
+          <span class="flecha">🏹</span>
+           <a href="#space" class="btn-categoria">Space🍔</a>
+        <a href="#smash" class="btn-categoria">Smash🍔</a>
+        <a href="#combos" class="btn-categoria">Combos🍔🍟</a>
+        <a href="#porcoes" class="btn-categoria">Porções</a>
+        <a href="#bebidas" class="btn-categoria">Bebidas🍾</a>
+       
+      </nav>
           <form id="pedidoForm">
+            <div class="carrossel-secoes">
             <section id="space">
               <h2>Space Burguer´s (160 a 200 gramas)</h2>
               <div class="item-container">
@@ -1152,7 +1164,7 @@
                 >
                   <div class="item-info">
                     <span class="item-name">Combo Calabresa</span>
-                    <span class="item-price">R$ 42,90</span>
+                    <span class="item-price">R$ ----</span>
                   </div>
                   <div class="item-desc">
                     Pão de brioche, hambúrguer artesanal de 160g, 100g de
@@ -1681,89 +1693,78 @@
                   </div>
                 </div>
               </div>
-            </section>
 
-             <section id="refri2Litros">
-             
-               <div class="item-container">
-                 <div
-                   class="item"
-                   data-id="cocaCola2L"
-                   data-nome="Coca-Cola Original 2L"
-                   data-valor="15.00"
-                   data-tipo="bebida"
-                 >
-                   <div class="item-info">
-                      <img class="imgBebida" src="img/coca2litro.webp" alt="Coca-Cola Original 2L">
-                     <span class="item-name">Coca-Cola Original 2L</span>
-               
-                     <span class="item-price">R$ 15,50</span>
-                   </div>
-                   <div class="item-actions">
-                     <button type="button" class="btn-decrease">-</button>
-                     <span class="item-qty">0</span>
-                     <button type="button" class="btn-increase">+</button>
-                   </div>
-                 </div>
-                 <div
-                   class="item"
-                   data-id="cocaColaZero2L"
-                   data-nome="Coca-Cola Zero 2L"
-                   data-valor="15.00"
-                   data-tipo="bebida"
-                 >
-                   <div class="item-info">
-                     <img class="imgBebida" src="img/cocaZero2L.webp" alt="Coca-Cola Zero 2L">
-                     <span class="item-name">Coca-Cola Zero 2L
-                     </span>
-                     <span class="item-price">R$ 15,50</span>
-                   </div>
-                   <div class="item-actions">
-                     <button type="button" class="btn-decrease">-</button>
-                     <span class="item-qty">0</span>
-                     <button type="button" class="btn-increase">+</button>
-                   </div>
-                 </div>
-                   <div
-                   class="item"
-                   data-id="fanta2l"
-                   data-nome="Fanta 2L"
-                   data-valor="12.50"
-                   data-tipo="bebida"
-                 >
-                   <div class="item-info">
-                      <img class="imgBebida" src="img/guaranaFanta2L.webp" alt="fanta guaraná 2litros">
-                     <span class="item-name">Fanta 2L</span>
-               
-                     <span class="item-price">R$ 12,50</span>
-               </div>
-                   <div class="item-actions">
-                     <button type="button" class="btn-decrease">-</button>
-                     <span class="item-qty">0</span>
-                     <button type="button" class="btn-increase">+</button>
-                   </div>
-                 </div>      
-                 <div
-                   class="item"
-                   data-id="fantaLaranja2l"
-                   data-nome="Fanta Laranja 2L"
-                   data-valor="12.50"
-                   data-tipo="bebida"
-                 >
-                   <div class="item-info">
-                      <img class="imgBebida" src="img/fanta2l.webp" alt="fanta guaraná 2litros">
-                     <span class="item-name">Fanta Laranja 2L</span>
-               
-                     <span class="item-price">R$ 12,50</span>
-               </div>
-                   <div class="item-actions">
-                     <button type="button" class="btn-decrease">-</button>
-                     <span class="item-qty">0</span>
-                     <button type="button" class="btn-increase">+</button>
-                   </div>
-                 </div>                 
-                           </div>
-             </section>
+              <div class="item-container">
+                <div
+                  class="item"
+                  data-id="cocaCola2L"
+                  data-nome="Coca-Cola Original 2L"
+                  data-valor="15.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <img
+                      class="imgBebida"
+                      src="img/coca2litro.webp"
+                      alt="Coca-Cola Original 2L"
+                    />
+                    <span class="item-name">Coca-Cola Original 2L</span>
+
+                    <span class="item-price">R$ 15,50</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+                <div
+                  class="item"
+                  data-id="cocaColaZero2L"
+                  data-nome="Coca-Cola Zero 2L"
+                  data-valor="15.00"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <img
+                      class="imgBebida"
+                      src="img/cocaZero2L.webp"
+                      alt="Coca-Cola Zero 2L"
+                    />
+                    <span class="item-name">Coca-Cola Zero 2L </span>
+                    <span class="item-price">R$ 15,50</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+
+                <div
+                  class="item"
+                  data-id="fantaLaranja2l"
+                  data-nome="Fanta Laranja 2L"
+                  data-valor="12.50"
+                  data-tipo="bebida"
+                >
+                  <div class="item-info">
+                    <img
+                      class="imgBebida"
+                      src="img/fanta2l.webp"
+                      alt="fanta guaraná 2litros"
+                    />
+                    <span class="item-name">Fanta Laranja 2L</span>
+
+                    <span class="item-price">R$ 12,50</span>
+                  </div>
+                  <div class="item-actions">
+                    <button type="button" class="btn-decrease">-</button>
+                    <span class="item-qty">0</span>
+                    <button type="button" class="btn-increase">+</button>
+                  </div>
+                </div>
+              </div>
 
               <div class="item-container">
                 <div
@@ -1815,6 +1816,7 @@
               </div>
             </section>
           </form>
+        </div>
         </div>
         <div class="cart-container">
           <div id="resumoPedido">
@@ -1912,10 +1914,10 @@
               <span id="valorTotal">R$ 0,00</span>
             </div>
             <div class="containerChavePix chavePix">
-              <p >Clique para copiar nossa chave pix</p>
+              <p>Clique para copiar nossa chave pix</p>
               Rodrigo Pereira da Silva
               <span class="chavepix">43996114268</span>
-              <button class='botaoPix botao-pix'>copiar</button>
+              <button class="botaoPix botao-pix">copiar</button>
             </div>
 
             <div class="cart-buttons">
@@ -1966,32 +1968,6 @@
         <circle cx="17" cy="19" r="2"></circle>
       </svg>
     </button>
-    
-   <div class="containerBotoes">
-     
-     <button id="botao-flutuante-smash" class="botoes-flutuante-style"
-     >
-     <circle id="botoes-flutuante-section" >
-       <a class="a" href="#smash">Smash🍔🍟</a>
-     </circle>
-       </button>
-     
-     <button id="botao-flutuante-combos" class="botoes-flutuante-style"
-     >
-     <circle id="botoes-flutuante-section" >
-       <a class="a" href="#combos">Combos🍔🍟</a>
-     </circle>
-       </button>
-       <button id="botao-flutuante-combos" class="botoes-flutuante-style"
-     >
-     <circle id="botoes-flutuante-section" >
-       <a class="a" href="#bebidas">Bebidas🍾</a>
-     </circle>
-       </button>
-   </div>
-  
-    
-   
 
     <button id="btn-voltar-topo" class="btn-flutuante" title="Voltar ao topo">
       <svg
@@ -2019,8 +1995,10 @@
           Delivery</a
         >
       </p>
-      <p class="rd"> Jacarezinho - PR - 86400-000 -  Rua Padre Mello 572, Centro</p>
-       <p><p>Gostou deste cardápio digital? Leve uma solução como esta para o seu negócio.</p></p>
+      <p class="rd">
+        Jacarezinho - PR - 86400-000 - Rua Padre Mello 572, Centro
+      </p>
+
       <p class="rodape-texto">
         Desenvolvido por
         <a

@@ -1,0 +1,90 @@
+/* --- Estilo do Menu de Categorias --- */
+.navegacao-categorias {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto; /* Permite rolar o menu se for muito grande */
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
+ position:relative;
+}
+
+.flecha{
+  position:absolute;
+  right:20px;
+  bottom:50px;
+  justify-content:flex-end;
+
+}
+
+.navegacao-categorias::-webkit-scrollbar {
+  height: 4px; /* Barra de rolagem fininha para o menu */
+}
+
+.navegacao-categorias::-webkit-scrollbar-thumb {
+  background-color: #ff5722;
+  border-radius: 4px;
+}
+
+.btn-categoria {
+  text-decoration: none;
+  color: var(--text-color);
+  background-color: var(--card-bg);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-categoria:hover, 
+.btn-categoria:focus {
+  background-color: #ff5722;
+  color: white;
+  border-color: #ff5722;
+}
+
+/* --- Estilo do Carrossel Horizontal --- */
+.carrossel-secoes {
+  display: flex; /* Coloca as seções uma ao lado da outra */
+  overflow-x: auto; /* Habilita a rolagem horizontal */
+  scroll-snap-type: x mandatory; /* O segredo! Força o "imã" horizontal */
+  scroll-behavior: smooth; /* Rolagem suave ao clicar no menu */
+  gap: 20px; /* Espaço entre as seções */
+  padding-bottom: 20px; /* Espaço para a barra de rolagem não colar no conteúdo */
+  width: 100%;
+}
+
+/* Esconder a barra de rolagem das seções para ficar mais limpo (opcional) */
+.carrossel-secoes::-webkit-scrollbar {
+  display: none; 
+}
+.carrossel-secoes {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Ajuste nas Seções para ocuparem a largura total */
+.carrossel-secoes section {
+  min-width: 100%; /* Cada seção ocupa 100% da largura do pai */
+  scroll-snap-align: start; /* Alinha o início da seção à esquerda */
+  margin-bottom: 0; /* Remove a margem inferior antiga */
+}
+
+/* Responsividade: No desktop, se quiser ver tudo normal, use este media query.
+   Se quiser carrossel no PC também, pode ignorar esta parte. */
+@media (min-width: 992px) {
+  .carrossel-secoes {
+    display: block;
+    overflow-x: visible;
+  }
+  .carrossel-secoes section {
+    min-width: auto;
+    margin-bottom: 25px;
+  }
+  .navegacao-categorias {
+    display: none; 
+  }
+}

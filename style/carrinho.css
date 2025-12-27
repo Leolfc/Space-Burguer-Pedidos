@@ -4,11 +4,7 @@
    align-items: center;
    justify-content: center;
    gap: 10px;
-<<<<<<< HEAD
-   font-size: 8px;
-=======
    font-size: 10px;
->>>>>>> main
    margin-bottom: 8px;
 }
 
@@ -20,20 +16,9 @@
 }
 .botao-pix:hover{
     background: linear-gradient(to left, rgb(216, 76, 76), rgb(255, 187, 0));
-<<<<<<< HEAD
-=======
 }
 
-.containerNotification{
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  position:fixed;
-  right:20px;
-  top:20px;
-  z-index:9999;
-
-}
+ 
 .cardNotification{
 text-align: center;
 background-color: green;
@@ -41,5 +26,4 @@ padding:12px 8px;
 border-radius: 8px;
 color:white;
 font-weight: 600;
->>>>>>> main
 }
