@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (secaoBebidas && secaoBebidas.dataset.tipo === "bebida") {
       botao.textContent = "Adicionar";
     } else {
-      botao.textContent = "Personalizar✏️";
+      botao.textContent = "Adc/Perso✏️";
     }
 
     botao.classList.add("btn-texto");
