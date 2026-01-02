@@ -20,21 +20,10 @@ header {
   overflow: hidden;
 }
 
-.fraseNatal {
-  color: white;
- font-family: "Roboto", sans-serif;
- font-weight: 700;
-}
-@media screen and (max-width: 576px) {
-  .fraseNatal {
-    font-size: 14px;
-    margin: 10px 8px;
-  }
-}
 .subtitleAtendimento {
   display: flex;
   justify-content: left;
-  margin-top: 10px;
+  margin-top: 3.125rem;
   font-size: 9px;
 }
 @media screen and (max-width: 576px) {
@@ -66,3 +55,15 @@ header {
   }
 }
 
+/* 
+.fraseNatal {
+  color: white;
+ font-family: "Roboto", sans-serif;
+ font-weight: 700;
+}
+@media screen and (max-width: 576px) {
+  .fraseNatal {
+    font-size: 14px;
+    margin: 10px 8px;
+  }
+} */
