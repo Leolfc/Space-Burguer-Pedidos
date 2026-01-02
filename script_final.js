@@ -29,17 +29,15 @@ botao.addEventListener("click", () => {
 function notification(mensagem) {
   const NotificationPix = document.querySelector(".containerNotification");
 
- 
   const existing = NotificationPix.querySelector(".cardNotification");
   if (existing) {
     existing.remove();
   }
   const card = document.createElement("span");
-    card.classList.add("cardNotification");
+  card.classList.add("cardNotification");
   card.innerHTML = mensagem;
-   NotificationPix.appendChild(card);
-  setTimeout(() => {
-  }, 2500);
+  NotificationPix.appendChild(card);
+  setTimeout(() => {}, 2500);
   setTimeout(() => {
     card.remove();
   }, 3000);
@@ -135,6 +133,41 @@ function removerMaioneseVerde() {
     atualizarCarrinho();
   }
 }
+function criarBotoesPersonalizarParaTodos() {
+  const itens = document.querySelectorAll(".item");
+
+  itens.forEach((itemDiv) => {
+    const tipo = itemDiv.dataset.tipo;
+
+    // só hamburguer e combo
+    if (tipo !== "hamburguer" && tipo !== "combo") return;
+
+    const actions = itemDiv.querySelector(".item-actions");
+    if (!actions) return;
+
+    // evita duplicar
+    if (actions.querySelector(".btn-perso")) return;
+
+    const btnPerso = document.createElement("button");
+    btnPerso.type = "button";
+    btnPerso.className = "btn-perso btn-texto"; // reaproveita seu estilo
+    btnPerso.textContent = "Personalizar";
+
+    // SOMENTE abre o modal
+    btnPerso.addEventListener("click", () => {
+      const { id, nome, valor, tipo } = itemDiv.dataset;
+      abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
+    });
+
+    // coloca entre quantidade e adicionar (opcional)
+    const spanQtd = actions.querySelector(".item-qty");
+    if (spanQtd) {
+      spanQtd.insertAdjacentElement("afterend", btnPerso);
+    } else {
+      actions.appendChild(btnPerso);
+    }
+  });
+}
 
 //*Inicialização
 document.addEventListener("DOMContentLoaded", function () {
@@ -146,15 +179,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
-
+  
+ 
   botoesAdicionar.forEach((botao) => {
     const secaoBebidas = botao.closest(".item");
+    criarBotoesPersonalizarParaTodos();
     if (secaoBebidas && secaoBebidas.dataset.tipo === "bebida") {
       botao.textContent = "Adicionar";
     } else {
-      botao.textContent = "Adicionar ✏️";
+      botao.textContent = "Adicionar";
+      
     }
-
+ 
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });
@@ -293,10 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (enderecoClienteInput) {
     enderecoClienteInput.addEventListener("input", function () {
       carrinho.enderecoCliente = this.value.trim();
-      
-      localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
 
-     
+      localStorage.setItem("enderecoCliente", carrinho.enderecoCliente);
     });
     const enderecoSalvo = localStorage.getItem("enderecoCliente");
     if (enderecoSalvo) {
@@ -379,6 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     atualizarMaioneseVerdeUI();
   }
 });
+
 // FIM DO DOMContentLoaded
 
 // Função para adicionar botões de observação a todos os itens
@@ -533,6 +568,7 @@ function criarModalAdicionais() {
     event.stopPropagation();
     fecharModalAdicionais();
   });
+
   adicionaisContainer.appendChild(closeButton);
   const adicionaisList = document.createElement("div");
   adicionaisList.className = "adicionais-list-select";
@@ -1056,22 +1092,8 @@ function adicionarItem(event) {
   const nome = itemDiv.dataset.nome;
   const valor = parseFloat(itemDiv.dataset.valor);
   const tipo = itemDiv.dataset.tipo;
-  if (tipo === "bebida" || tipo === "porcao") {
-    adicionarItemAoCarrinho(id, nome, valor, tipo, [], "");
-    return;
-  }
-  carrinho.itemAtual = {
-    idUnico: `${id}_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-    idOriginal: id,
-    nome: nome,
-    valor: valor,
-    tipo: tipo,
-    adicionais: [],
-    observacao: "",
-  };
-  const campoObs = itemDiv.querySelector(".observacao-texto");
-  if (campoObs) campoObs.value = "";
-  mostrarPerguntaAdicionais(itemDiv, id, nome, valor, tipo);
+  // ✅ Agora: SEMPRE adiciona direto, sem pergunta e sem modal
+  adicionarItemAoCarrinho(id, nome, valor, tipo, [], "");
 }
 
 function adicionarItemAoCarrinho(
@@ -1510,7 +1532,6 @@ async function enviarPedidoWhatsApp() {
     return;
   }
 
-
   //!Função para mostrar notificação quando hamburgueria estiver fechada
   const isOpenNow = checkRestaurantOpen();
   if (!isOpenNow) {
@@ -1731,24 +1752,19 @@ function itemEmBreve(event) {
   }
 }
 
-
 //FUNÇÃO PARA QUANDO USUARIO ESTIVER NO CARRINHO, OS BOTÕES DESPAARECEM
-const containerBotoes = document.querySelector(".containerBotoes")
-const containerCarrinho = document.querySelector(".cart-container")
-const observer = new IntersectionObserver((entries)=>{ 
-  entries.forEach((entry)=>{
-if(entry.isIntersecting){
-  containerBotoes.style.display= "none"
-}else{
-  containerBotoes.style.display= "flex"
-}
-  })
-})
-observer.observe(containerCarrinho)
-
-
-
-
+const containerBotoes = document.querySelector(".containerBotoes");
+const containerCarrinho = document.querySelector(".cart-container");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      containerBotoes.style.display = "none";
+    } else {
+      containerBotoes.style.display = "flex";
+    }
+  });
+});
+observer.observe(containerCarrinho);
 
 // !função para abirir a loja pelo painel
 // async function checkRestaurantOpen() {
@@ -1797,7 +1813,7 @@ function checkRestaurantOpen() {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60  ; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
@@ -1832,11 +1848,9 @@ function gerenciarVisibilidadeTroco() {
   if (formaPagamentoSelect) {
     if (formaPagamentoSelect.value === "Dinheiro") {
       trocoContainer.style.display = "flex";
-      
     } else {
       trocoContainer.style.display = "none";
       trocoInput.value = ""; //*limpa o input
-      
     }
   }
 
@@ -1844,7 +1858,7 @@ function gerenciarVisibilidadeTroco() {
   if (formaPagamentoSalva) {
     formaPagamentoSelect.value = formaPagamentoSalva;
     carrinho.formaPagamento = formaPagamentoSalva;
-    gerenciarVisibilidadePix()
+    gerenciarVisibilidadePix();
   }
 
   return;
@@ -1916,6 +1930,7 @@ if (formaPagamentoSelect) {
           <button type="button" class="btn-decrease">Remover</button>
           <span class="item-qty">0</span>
           <button type="button" class="btn-increase">Adicionar</button>
+          
         </div>
       </div>`;
   }
@@ -1952,14 +1967,14 @@ if (formaPagamentoSelect) {
       function atualizarSecao(seletorLista, itens) {
         const divLista = document.querySelector(seletorLista);
         if (divLista) {
-          const sectionPai = divLista.closest('section');
-          
+          const sectionPai = divLista.closest("section");
+
           if (itens.length > 0) {
             divLista.innerHTML = monta(itens);
-            if (sectionPai) sectionPai.style.display = 'block'; // Mostra a seção
+            if (sectionPai) sectionPai.style.display = "block"; // Mostra a seção
           } else {
-            divLista.innerHTML = '';
-            if (sectionPai) sectionPai.style.display = 'none'; // Esconde a seção inteira
+            divLista.innerHTML = "";
+            if (sectionPai) sectionPai.style.display = "none"; // Esconde a seção inteira
           }
         }
       }
@@ -1989,18 +2004,16 @@ if (formaPagamentoSelect) {
   });
 })();
 
-const flocoNeve = document.querySelector(".floco")
+const flocoNeve = document.querySelector(".floco");
 
-for(let floco=0; floco<50; floco++){
-const flocoRepeat = flocoNeve.cloneNode(true)
+for (let floco = 0; floco < 50; floco++) {
+  const flocoRepeat = flocoNeve.cloneNode(true);
 
+  const flocosAleatorios = Math.random() * 100 + "%";
 
-const flocosAleatorios=(Math.random()*100) + "%";
+  flocoNeve.style.animationDelay = Math.random() * 5 + "s";
 
-flocoNeve.style.animationDelay = (Math.random()*5) + "s";
+  flocoNeve.style.left = flocosAleatorios;
 
-flocoNeve.style.left= flocosAleatorios;
-
-flocoNeve.parentElement.appendChild(flocoRepeat)
+  flocoNeve.parentElement.appendChild(flocoRepeat);
 }
-
