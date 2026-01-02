@@ -7,8 +7,8 @@ const adicionais = {
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela 🧀", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
-  molhoBarbercue:{nome:"Molho Barbercue", preco:5.0},
-  calabresa:{nome: "Calabresa", preco: 8.0},
+  molhoBarbercue: { nome: "Molho Barbercue", preco: 5.0 },
+  calabresa: { nome: "Calabresa", preco: 8.0 },
   ovoFrito: { nome: "Ovo Frito 🥚", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
@@ -181,8 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
-  
- 
+
   botoesAdicionar.forEach((botao) => {
     const secaoBebidas = botao.closest(".item");
     criarBotoesPersonalizarParaTodos();
@@ -190,9 +189,8 @@ document.addEventListener("DOMContentLoaded", function () {
       botao.textContent = "Adicionar";
     } else {
       botao.textContent = "Adicionar";
-      
     }
- 
+
     botao.classList.add("btn-texto");
     botao.addEventListener("click", adicionarItem);
   });

@@ -309,21 +309,7 @@ section h2 {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  & .btn-perso {
-    min-width: 100px;
-    height: 40px;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
+ 
 }
 
 .btn-decrease {
@@ -1032,7 +1018,9 @@ button#btnLimparCarrinho {
    border-radius:8px;
    border:none;
 justify-self: center;
+font-family: "Bungee", sans-serif;
    background: #ffaa00; 
+   font: var()
   }
 
   /* importante: deixa os botões encolherem no grid */
