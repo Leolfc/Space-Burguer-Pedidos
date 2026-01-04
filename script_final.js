@@ -1,6 +1,6 @@
 //*Preços dos adicionais
 
-const adicionais = {
+const adicionaisFallback = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
   bacon: { nome: "Bacon 🥓", preco: 8.0 },
@@ -19,6 +19,45 @@ const adicionais = {
   doritos: { nome: "Doritos", preco: 5.0 },
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
+
+let adicionais = { ...adicionaisFallback };
+let adicionaisOrdenados = Object.entries(adicionais);
+
+const API_BASE = `http://${location.hostname}:3000`;
+
+function definirAdicionais(lista, usarFallback = false) {
+  if (!Array.isArray(lista) || (usarFallback && lista.length === 0)) {
+    adicionais = { ...adicionaisFallback };
+    adicionaisOrdenados = Object.entries(adicionais);
+    atualizarListaAdicionaisModal();
+    return;
+  }
+
+  adicionais = {};
+  adicionaisOrdenados = lista.map((adicional) => {
+    const item = {
+      nome: adicional.nome,
+      preco: Number(adicional.preco),
+    };
+    adicionais[adicional.id] = item;
+    return [adicional.id, item];
+  });
+  atualizarListaAdicionaisModal();
+}
+
+async function carregarAdicionais() {
+  try {
+    const response = await fetch(`${API_BASE}/adicionais?t=${Date.now()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error("Falha ao buscar adicionais.");
+    const adicionaisApi = await response.json();
+    definirAdicionais(adicionaisApi.filter((item) => item.ativo !== false));
+  } catch (error) {
+    console.error("Erro ao carregar adicionais:", error);
+    definirAdicionais([], true);
+  }
+}
 
 const chavePix = document.querySelector(".chavepix");
 const botao = document.querySelector(".botaoPix");
@@ -543,37 +582,17 @@ function configurarPesquisa() {
   pesquisaInput.addEventListener("search", realizarPesquisa);
 }
 
-function criarModalAdicionais() {
-  if (document.querySelector(".adicionais-modal-overlay")) {
+function preencherListaAdicionais(adicionaisList) {
+  adicionaisList.innerHTML = "";
+  if (!adicionaisOrdenados.length) {
+    const vazio = document.createElement("p");
+    vazio.textContent = "Nenhum adicional disponível no momento.";
+    vazio.style.opacity = "0.7";
+    adicionaisList.appendChild(vazio);
     return;
   }
 
-  const modalOverlay = document.createElement("div");
-  modalOverlay.className = "adicionais-modal-overlay";
-  const adicionaisContainer = document.createElement("div");
-  adicionaisContainer.className = "adicionais-container";
-  modalOverlay.appendChild(adicionaisContainer);
-  const titulo = document.createElement("h3");
-  titulo.textContent = "Escolha seus adicionais:";
-  titulo.style.paddingRight = "40px";
-  adicionaisContainer.appendChild(titulo);
-  const closeButton = document.createElement("button");
-  closeButton.type = "button";
-  closeButton.className = "btn-close-adicionais";
-  closeButton.innerHTML = "×";
-  closeButton.style.cssText =
-    "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
-  closeButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    fecharModalAdicionais();
-  });
-
-  adicionaisContainer.appendChild(closeButton);
-  const adicionaisList = document.createElement("div");
-  adicionaisList.className = "adicionais-list-select";
-  adicionaisContainer.appendChild(adicionaisList);
-  for (const [key, adicional] of Object.entries(adicionais)) {
+  adicionaisOrdenados.forEach(([key, adicional]) => {
     const adicionalItem = document.createElement("div");
 
     adicionalItem.className = "adicional-item";
@@ -650,7 +669,49 @@ function criarModalAdicionais() {
     adicionalItem.appendChild(adicionalInfo);
     adicionalItem.appendChild(quantidadeControle);
     adicionaisList.appendChild(adicionalItem);
+  });
+}
+
+function atualizarListaAdicionaisModal() {
+  const modalOverlay = document.querySelector(".adicionais-modal-overlay");
+  if (!modalOverlay) return;
+  const adicionaisList = modalOverlay.querySelector(".adicionais-list-select");
+  if (adicionaisList) {
+    preencherListaAdicionais(adicionaisList);
   }
+}
+
+function criarModalAdicionais() {
+  if (document.querySelector(".adicionais-modal-overlay")) {
+    return;
+  }
+
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "adicionais-modal-overlay";
+  const adicionaisContainer = document.createElement("div");
+  adicionaisContainer.className = "adicionais-container";
+  modalOverlay.appendChild(adicionaisContainer);
+  const titulo = document.createElement("h3");
+  titulo.textContent = "Escolha seus adicionais:";
+  titulo.style.paddingRight = "40px";
+  adicionaisContainer.appendChild(titulo);
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "btn-close-adicionais";
+  closeButton.innerHTML = "×";
+  closeButton.style.cssText =
+    "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
+  closeButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    fecharModalAdicionais();
+  });
+
+  adicionaisContainer.appendChild(closeButton);
+  const adicionaisList = document.createElement("div");
+  adicionaisList.className = "adicionais-list-select";
+  adicionaisContainer.appendChild(adicionaisList);
+  preencherListaAdicionais(adicionaisList);
   const observacoesDiv = document.createElement("div");
   observacoesDiv.className = "observacoes-container";
   observacoesDiv.innerHTML = `
@@ -993,7 +1054,6 @@ function confirmarAdicionais() {
   const modalOverlay = document.querySelector(".adicionais-modal-overlay");
   if (!modalOverlay) return;
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
-  const fritasP = adicionais.fritasP_extra;
 
   const adicionaisSelecionados = [];
   qtySpans.forEach((span) => {
@@ -1884,8 +1944,6 @@ if (formaPagamentoSelect) {
 
 // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
 (function () {
-  const API_BASE = `http://${location.hostname}:3000`;
-
   function resolveImagemUrl(imagemUrl) {
     if (!imagemUrl) return "";
     if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
@@ -2000,6 +2058,7 @@ if (formaPagamentoSelect) {
 
   document.addEventListener("DOMContentLoaded", () => {
     carregarHamburguers();
+    carregarAdicionais();
   });
 })();
 

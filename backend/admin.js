@@ -10,10 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ---
   const btnMostrarGerenciar = document.getElementById("btn-mostrar-gerenciar");
   const btnMostrarAdicionar = document.getElementById("btn-mostrar-adicionar");
+  const btnMostrarAdicionais = document.getElementById("btn-mostrar-adicionais");
   const btnAbrirAdicionar = document.getElementById("btn-abrir-adicionar");
   const btnLogout = document.getElementById("btn-logout");
   const telaGerenciar = document.getElementById("tela-gerenciar");
   const telaAdicionar = document.getElementById("tela-adicionar");
+  const telaAdicionais = document.getElementById("tela-adicionais");
   const formAdicionar = document.getElementById("form-adicionar-lanche");
   const tituloForm = document.getElementById("titulo-form");
   const btnSubmit = document.getElementById("btn-submit");
@@ -23,7 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusTexto = document.getElementById("status-atual-texto");
   const btnAbrirLoja = document.getElementById("btn-abrir-loja");
   const btnFecharLoja = document.getElementById("btn-fechar-loja");
+  const tabelaAdicionais = document.getElementById("tabela-adicionais-corpo");
+  const formAdicional = document.getElementById("form-adicional");
+  const tituloFormAdicional = document.getElementById("titulo-form-adicional");
+  const btnCancelarAdicional = document.getElementById(
+    "btn-cancelar-adicional"
+  );
+  const btnNovoAdicional = document.getElementById("btn-novo-adicional");
   let idEmEdicao = null;
+  let adicionalEmEdicao = null;
 
    
   // --- 2. FUNÇÕES ---
@@ -66,8 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function mostrarTela(idTelaParaMostrar) {
     telaGerenciar.style.display = "none";
     telaAdicionar.style.display = "none";
+    telaAdicionais.style.display = "none";
     btnMostrarGerenciar.classList.remove("active");
     btnMostrarAdicionar.classList.remove("active");
+    btnMostrarAdicionais.classList.remove("active");
 
     if (idTelaParaMostrar === "tela-gerenciar") {
       telaGerenciar.style.display = "block";
@@ -75,6 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (idTelaParaMostrar === "tela-adicionar") {
       telaAdicionar.style.display = "block";
       btnMostrarAdicionar.classList.add("active");
+    } else if (idTelaParaMostrar === "tela-adicionais") {
+      telaAdicionais.style.display = "block";
+      btnMostrarAdicionais.classList.add("active");
     }
   }
 
@@ -248,6 +263,56 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function sairDoModoEdicaoAdicional() {
+    adicionalEmEdicao = null;
+    tituloFormAdicional.textContent = "Adicionar adicional";
+    btnCancelarAdicional.style.display = "none";
+    if (formAdicional) {
+      formAdicional.reset();
+    }
+  }
+
+  async function carregarAdicionais() {
+    if (!tabelaAdicionais) return;
+    try {
+      const response = await fetch(`${API_BASE}/adicionais?t=${Date.now()}`, {
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("Falha ao buscar adicionais.");
+      const adicionais = await response.json();
+      tabelaAdicionais.innerHTML = "";
+
+      if (!adicionais.length) {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td colspan="3" style="opacity:0.7">Nenhum adicional cadastrado.</td>';
+        tabelaAdicionais.appendChild(tr);
+        return;
+      }
+
+      adicionais.forEach((adicional) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${adicional.nome}</td>
+          <td>R$ ${parseFloat(adicional.preco)
+            .toFixed(2)
+            .replace(".", ",")}</td>
+          <td class="acoes">
+            <button class="btn-editar" data-id="${adicional.id}">Editar</button>
+            <button class="btn-deletar" data-id="${adicional.id}">Deletar</button>
+          </td>
+        `;
+        tr.dataset.nome = adicional.nome;
+        tr.dataset.preco = adicional.preco;
+        tabelaAdicionais.appendChild(tr);
+      });
+    } catch (error) {
+      console.error("Erro ao carregar adicionais:", error);
+      tabelaAdicionais.innerHTML =
+        '<tr><td colspan="3">Erro ao carregar adicionais.</td></tr>';
+    }
+  }
+
   btnLogout.addEventListener("click", fazerLogout);
   btnAbrirLoja.addEventListener("click", () => alterarStatusLoja(true));
   btnFecharLoja.addEventListener("click", () => alterarStatusLoja(false));
@@ -262,6 +327,12 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarTela("tela-adicionar");
   });
 
+  btnMostrarAdicionais.addEventListener("click", () => {
+    sairDoModoEdicaoAdicional();
+    carregarAdicionais();
+    mostrarTela("tela-adicionais");
+  });
+
   if (btnAbrirAdicionar) {
     btnAbrirAdicionar.addEventListener("click", () => {
       sairDoModoEdicao();
@@ -273,6 +344,18 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCancelarEdicao.addEventListener("click", () => {
       sairDoModoEdicao();
       mostrarTela("tela-gerenciar");
+    });
+  }
+
+  if (btnNovoAdicional) {
+    btnNovoAdicional.addEventListener("click", () => {
+      sairDoModoEdicaoAdicional();
+    });
+  }
+
+  if (btnCancelarAdicional) {
+    btnCancelarAdicional.addEventListener("click", () => {
+      sairDoModoEdicaoAdicional();
     });
   }
 
@@ -338,6 +421,50 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (formAdicional) {
+    formAdicional.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const nome = document.getElementById("adicional-nome").value.trim();
+      const preco = document
+        .getElementById("adicional-preco")
+        .value.replace(",", ".");
+
+      if (!nome) {
+        alert("Informe o nome do adicional.");
+        return;
+      }
+      if (!preco || Number.isNaN(Number(preco))) {
+        alert("Informe um preço válido.");
+        return;
+      }
+
+      const payload = { nome, preco: Number(preco) };
+      const url = adicionalEmEdicao
+        ? `${API_BASE}/adicionais/${adicionalEmEdicao}`
+        : `${API_BASE}/adicionais`;
+      const method = adicionalEmEdicao ? "PUT" : "POST";
+
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          const erro = await response.json();
+          throw new Error(erro.message || "Falha ao salvar adicional.");
+        }
+        alert(
+          `Adicional ${adicionalEmEdicao ? "atualizado" : "adicionado"}!`
+        );
+        sairDoModoEdicaoAdicional();
+        carregarAdicionais();
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
+    });
+  }
+
   if (tabelaCorpo) {
     tabelaCorpo.addEventListener("click", async (event) => {
       const target = event.target;
@@ -377,6 +504,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (tabelaAdicionais) {
+    tabelaAdicionais.addEventListener("click", async (event) => {
+      const target = event.target;
+      const id = target.dataset.id;
+
+      if (target.classList.contains("btn-deletar")) {
+        if (confirm("Deseja deletar este adicional?")) {
+          try {
+            const response = await fetch(`${API_BASE}/adicionais/${id}`, {
+              method: "DELETE",
+            });
+            if (!response.ok) throw new Error("Falha ao deletar adicional.");
+            carregarAdicionais();
+          } catch (error) {
+            alert(`Erro: ${error.message}`);
+          }
+        }
+      }
+
+      if (target.classList.contains("btn-editar")) {
+        const row = target.closest("tr");
+        if (!row) return;
+        adicionalEmEdicao = id;
+        tituloFormAdicional.textContent = "Editar adicional";
+        btnCancelarAdicional.style.display = "inline-block";
+        document.getElementById("adicional-nome").value =
+          row.dataset.nome || "";
+        document.getElementById("adicional-preco").value =
+          row.dataset.preco || "";
+      }
+    });
+  }
+
   if (inputFiltro) {
     inputFiltro.addEventListener("input", () => {
       const termo = inputFiltro.value.trim().toLowerCase();
@@ -393,5 +553,4 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarLanches();
   mostrarTela("tela-gerenciar");
 });
-
 
