@@ -1951,48 +1951,48 @@ if (formaPagamentoSelect) {
     }
     return imagemUrl;
   }
+function itemHtml(burguer) {
+  const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
 
-  function itemHtml(burguer) {
-    const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
+  let tipoItem = "hamburguer";
+  if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
+  else if (burguer.categoria.includes("combo")) tipoItem = "combo";
+  else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
 
-    let tipoItem = "hamburguer";
-    if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
-    else if (burguer.categoria.includes("combo")) tipoItem = "combo";
-    else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
+  // ✅ só mostra botão pra hamburguer e combo
+  const botaoPersonalizar =
+    (tipoItem === "hamburguer" || tipoItem === "combo")
+      ? `<button type="button" class="btn-perso btn-texto">Personalizar</button>`
+      : "";
+  let imagemHtml = "";
+   if (burguer.imagem_url) {
+     const url = resolveImagemUrl(burguer.imagem_url);
+       imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
+   }
+  return `
+    <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
+         data-id="${burguer.id}"
+         data-nome="${burguer.nome}"
+         data-valor="${burguer.preco}"
+         data-tipo="${tipoItem}">
+      <div class="item-info">
+       ${imagemHtml}
+        <span class="item-name">${burguer.nome}</span>
+        <span class="item-price">R$ ${parseFloat(burguer.preco).toFixed(2).replace(".", ",")}</span>
+      </div>
 
-    let imagemHtml = "";
-    if (burguer.imagem_url) {
-      const url = resolveImagemUrl(burguer.imagem_url);
-      imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
-    }
+      ${itemNovo}
+      <div class="item-desc">${burguer.descricao || ""}</div>
 
-    return `
-      <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
-           data-id="${burguer.id}"
-          
-           data-nome="${burguer.nome}"
-           data-valor="${burguer.preco}"
-           data-tipo="${tipoItem}">
-       
-        <div class="item-info">
-         ${imagemHtml}
-          <span class="item-name">${burguer.nome}</span>
-          <span class="item-price">R$ ${parseFloat(burguer.preco)
-            .toFixed(2)
-            .replace(".", ",")}</span>
-        </div>
-        ${itemNovo}
-        <div class="item-desc">${burguer.descricao || ""}</div>
-        <div class="item-actions">
-          <button type="button" class="btn-decrease">Remover</button>
-          <span class="item-qty">0</span>
-          <button type="button" class="btn-increase">Adicionar</button>
-          <button type="button" class="btn-perso btn-texto">Personalizar</button>
-        </div>
-      </div>`;
-  }
+      <div class="item-actions">
+        <button type="button" class="btn-decrease">Remover</button>
+        <span class="item-qty">0</span>
+        <button type="button" class="btn-increase">Adicionar</button>
+        ${botaoPersonalizar}
+      </div>
+    </div>`;
+}
 
-  // ... (código anterior da função itemHtml permanece igual)
 
   async function carregarHamburguers() {
     try {
@@ -2051,20 +2051,20 @@ if (formaPagamentoSelect) {
         .querySelectorAll(".btn-decrease")
         .forEach((btn) => btn.addEventListener("click", removerItem));
       adicionarBotoesObservacao();
-      document.querySelectorAll(".btn-perso").forEach((btn) => {
+     document.querySelectorAll(".btn-perso").forEach((btn) => {
   btn.addEventListener("click", (event) => {
-    // 1. Achar o elemento pai que tem os dados do produto
     const itemDiv = event.target.closest(".item");
-    
-    if (itemDiv) {
-      // 2. Pegar os dados que estão no HTML (data-id, data-nome, etc)
-      const { id, nome, valor, tipo } = itemDiv.dataset;
+    if (!itemDiv) return;
 
-      // 3. Chamar a função que REALMENTE abre o modal e carrega os dados
-      abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
-    }
+    const { id, nome, valor, tipo } = itemDiv.dataset;
+
+    // ✅ trava extra
+    if (tipo !== "hamburguer" && tipo !== "combo") return;
+
+    abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
   });
 });
+
     } catch (error) {
       console.error("Erro ao carregar o cardápio:", error);
     }

@@ -925,6 +925,8 @@ button#btnLimparCarrinho {
   justify-self: center;
   width: 60%; /* ajusta o tamanho como quiser */
   border: none;
+  border-radius:8px;
+  cursor:pointer;
   font-family: "Bungee", sans-serif;
   background: #ffaa00;
 }
