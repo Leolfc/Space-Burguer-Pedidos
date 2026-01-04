@@ -47,3 +47,11 @@ model Configuracao {
   lojaAberta Boolean  @default(false)
   // campo para adicionar configuração se precisar  futuramente
 }
+
+model Adicional {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome     String   @unique
+  preco    Float
+  ativo    Boolean  @default(true)
+  criadoEm DateTime @default(now())
+}

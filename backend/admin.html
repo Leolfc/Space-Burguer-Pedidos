@@ -56,6 +56,9 @@
           <button id="btn-mostrar-adicionar" class="nav-btn">
             Adicionar Lanche
           </button>
+          <button id="btn-mostrar-adicionais" class="nav-btn">
+            Gerenciar Adicionais
+          </button>
           <button id="btn-logout" class="nav-btn-logout">Sair</button>
         </nav>
       </header>
@@ -181,6 +184,64 @@
               </button>
             </div>
           </form>
+        </div>
+
+        <div id="tela-adicionais" class="tela">
+          <div class="toolbar">
+            <h2>Adicionais</h2>
+            <div class="toolbar-actions">
+              <button id="btn-novo-adicional" class="btn btn-primario">
+                + Novo Adicional
+              </button>
+            </div>
+          </div>
+
+          <div class="adicionais-layout">
+            <div class="adicionais-lista">
+              <table class="tabela-adicionais">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-adicionais-corpo"></tbody>
+              </table>
+            </div>
+
+            <div class="adicionais-formulario">
+              <h3 id="titulo-form-adicional">Adicionar adicional</h3>
+              <form id="form-adicional">
+                <div class="form-group">
+                  <label for="adicional-nome">Nome do adicional</label>
+                  <input type="text" id="adicional-nome" required />
+                </div>
+                <div class="form-group">
+                  <label for="adicional-preco">Preço (Ex: 4.50)</label>
+                  <input
+                    type="number"
+                    id="adicional-preco"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn-submit">
+                    Salvar adicional
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-cancelar-adicional"
+                    class="btn btn-secundario"
+                    style="display: none"
+                  >
+                    Cancelar edição
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </main>
     </div>

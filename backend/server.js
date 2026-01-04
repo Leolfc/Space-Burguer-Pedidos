@@ -183,6 +183,81 @@ app.put("/editar/hamburguer/:id", upload.single('imagem'), async (request, respo
   }
 });
 
+// --- ADICIONAIS ---
+app.get("/adicionais", async (req, res) => {
+  try {
+    const adicionais = await prisma.adicional.findMany({
+      orderBy: { nome: "asc" },
+    });
+    res.status(200).json(adicionais);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar adicionais." });
+  }
+});
+
+app.post("/adicionais", async (req, res) => {
+  try {
+    const { nome, preco, ativo } = req.body;
+    if (!nome || typeof nome !== "string") {
+      return res.status(400).json({ message: "Nome é obrigatório." });
+    }
+    if (typeof preco === "undefined" || Number.isNaN(Number(preco))) {
+      return res.status(400).json({ message: "Preço inválido." });
+    }
+
+    const adicional = await prisma.adicional.create({
+      data: {
+        nome: nome.trim(),
+        preco: Number(preco),
+        ativo: typeof ativo === "boolean" ? ativo : true,
+      },
+    });
+    res.status(201).json(adicional);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Erro ao adicionar adicional." });
+  }
+});
+
+app.put("/adicionais/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, preco, ativo } = req.body;
+
+    const data = {};
+    if (typeof nome !== "undefined") data.nome = String(nome).trim();
+    if (typeof preco !== "undefined") data.preco = Number(preco);
+    if (typeof ativo !== "undefined") data.ativo = !!ativo;
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ message: "Nenhuma alteração enviada." });
+    }
+
+    const adicionalAtualizado = await prisma.adicional.update({
+      where: { id },
+      data,
+    });
+    res.status(200).json(adicionalAtualizado);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Erro ao atualizar adicional." });
+  }
+});
+
+app.delete("/adicionais/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const adicionalDeletado = await prisma.adicional.delete({
+      where: { id },
+    });
+    res.status(200).json(adicionalDeletado);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Erro ao deletar adicional." });
+  }
+});
+
 // STATUS LOJA
 app.get("/status-loja", async (req, res) => {
   try {
