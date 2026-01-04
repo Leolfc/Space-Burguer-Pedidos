@@ -1,12 +1,14 @@
 //*Preços dos adicionais
 
-const adicionais = {
+const adicionaisFallback = {
   hamburguer160g: { nome: "Hambúrguer 160g", preco: 10.0 },
   hamburguer95g: { nome: "Hambúrguer 95g", preco: 7.0 },
   bacon: { nome: "Bacon 🥓", preco: 8.0 },
   queijoCheddar: { nome: "Queijo Cheddar", preco: 4.0 },
   queijoMussarela: { nome: "Queijo Mussarela 🧀", preco: 3.0 },
   molhoChesse: { nome: "Molho American Cheese", preco: 5.0 },
+  molhoBarbercue: { nome: "Molho Barbercue", preco: 5.0 },
+  calabresa: { nome: "Calabresa", preco: 8.0 },
   ovoFrito: { nome: "Ovo Frito 🥚", preco: 3.0 },
   salsicha: { nome: "Salsicha (2 Un.)", preco: 4.0 },
   cebolaCaramelizada: { nome: "Cebola Caramelizada", preco: 7.0 },
@@ -17,6 +19,45 @@ const adicionais = {
   doritos: { nome: "Doritos", preco: 5.0 },
   picles: { nome: "Picles 🥒", preco: 7.0 },
 };
+
+let adicionais = { ...adicionaisFallback };
+let adicionaisOrdenados = Object.entries(adicionais);
+
+const API_BASE = `http://${location.hostname}:3000`;
+
+function definirAdicionais(lista, usarFallback = false) {
+  if (!Array.isArray(lista) || (usarFallback && lista.length === 0)) {
+    adicionais = { ...adicionaisFallback };
+    adicionaisOrdenados = Object.entries(adicionais);
+    atualizarListaAdicionaisModal();
+    return;
+  }
+
+  adicionais = {};
+  adicionaisOrdenados = lista.map((adicional) => {
+    const item = {
+      nome: adicional.nome,
+      preco: Number(adicional.preco),
+    };
+    adicionais[adicional.id] = item;
+    return [adicional.id, item];
+  });
+  atualizarListaAdicionaisModal();
+}
+
+async function carregarAdicionais() {
+  try {
+    const response = await fetch(`${API_BASE}/adicionais?t=${Date.now()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error("Falha ao buscar adicionais.");
+    const adicionaisApi = await response.json();
+    definirAdicionais(adicionaisApi.filter((item) => item.ativo !== false));
+  } catch (error) {
+    console.error("Erro ao carregar adicionais:", error);
+    definirAdicionais([], true);
+  }
+}
 
 const chavePix = document.querySelector(".chavepix");
 const botao = document.querySelector(".botaoPix");
@@ -188,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
       botao.textContent = "Adicionar";
     } else {
       botao.textContent = "Adicionar";
-      
     }
  
     botao.classList.add("btn-texto");
@@ -543,37 +583,17 @@ function configurarPesquisa() {
   pesquisaInput.addEventListener("search", realizarPesquisa);
 }
 
-function criarModalAdicionais() {
-  if (document.querySelector(".adicionais-modal-overlay")) {
+function preencherListaAdicionais(adicionaisList) {
+  adicionaisList.innerHTML = "";
+  if (!adicionaisOrdenados.length) {
+    const vazio = document.createElement("p");
+    vazio.textContent = "Nenhum adicional disponível no momento.";
+    vazio.style.opacity = "0.7";
+    adicionaisList.appendChild(vazio);
     return;
   }
 
-  const modalOverlay = document.createElement("div");
-  modalOverlay.className = "adicionais-modal-overlay";
-  const adicionaisContainer = document.createElement("div");
-  adicionaisContainer.className = "adicionais-container";
-  modalOverlay.appendChild(adicionaisContainer);
-  const titulo = document.createElement("h3");
-  titulo.textContent = "Escolha seus adicionais:";
-  titulo.style.paddingRight = "40px";
-  adicionaisContainer.appendChild(titulo);
-  const closeButton = document.createElement("button");
-  closeButton.type = "button";
-  closeButton.className = "btn-close-adicionais";
-  closeButton.innerHTML = "×";
-  closeButton.style.cssText =
-    "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
-  closeButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    fecharModalAdicionais();
-  });
-
-  adicionaisContainer.appendChild(closeButton);
-  const adicionaisList = document.createElement("div");
-  adicionaisList.className = "adicionais-list-select";
-  adicionaisContainer.appendChild(adicionaisList);
-  for (const [key, adicional] of Object.entries(adicionais)) {
+  adicionaisOrdenados.forEach(([key, adicional]) => {
     const adicionalItem = document.createElement("div");
 
     adicionalItem.className = "adicional-item";
@@ -650,7 +670,49 @@ function criarModalAdicionais() {
     adicionalItem.appendChild(adicionalInfo);
     adicionalItem.appendChild(quantidadeControle);
     adicionaisList.appendChild(adicionalItem);
+  });
+}
+
+function atualizarListaAdicionaisModal() {
+  const modalOverlay = document.querySelector(".adicionais-modal-overlay");
+  if (!modalOverlay) return;
+  const adicionaisList = modalOverlay.querySelector(".adicionais-list-select");
+  if (adicionaisList) {
+    preencherListaAdicionais(adicionaisList);
   }
+}
+
+function criarModalAdicionais() {
+  if (document.querySelector(".adicionais-modal-overlay")) {
+    return;
+  }
+
+  const modalOverlay = document.createElement("div");
+  modalOverlay.className = "adicionais-modal-overlay";
+  const adicionaisContainer = document.createElement("div");
+  adicionaisContainer.className = "adicionais-container";
+  modalOverlay.appendChild(adicionaisContainer);
+  const titulo = document.createElement("h3");
+  titulo.textContent = "Escolha seus adicionais:";
+  titulo.style.paddingRight = "40px";
+  adicionaisContainer.appendChild(titulo);
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "btn-close-adicionais";
+  closeButton.innerHTML = "×";
+  closeButton.style.cssText =
+    "position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background-color:#f44336;color:white;font-size:24px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;border:none;";
+  closeButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    fecharModalAdicionais();
+  });
+
+  adicionaisContainer.appendChild(closeButton);
+  const adicionaisList = document.createElement("div");
+  adicionaisList.className = "adicionais-list-select";
+  adicionaisContainer.appendChild(adicionaisList);
+  preencherListaAdicionais(adicionaisList);
   const observacoesDiv = document.createElement("div");
   observacoesDiv.className = "observacoes-container";
   observacoesDiv.innerHTML = `
@@ -993,7 +1055,6 @@ function confirmarAdicionais() {
   const modalOverlay = document.querySelector(".adicionais-modal-overlay");
   if (!modalOverlay) return;
   const qtySpans = modalOverlay.querySelectorAll(".adicional-qty");
-  const fritasP = adicionais.fritasP_extra;
 
   const adicionaisSelecionados = [];
   qtySpans.forEach((span) => {
@@ -1809,7 +1870,7 @@ function checkRestaurantOpen() {
   const abre = 18 * 60 + 30;
   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
-  if (dia === 3) {
+  if (dia === 4) {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
@@ -1885,8 +1946,6 @@ if (formaPagamentoSelect) {
 
 // !============= INTEGRAÇÃO BACKEND - LISTAGEM DINÂMICA =============
 (function () {
-  const API_BASE = `http://${location.hostname}:3000`;
-
   function resolveImagemUrl(imagemUrl) {
     if (!imagemUrl) return "";
     if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
@@ -1894,48 +1953,48 @@ if (formaPagamentoSelect) {
     }
     return imagemUrl;
   }
+function itemHtml(burguer) {
+  const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
 
-  function itemHtml(burguer) {
-    const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
+  let tipoItem = "hamburguer";
+  if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
+  else if (burguer.categoria.includes("combo")) tipoItem = "combo";
+  else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
 
-    let tipoItem = "hamburguer";
-    if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
-    else if (burguer.categoria.includes("combo")) tipoItem = "combo";
-    else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
+  // ✅ só mostra botão pra hamburguer e combo
+  const botaoPersonalizar =
+    (tipoItem === "hamburguer" || tipoItem === "combo")
+      ? `<button type="button" class="btn-perso btn-texto">Personalizar</button>`
+      : "";
+  let imagemHtml = "";
+   if (burguer.imagem_url) {
+     const url = resolveImagemUrl(burguer.imagem_url);
+       imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
+   }
+  return `
+    <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
+         data-id="${burguer.id}"
+         data-nome="${burguer.nome}"
+         data-valor="${burguer.preco}"
+         data-tipo="${tipoItem}">
+      <div class="item-info">
+       ${imagemHtml}
+        <span class="item-name">${burguer.nome}</span>
+        <span class="item-price">R$ ${parseFloat(burguer.preco).toFixed(2).replace(".", ",")}</span>
+      </div>
 
-    let imagemHtml = "";
-    if (burguer.imagem_url) {
-      const url = resolveImagemUrl(burguer.imagem_url);
-      imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
-    }
+      ${itemNovo}
+      <div class="item-desc">${burguer.descricao || ""}</div>
 
-    return `
-      <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
-           data-id="${burguer.id}"
-          
-           data-nome="${burguer.nome}"
-           data-valor="${burguer.preco}"
-           data-tipo="${tipoItem}">
-       
-        <div class="item-info">
-         ${imagemHtml}
-          <span class="item-name">${burguer.nome}</span>
-          <span class="item-price">R$ ${parseFloat(burguer.preco)
-            .toFixed(2)
-            .replace(".", ",")}</span>
-        </div>
-        ${itemNovo}
-        <div class="item-desc">${burguer.descricao || ""}</div>
-        <div class="item-actions">
-          <button type="button" class="btn-decrease">Remover</button>
-          <span class="item-qty">0</span>
-          <button type="button" class="btn-increase">Adicionar</button>
-          
-        </div>
-      </div>`;
-  }
+      <div class="item-actions">
+        <button type="button" class="btn-decrease">Remover</button>
+        <span class="item-qty">0</span>
+        <button type="button" class="btn-increase">Adicionar</button>
+        ${botaoPersonalizar}
+      </div>
+    </div>`;
+}
 
-  // ... (código anterior da função itemHtml permanece igual)
 
   async function carregarHamburguers() {
     try {
@@ -1994,6 +2053,20 @@ if (formaPagamentoSelect) {
         .querySelectorAll(".btn-decrease")
         .forEach((btn) => btn.addEventListener("click", removerItem));
       adicionarBotoesObservacao();
+     document.querySelectorAll(".btn-perso").forEach((btn) => {
+  btn.addEventListener("click", (event) => {
+    const itemDiv = event.target.closest(".item");
+    if (!itemDiv) return;
+
+    const { id, nome, valor, tipo } = itemDiv.dataset;
+
+    // ✅ trava extra
+    if (tipo !== "hamburguer" && tipo !== "combo") return;
+
+    abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
+  });
+});
+
     } catch (error) {
       console.error("Erro ao carregar o cardápio:", error);
     }
@@ -2001,19 +2074,7 @@ if (formaPagamentoSelect) {
 
   document.addEventListener("DOMContentLoaded", () => {
     carregarHamburguers();
+    carregarAdicionais();
   });
 })();
 
-const flocoNeve = document.querySelector(".floco");
-
-for (let floco = 0; floco < 50; floco++) {
-  const flocoRepeat = flocoNeve.cloneNode(true);
-
-  const flocosAleatorios = Math.random() * 100 + "%";
-
-  flocoNeve.style.animationDelay = Math.random() * 5 + "s";
-
-  flocoNeve.style.left = flocosAleatorios;
-
-  flocoNeve.parentElement.appendChild(flocoRepeat);
-}

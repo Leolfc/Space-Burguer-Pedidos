@@ -909,6 +909,43 @@ button#btnLimparCarrinho {
   bottom: 20px;
 }
 
+.item-actions {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* remover | qtd | adicionar */
+  grid-template-rows: auto auto; /* linha 1 e linha 2 */
+  gap: 12px;
+  align-items: center;
+}
+
+/* Linha 1 (em cima) */
+.btn-decrease {
+  grid-column: 1;
+  grid-row: 1;
+}
+.item-qty {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+}
+.btn-increase {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+/* Linha 2 (embaixo) */
+.btn-perso {
+  grid-column: 1 / -1; /* ocupa tudo */
+  grid-row: 2;
+  justify-self: center;
+  width: 60%; /* ajusta o tamanho como quiser */
+  border: none;
+  border-radius:8px;
+  cursor:pointer;
+  font-family: "Bungee", sans-serif;
+  background: #ffaa00;
+}
+
 /* RESPONSIVIDADE - DESKTOP PRIMEIRO, MOBILE DEPOIS */
 @media (max-width: 992px) {
   .container {
@@ -1008,6 +1045,43 @@ button#btnLimparCarrinho {
     gap: 8px;
     width: 100%;
     align-items: center;
+<<<<<<< HEAD
+=======
+  }
+
+  .item-qty {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+  .btn-increase {
+    grid-column: 3; /*Deixa o botão adicionar na coluna 3*/
+    grid-row: 1;
+    width: 100%;
+  }
+
+  /* Personalizar embaixo, pegando a linha toda */
+  .btn-perso {
+    grid-column: 1/-1; /* ocupa do começo ao fim */
+    width: 74%;
+    grid-row: 2;
+    margin: 0;
+    text-align: center;
+    border-radius: 8px;
+    border: none;
+    justify-self: center;
+    font-family: "Bungee", sans-serif;
+    background: #ffaa00;
+  }
+
+  /* importante: deixa os botões encolherem no grid */
+  .btn-decrease,
+  .btn-increase,
+  .btn-perso {
+    min-width: 0;
+    height: 36px;
+    font-size: 0.85rem;
+>>>>>>> main
   }
 
 .item-qty {

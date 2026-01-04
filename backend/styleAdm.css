@@ -205,3 +205,25 @@ tbody tr:nth-child(odd) {
   gap:5px;
   max-width: 100%;
 }
+
+/* Adicionais */
+.adicionais-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.adicionais-formulario {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.adicionais-formulario h3 {
+  margin-top: 0;
+}
+
+.tabela-adicionais td:last-child {
+  width: 160px;
+}
