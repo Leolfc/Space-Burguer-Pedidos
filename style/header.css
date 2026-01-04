@@ -23,7 +23,7 @@ header {
 .subtitleAtendimento {
   display: flex;
   justify-content: left;
-  margin-top: 3.125rem;
+  margin-top: 1rem;
   font-size: 9px;
 }
 @media screen and (max-width: 576px) {

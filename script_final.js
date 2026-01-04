@@ -1987,7 +1987,7 @@ if (formaPagamentoSelect) {
           <button type="button" class="btn-decrease">Remover</button>
           <span class="item-qty">0</span>
           <button type="button" class="btn-increase">Adicionar</button>
-          
+          <button type="button" class="btn-perso btn-texto">Personalizar</button>
         </div>
       </div>`;
   }
@@ -2051,6 +2051,20 @@ if (formaPagamentoSelect) {
         .querySelectorAll(".btn-decrease")
         .forEach((btn) => btn.addEventListener("click", removerItem));
       adicionarBotoesObservacao();
+      document.querySelectorAll(".btn-perso").forEach((btn) => {
+  btn.addEventListener("click", (event) => {
+    // 1. Achar o elemento pai que tem os dados do produto
+    const itemDiv = event.target.closest(".item");
+    
+    if (itemDiv) {
+      // 2. Pegar os dados que estão no HTML (data-id, data-nome, etc)
+      const { id, nome, valor, tipo } = itemDiv.dataset;
+
+      // 3. Chamar a função que REALMENTE abre o modal e carrega os dados
+      abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
+    }
+  });
+});
     } catch (error) {
       console.error("Erro ao carregar o cardápio:", error);
     }
@@ -2062,16 +2076,3 @@ if (formaPagamentoSelect) {
   });
 })();
 
-const flocoNeve = document.querySelector(".floco");
-
-for (let floco = 0; floco < 50; floco++) {
-  const flocoRepeat = flocoNeve.cloneNode(true);
-
-  const flocosAleatorios = Math.random() * 100 + "%";
-
-  flocoNeve.style.animationDelay = Math.random() * 5 + "s";
-
-  flocoNeve.style.left = flocosAleatorios;
-
-  flocoNeve.parentElement.appendChild(flocoRepeat);
-}
