@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
           <label for="senha">Senha</label>
-          <input type="password" id="senha" required  />
+          <input type="password" id="senha" required />
         </div>
         <button type="submit" class="btn-submit">Entrar</button>
       </form>
@@ -41,9 +41,8 @@
 
             if (response.ok) {
               // **ETAPA 1: Salva a "chave" no navegador**
-              sessionStorage.setItem('isLoggedIn', 'true');
-              
-              // **ETAPA 2: Redireciona para o painel de admin**
+              const data = await response.json();
+              sessionStorage.setItem("token", data.token);
               window.location.href = "admin.html";
             } else {
               alert("Email ou senha incorretos!");

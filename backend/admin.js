@@ -1,3 +1,9 @@
+const token = sessionStorage.getItem("token");
+if (!token) {
+  window.location.href = "login.html";
+  return;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // **Verificação de segurança inicial**
   if (sessionStorage.getItem("isLoggedIn") !== "true") {
