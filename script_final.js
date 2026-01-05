@@ -23,7 +23,7 @@ const adicionaisFallback = {
 let adicionais = { ...adicionaisFallback };
 let adicionaisOrdenados = Object.entries(adicionais);
 
-const API_BASE = `http://${location.hostname}:3000`;
+
 
 function definirAdicionais(lista, usarFallback = false) {
   if (!Array.isArray(lista) || (usarFallback && lista.length === 0)) {
@@ -52,7 +52,9 @@ async function carregarAdicionais() {
     });
     if (!response.ok) throw new Error("Falha ao buscar adicionais.");
     const adicionaisApi = await response.json();
-    definirAdicionais(adicionaisApi.filter((item) => item.ativo !== false));
+    const ativos = adicionaisApi.filter((item) => item.ativo !== false);
+definirAdicionais(ativos, true); // ✅ se vier vazio, usa fallback
+
   } catch (error) {
     console.error("Erro ao carregar adicionais:", error);
     definirAdicionais([], true);
@@ -1827,67 +1829,70 @@ const observer = new IntersectionObserver((entries) => {
 });
 observer.observe(containerCarrinho);
 
-// !função para abirir a loja pelo painel
-// async function checkRestaurantOpen() {
-//   try {
-//     const API_BASE = `http://${location.hostname}:3000`;
-//     const response = await fetch(`${API_BASE}/status-loja`);
-//     if (!response.ok) {
-//       return false; // Se falhar a comunicação, assume que está fechada
-//     }
-//     const data = await response.json();
-//     return data.lojaAberta;
-//   } catch (error) {
-//     console.error("Erro ao verificar status da loja:", error);
-//     return false; // Em caso de erro, assume que está fechada
-//   }
-// }
+const API_BASE = `http://${location.hostname}:3000`;
 
-// // MODIFIQUE a parte final do script para lidar com a função assíncrona
-// async function atualizarStatusVisivel() {
-//   const isOpen = await checkRestaurantOpen();
-//   const elementoStatus = document.querySelector("#estaAberta");
-//   const atendimentoInfo = document.querySelector(".atendimento-info");
-
-//   if (isOpen) {
-//     elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-//     atendimentoInfo.style.backgroundColor = "green";
-//   } else {
-//     elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-//     atendimentoInfo.style.backgroundColor = "#d32525ff";
-//   }
-// }
-
-// // Chame a nova função quando o DOM carregar
-//  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
-
-function checkRestaurantOpen() {
-  const data = new Date();
-  const dia = data.getDay();
-  const hours = data.getHours();
-  const minutes = data.getMinutes();
-  const totalMinutes = hours * 60 + minutes;
-  const abre = 18 * 60 + 30;
-  let fecha = 23 * 60; //horário padrão de fechamento finais de semana
-
-  if (dia === 4) {
+async function checkRestaurantOpen() {
+  try {
+    const res = await fetch(`${API_BASE}/status-loja`, { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return !!data.lojaAberta;
+  } catch (e) {
+    console.error("Erro ao checar status:", e);
     return false;
   }
-  if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+}
+
+async function atualizarStatusVisivel() {
+  const isOpen = await checkRestaurantOpen();
+  const el = document.querySelector("#estaAberta");
+  const atendimentoInfo = document.querySelector(".atendimento-info");
+
+  if (!el || !atendimentoInfo) return;
+
+  if (isOpen) {
+    el.innerHTML = "🟢 Aberto - Aceitando pedidos";
+    atendimentoInfo.style.backgroundColor = "green";
+  } else {
+    el.innerHTML = "🔴 FECHADOS NO MOMENTO";
+    atendimentoInfo.style.backgroundColor = "#d32525ff";
   }
-  return totalMinutes >= abre && totalMinutes <= fecha;
 }
-const estaFechada = checkRestaurantOpen();
-const isOpen = document.querySelector("#estaAberta");
-const atendimentoInfo = document.querySelector(".atendimento-info");
-if (estaFechada) {
-  isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
-  atendimentoInfo.style.backgroundColor = "green";
-} else {
-  isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
-  atendimentoInfo.style.backgroundColor = "#d32525ff";
-}
+
+// Atualiza ao abrir o site + atualiza de tempos em tempos
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarStatusVisivel();
+  setInterval(atualizarStatusVisivel, 10000); // a cada 10s
+});
+
+
+// function checkRestaurantOpen() {
+//   const data = new Date();
+//   const dia = data.getDay();
+//   const hours = data.getHours();
+//   const minutes = data.getMinutes();
+//   const totalMinutes = hours * 60 + minutes;
+//   const abre = 18 * 60 + 30;
+//   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
+
+//   if (dia === 4) {
+//     return false;
+//   }
+//   if (dia === 1 || dia === 3 || dia === 4) {
+//     fecha = 22 * 60; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+//   }
+//   return totalMinutes >= abre && totalMinutes <= fecha;
+// }
+// const estaFechada = checkRestaurantOpen();
+// const isOpen = document.querySelector("#estaAberta");
+// const atendimentoInfo = document.querySelector(".atendimento-info");
+// if (estaFechada) {
+//   isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
+//   atendimentoInfo.style.backgroundColor = "green";
+// } else {
+//   isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
+//   atendimentoInfo.style.backgroundColor = "#d32525ff";
+// }
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
@@ -2078,3 +2083,10 @@ function itemHtml(burguer) {
   });
 })();
 
+document.addEventListener("DOMContentLoaded", async () => {
+  await carregarHamburguers();
+  await carregarAdicionais();
+
+  await aplicarStatusLojaNoCardapio();
+  setInterval(aplicarStatusLojaNoCardapio, 10000); // 10s
+});

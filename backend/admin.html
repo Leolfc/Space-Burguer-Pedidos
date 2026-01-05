@@ -3,248 +3,142 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel de Controle - Space Burguer</title>
+    <title>Painel - Space Burguer</title>
     <link rel="stylesheet" href="styleAdm.css" />
-    <style>
-      .nav-btn-logout {
-        background-color: #f44336;
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-left: auto;
-      }
-      .status-loja-container {
-        background-color: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        text-align: center;
-        border: 1px solid #eee;
-      }
-      .status-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 10px;
-      }
-      .btn-sucesso {
-        background-color: #4caf50;
-        color: white;
-      }
-      .btn-perigo {
-        background-color: #f44336;
-        color: white;
-      }
-    </style>
+  
   </head>
+
   <body>
-    <script>
-      if (sessionStorage.getItem("isLoggedIn") !== "true") {
-        window.location.href = "login.html";
-      }
-    </script>
+    <header class="painel-topo">
+      <h1>Painel Space Burguer</h1>
 
-    <div class="painel-container">
-      <header>
-        <nav>
-          <h1>Painel de Controle</h1>
-          <button id="btn-mostrar-gerenciar" class="nav-btn active">
-            Gerenciar Cardápio
-          </button>
-          <button id="btn-mostrar-adicionar" class="nav-btn">
-            Adicionar Lanche
-          </button>
-          <button id="btn-mostrar-adicionais" class="nav-btn">
-            Gerenciar Adicionais
-          </button>
-          <button id="btn-logout" class="nav-btn-logout">Sair</button>
-        </nav>
-      </header>
+      <div class="painel-acoes">
+        <span id="admin-email" class="muted"></span>
+        <button id="btn-logout" class="btn-submit" type="button">Sair</button>
+      </div>
+    </header>
 
-      <main>
-        <div class="status-loja-container">
-          <h2>Status da Loja</h2>
-          <p>
-            Atualmente a loja está:
-            <strong id="status-atual-texto" style="font-size: 1.2rem"
-              >Carregando...</strong
-            >
-          </p>
-          <div class="status-actions">
-            <button id="btn-abrir-loja" class="btn btn-sucesso">
-              ABRIR LOJA
-            </button>
-            <button id="btn-fechar-loja" class="btn btn-perigo">
-              FECHAR LOJA
-            </button>
+    <main class="painel-container">
+      <h2>Gerenciamento</h2>
+
+      <!-- STATUS LOJA -->
+      <section class="card">
+        <h3>Status da Loja</h3>
+        
+        <div class="row" style="align-items:center">
+          <button id="btn-abrir" type="button" class="btn-submit">Abrir</button>
+          <button id="btn-fechar" type="button" class="btn-submit btn-danger">Fechar</button>
+          <strong id="status-loja">Carregando...</strong>
+        </div>
+      </section>
+
+      <!-- ITENS -->
+      <section class="card">
+        <div class="toolbar">
+          <h3>Itens do Cardápio</h3>
+
+          <div class="row" style="max-width:520px">
+            <input id="search" type="text" placeholder="Buscar por nome..." />
+            <select id="filter-cat">
+              <option value="">Todas categorias</option>
+              <option value="space">space</option>
+              <option value="smash">smash</option>
+              <option value="combo">combo</option>
+              <option value="porcoes">porcoes</option>
+              <option value="bebidas">bebidas</option>
+            </select>
           </div>
         </div>
 
-        <div id="tela-gerenciar" class="tela">
-          <div class="toolbar">
-            <h2>Lanches Cadastrados</h2>
-            <div class="toolbar-actions">
-              <div class="search">
-                <input
-                  type="text"
-                  id="filtro-lanches"
-                  placeholder="Buscar por nome..."
-                />
-              </div>
-              <button id="btn-abrir-adicionar" class="btn btn-primario">
-                + Novo Lanche
-              </button>
-            </div>
-          </div>
-          <!-- Container que receberá, via JS, seções separadas por categoria -->
-          <div id="tabela-lanches-corpo" class="lanches-por-categoria"></div>
-        </div>
+        <div class="hr"></div>
 
-        <div id="tela-adicionar" class="tela">
-          <h2 id="titulo-form">Adicionar Novo Lanche</h2>
-          <form id="form-adicionar-lanche">
-            <div class="form-group">
-              <label for="nome">Nome do Lanche</label>
-              <input type="text" id="nome" required />
-            </div>
-            <div class="form-group">
-              <label for="descricao">Descrição</label>
-              <textarea id="descricao"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="preco">Preço (Ex: 25.50)</label>
-              <input type="number" id="preco" step="0.01" required />
-            </div>
+        <!-- FORM ADD/EDIT -->
+        <h3 id="form-title">Adicionar novo item</h3>
+        <form id="form-item" class="grid">
+          <input type="hidden" id="item-id" />
 
-            <div class="form-group">
-              <label class="category-label">Categorias</label>
-              <div class="category-option">
-                   
-                <input type="checkbox" name="categoria" value="space" />
-             
-                <label
-                  >Space Burguer</label
-                >
-              </div>
-              <div class="category-option">
-                <input type="checkbox" name="categoria" value="smash" /><label
-                  >Smash Burguer</label
-                >
-              </div>
-              <div class="category-option">
-                <input type="checkbox" name="categoria" value="combo" /><label
-                  >Combo</label>
-              </div>
-              <div class="category-option">
-                <input type="checkbox" name="categoria" value="porcoes" /><label
-                  >Porção</label
-                >
-              </div>
-              <div class="category-option">
-                <input type="checkbox" name="categoria" value="bebidas" /><label
-                  >Bebida</label
-                >
-              </div>
-              
-
-            <div class="form-group">
-              <label for="imagem_url">Imagem do Lanche</label>
-              <input
-                type="file"
-                id="imagem_url"
-                name="imagem"
-                accept="image/*"
-              />
+          <div class="row">
+            <div>
+              <label>Nome</label>
+              <input id="nome" required />
             </div>
-            <div class="form-group">
-              <div class="checkbox-group">
-                <input type="checkbox" id="novoItem" /><label
-                  >Marcar como "Novo"</label
-                >
-              </div>
-              <div class="checkbox-group">
-                <input type="checkbox" id="indisponivel" /><label
-                  >Marcar como "Indisponível"</label
-                >
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" id="btn-submit" class="btn-submit">
-                Adicionar Lanche
-              </button>
-              <button
-                type="button"
-                id="btn-cancelar-edicao"
-                class="btn btn-secundario"
-                style="display: none"
-              >
-                Cancelar Edição
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div id="tela-adicionais" class="tela">
-          <div class="toolbar">
-            <h2>Adicionais</h2>
-            <div class="toolbar-actions">
-              <button id="btn-novo-adicional" class="btn btn-primario">
-                + Novo Adicional
-              </button>
+            <div>
+              <label>Preço</label>
+              <input id="preco" type="number" step="0.01" required />
             </div>
           </div>
 
-          <div class="adicionais-layout">
-            <div class="adicionais-lista">
-              <table class="tabela-adicionais">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Preço</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="tabela-adicionais-corpo"></tbody>
-              </table>
-            </div>
+          <div>
+            <label>Descrição</label>
+            <textarea id="descricao" rows="3" style="width:100%"></textarea>
+          </div>
 
-            <div class="adicionais-formulario">
-              <h3 id="titulo-form-adicional">Adicionar adicional</h3>
-              <form id="form-adicional">
-                <div class="form-group">
-                  <label for="adicional-nome">Nome do adicional</label>
-                  <input type="text" id="adicional-nome" required />
-                </div>
-                <div class="form-group">
-                  <label for="adicional-preco">Preço (Ex: 4.50)</label>
-                  <input
-                    type="number"
-                    id="adicional-preco"
-                    step="0.01"
-                    required
-                  />
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn-submit">
-                    Salvar adicional
-                  </button>
-                  <button
-                    type="button"
-                    id="btn-cancelar-adicional"
-                    class="btn btn-secundario"
-                    style="display: none"
-                  >
-                    Cancelar edição
-                  </button>
-                </div>
-              </form>
+          <div class="row">
+            <div>
+              <label>Categorias (separe por vírgula)</label>
+              <input id="categorias" placeholder="ex: space, combo" />
+              <div class="form-help">Use: space, smash, combo, porcoes, bebidas</div>
+            </div>
+            <div>
+              <label>Imagem</label>
+              <input id="imagem" type="file" accept="image/*" />
+              <div class="form-help">Opcional. Se não enviar, mantém a atual.</div>
             </div>
           </div>
+
+          <div class="row" style="align-items:center">
+            <label style="display:flex; gap:10px; align-items:center">
+              <input id="indisponivel" type="checkbox" />
+              Indisponível
+            </label>
+
+            <label style="display:flex; gap:10px; align-items:center">
+              <input id="novoItem" type="checkbox" />
+              Novo
+            </label>
+          </div>
+
+          <div class="actions">
+            <button class="btn-submit" type="submit" id="btn-salvar">Salvar</button>
+            <button class="btn-submit btn-secondary" type="button" id="btn-cancelar" style="display:none">Cancelar edição</button>
+          </div>
+
+          <p id="form-msg" class="muted"></p>
+        </form>
+<section class="card">
+  <h3>Adicionais</h3>
+
+  <form id="form-adicional" style="display:flex; gap:10px; flex-wrap:wrap;">
+    <input id="ad-nome" placeholder="Nome do adicional" required />
+    <input id="ad-preco" type="number" step="0.01" placeholder="Preço" required />
+    <button class="btn-submit" type="submit">Adicionar</button>
+  </form>
+
+  <div id="lista-adicionais" style="margin-top:15px;"></div>
+</section>
+
+        <div class="hr"></div>
+
+        <!-- LISTA -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Categorias</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="itens-tbody">
+              <tr><td colspan="6">Carregando itens...</td></tr>
+            </tbody>
+          </table>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
 
     <script src="admin.js"></script>
   </body>

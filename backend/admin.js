@@ -1,562 +1,894 @@
-const token = sessionStorage.getItem("token");
-if (!token) {
-  window.location.href = "login.html";
-  return;
+// backend/admin.js
+
+const API_BASE = `http://${location.hostname}:3000`;
+
+// ----------------------------
+// TOKEN / AUTH
+// ----------------------------
+function getToken() {
+  return sessionStorage.getItem("token");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // **Verificação de segurança inicial**
-  if (sessionStorage.getItem("isLoggedIn") !== "true") {
+function exigirLogin() {
+  const token = getToken();
+  if (!token) {
     window.location.href = "login.html";
-    return; // Interrompe a execução do script se não estiver logado
+    return false;
+  }
+  return true;
+}
+
+async function apiFetch(path, options = {}) {
+  const token = getToken();
+  const headers = {
+    ...(options.headers || {}),
+    Authorization: `Bearer ${token}`,
+  };
+
+  // Só setar Content-Type quando NÃO for FormData
+  const isFormData = options.body instanceof FormData;
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  if (res.status === 401) {
+    sessionStorage.removeItem("token");
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.href = "login.html";
+    throw new Error("Não autorizado");
   }
 
-  const API_BASE = `http://${location.hostname}:3000`;
+  return res;
+}
 
-  // --- 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ---
-  const btnMostrarGerenciar = document.getElementById("btn-mostrar-gerenciar");
-  const btnMostrarAdicionar = document.getElementById("btn-mostrar-adicionar");
-  const btnMostrarAdicionais = document.getElementById("btn-mostrar-adicionais");
-  const btnAbrirAdicionar = document.getElementById("btn-abrir-adicionar");
+// ----------------------------
+// UI HELPERS
+// ----------------------------
+function el(tag, attrs = {}, children = []) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") node.className = v;
+    else if (k === "html") node.innerHTML = v;
+    else if (k.startsWith("on") && typeof v === "function")
+      node.addEventListener(k.slice(2), v);
+    else node.setAttribute(k, v);
+  }
+  for (const c of children) node.appendChild(c);
+  return node;
+}
+
+function moneyToNumber(v) {
+  if (v == null) return NaN;
+  const s = String(v).replace(",", ".").trim();
+  return Number(s);
+}
+
+function showToast(msg, type = "ok") {
+  const wrapId = "sb-toast-wrap";
+  let wrap = document.getElementById(wrapId);
+  if (!wrap) {
+    wrap = el("div", { id: wrapId, class: "sb-toast-wrap" });
+    document.body.appendChild(wrap);
+  }
+  const t = el("div", { class: `sb-toast ${type}`, html: msg });
+  wrap.appendChild(t);
+  setTimeout(() => t.classList.add("show"), 10);
+  setTimeout(() => {
+    t.classList.remove("show");
+    setTimeout(() => t.remove(), 250);
+  }, 2600);
+}
+
+function confirmDanger(msg) {
+  return window.confirm(msg);
+}
+
+// ----------------------------
+// TOP BAR (email + logout)
+// ----------------------------
+async function carregarAdmin() {
+  const spanEmail = document.getElementById("admin-email");
+  if (!spanEmail) return;
+
+  try {
+    const res = await apiFetch("/me", { method: "GET" });
+    if (!res.ok) return;
+    const data = await res.json();
+    const email = data?.user?.email || "";
+    spanEmail.textContent = email ? `Logado: ${email}` : "Logado";
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function configurarLogout() {
   const btnLogout = document.getElementById("btn-logout");
-  const telaGerenciar = document.getElementById("tela-gerenciar");
-  const telaAdicionar = document.getElementById("tela-adicionar");
-  const telaAdicionais = document.getElementById("tela-adicionais");
-  const formAdicionar = document.getElementById("form-adicionar-lanche");
-  const tituloForm = document.getElementById("titulo-form");
-  const btnSubmit = document.getElementById("btn-submit");
-  const btnCancelarEdicao = document.getElementById("btn-cancelar-edicao");
-  const inputFiltro = document.getElementById("filtro-lanches");
-  const tabelaCorpo = document.getElementById("tabela-lanches-corpo");
-  const statusTexto = document.getElementById("status-atual-texto");
-  const btnAbrirLoja = document.getElementById("btn-abrir-loja");
-  const btnFecharLoja = document.getElementById("btn-fechar-loja");
-  const tabelaAdicionais = document.getElementById("tabela-adicionais-corpo");
-  const formAdicional = document.getElementById("form-adicional");
-  const tituloFormAdicional = document.getElementById("titulo-form-adicional");
-  const btnCancelarAdicional = document.getElementById(
-    "btn-cancelar-adicional"
-  );
-  const btnNovoAdicional = document.getElementById("btn-novo-adicional");
-  let idEmEdicao = null;
-  let adicionalEmEdicao = null;
+  if (!btnLogout) return;
 
-   
-  // --- 2. FUNÇÕES ---
-
-
-  function fazerLogout() {
-    sessionStorage.removeItem("isLoggedIn");
+  btnLogout.addEventListener("click", () => {
+    sessionStorage.removeItem("token");
     window.location.href = "login.html";
-  }
+  });
+}
 
-  async function verificarStatusLoja() {
-    try {
-      const response = await fetch(`${API_BASE}/status-loja`);
-      const data = await response.json();
-      statusTexto.textContent = data.lojaAberta ? "ABERTA" : "FECHADA";
-      statusTexto.style.color = data.lojaAberta ? "green" : "red";
-    } catch (error) {
-      statusTexto.textContent = "Erro ao carregar";
+// ----------------------------
+// STATUS LOJA
+// ----------------------------
+async function carregarStatusLoja() {
+  const statusEl = document.getElementById("status-loja");
+  if (!statusEl) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/status-loja`, { cache: "no-store" });
+    const data = await res.json();
+
+    if (data.lojaAberta) {
+      statusEl.textContent = "🟢 Aberta";
+      statusEl.style.color = "#16a34a";
+    } else {
+      statusEl.textContent = "🔴 Fechada";
+      statusEl.style.color = "#dc2626";
     }
+  } catch (err) {
+    statusEl.textContent = "Erro ao carregar status";
+    statusEl.style.color = "#6b7280";
+  }
+}
+
+async function alterarStatus(lojaAberta) {
+  const statusEl = document.getElementById("status-loja");
+  if (statusEl) {
+    statusEl.textContent = "Atualizando...";
+    statusEl.style.color = "#6b7280";
   }
 
-  async function alterarStatusLoja(novoStatus) {
+  try {
+    const res = await apiFetch("/alterar-status-loja", {
+      method: "POST",
+      body: JSON.stringify({ lojaAberta }),
+    });
+
+    if (!res.ok) {
+      const msg = await res.json().catch(() => ({}));
+      showToast(msg.message || "Erro ao alterar status", "err");
+    } else {
+      showToast("Status atualizado!", "ok");
+    }
+    await carregarStatusLoja();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao alterar status da loja", "err");
+    await carregarStatusLoja();
+  }
+}
+
+// ----------------------------
+// PAINEL: ITENS (CRUD)
+// ----------------------------
+let itensCache = [];
+let adicionaisCache = [];
+
+async function listarItens() {
+  const res = await fetch(`${API_BASE}/buscar/hamburguers?t=${Date.now()}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Falha ao listar itens");
+  return await res.json();
+}
+
+async function listarAdicionais() {
+  const res = await fetch(`${API_BASE}/adicionais?t=${Date.now()}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Falha ao listar adicionais");
+  return await res.json();
+}
+
+function resolveImagemUrl(imagemUrl) {
+  if (!imagemUrl) return "";
+  if (imagemUrl.startsWith("/uploads") || imagemUrl.startsWith("/img")) {
+    return `${API_BASE}${imagemUrl}`;
+  }
+  return imagemUrl;
+}
+
+function getMainContainer() {
+  return document.querySelector("main.painel-container") || document.body;
+}
+
+function ensurePanelStructure() {
+  const main = getMainContainer();
+
+  // Se já existe um container novo, não duplica
+  if (document.getElementById("sb-admin-root")) return;
+
+  const root = el("div", { id: "sb-admin-root", class: "sb-root" });
+
+  // Cards
+  const cardItens = el("section", { class: "sb-card" }, [
+    el("div", { class: "sb-card-header" }, [
+      el("h3", { class: "sb-title", html: "🍔 Itens do Cardápio" }),
+      el("button", {
+        class: "sb-btn sb-btn-secondary",
+        type: "button",
+        id: "btn-recarregar-itens",
+        html: "Recarregar",
+      }),
+    ]),
+    el("p", {
+      class: "sb-muted",
+      html:
+        'Adicione/edite itens. Categorias: <b>space</b>, <b>smash</b>, <b>combo</b>, <b>porcoes</b>, <b>bebidas</b>.',
+    }),
+    el("div", { id: "sb-form-item" }),
+    el("div", { class: "sb-divider" }),
+    el("div", { id: "sb-itens-list" }),
+  ]);
+
+  const cardAdicionais = el("section", { class: "sb-card" }, [
+    el("div", { class: "sb-card-header" }, [
+      el("h3", { class: "sb-title", html: "➕ Adicionais" }),
+      el("button", {
+        class: "sb-btn sb-btn-secondary",
+        type: "button",
+        id: "btn-recarregar-adicionais",
+        html: "Recarregar",
+      }),
+    ]),
+    el("p", {
+      class: "sb-muted",
+      html: "Aqui você controla nome, preço e se o adicional está ativo (aparece no modal do cardápio).",
+    }),
+    el("div", { id: "sb-form-adicional" }),
+    el("div", { class: "sb-divider" }),
+    el("div", { id: "sb-adicionais-list" }),
+  ]);
+
+  root.appendChild(cardItens);
+  root.appendChild(cardAdicionais);
+
+  main.appendChild(root);
+
+  // Botões recarregar
+  document
+    .getElementById("btn-recarregar-itens")
+    .addEventListener("click", async () => {
+      await carregarItensUI();
+    });
+
+  document
+    .getElementById("btn-recarregar-adicionais")
+    .addEventListener("click", async () => {
+      await carregarAdicionaisUI();
+    });
+}
+
+function renderFormNovoItem() {
+  const mount = document.getElementById("sb-form-item");
+  if (!mount) return;
+
+  mount.innerHTML = "";
+  const form = el("form", { class: "sb-form" });
+
+  const nome = el("input", { class: "sb-input", placeholder: "Nome", required: "true" });
+  const preco = el("input", {
+    class: "sb-input",
+    placeholder: "Preço (ex: 25.90)",
+    required: "true",
+    inputmode: "decimal",
+  });
+  const descricao = el("textarea", { class: "sb-textarea", placeholder: "Descrição" });
+
+  const categoria = el("input", {
+    class: "sb-input",
+    placeholder: 'Categorias (JSON ou separado por vírgula). Ex: space, smash',
+    required: "true",
+  });
+
+  const imagem = el("input", { class: "sb-input", type: "file", accept: "image/*" });
+
+  const indisponivel = el("input", { type: "checkbox" });
+  const novoItem = el("input", { type: "checkbox" });
+
+  const row1 = el("div", { class: "sb-grid" }, [
+    el("div", {}, [el("label", { class: "sb-label", html: "Nome" }), nome]),
+    el("div", {}, [el("label", { class: "sb-label", html: "Preço" }), preco]),
+  ]);
+
+  const row2 = el("div", { class: "sb-grid" }, [
+    el("div", { style: "grid-column: 1 / -1" }, [
+      el("label", { class: "sb-label", html: "Descrição" }),
+      descricao,
+    ]),
+  ]);
+
+  const row3 = el("div", { class: "sb-grid" }, [
+    el("div", { style: "grid-column: 1 / -1" }, [
+      el("label", { class: "sb-label", html: "Categorias" }),
+      categoria,
+    ]),
+  ]);
+
+  const row4 = el("div", { class: "sb-grid" }, [
+    el("div", {}, [el("label", { class: "sb-label", html: "Imagem (opcional)" }), imagem]),
+    el("div", { class: "sb-inline" }, [
+      el("label", { class: "sb-check" }, [
+        indisponivel,
+        el("span", { html: "Indisponível" }),
+      ]),
+      el("label", { class: "sb-check" }, [
+        novoItem,
+        el("span", { html: "Novo" }),
+      ]),
+    ]),
+  ]);
+
+  const btn = el("button", {
+    class: "sb-btn sb-btn-primary",
+    type: "submit",
+    html: "Adicionar Item",
+  });
+
+  form.appendChild(row1);
+  form.appendChild(row2);
+  form.appendChild(row3);
+  form.appendChild(row4);
+  form.appendChild(el("div", { class: "sb-actions" }, [btn]));
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const precoNum = moneyToNumber(preco.value);
+    if (Number.isNaN(precoNum)) {
+      showToast("Preço inválido", "err");
+      return;
+    }
+
+    // categorias: aceita JSON ou "a,b,c"
+    let cats = [];
+    const raw = categoria.value.trim();
     try {
-      const response = await fetch(`${API_BASE}/alterar-status-loja`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lojaAberta: novoStatus }),
-      });
-      if (response.ok) {
-        alert(`Loja ${novoStatus ? "aberta" : "fechada"} com sucesso!`);
-        verificarStatusLoja();
+      if (raw.startsWith("[") || raw.startsWith("{")) {
+        const parsed = JSON.parse(raw);
+        cats = Array.isArray(parsed) ? parsed : [];
       } else {
-        throw new Error("Falha ao alterar status");
+        cats = raw.split(",").map((s) => s.trim()).filter(Boolean);
       }
-    } catch (error) {
-      alert("Ocorreu um erro.");
+    } catch {
+      cats = raw.split(",").map((s) => s.trim()).filter(Boolean);
     }
-  }
 
-  function mostrarTela(idTelaParaMostrar) {
-    telaGerenciar.style.display = "none";
-    telaAdicionar.style.display = "none";
-    telaAdicionais.style.display = "none";
-    btnMostrarGerenciar.classList.remove("active");
-    btnMostrarAdicionar.classList.remove("active");
-    btnMostrarAdicionais.classList.remove("active");
-
-    if (idTelaParaMostrar === "tela-gerenciar") {
-      telaGerenciar.style.display = "block";
-      btnMostrarGerenciar.classList.add("active");
-    } else if (idTelaParaMostrar === "tela-adicionar") {
-      telaAdicionar.style.display = "block";
-      btnMostrarAdicionar.classList.add("active");
-    } else if (idTelaParaMostrar === "tela-adicionais") {
-      telaAdicionais.style.display = "block";
-      btnMostrarAdicionais.classList.add("active");
+    if (!cats.length) {
+      showToast("Informe ao menos 1 categoria", "err");
+      return;
     }
-  }
 
-  async function carregarLanches() {
-    
+    const fd = new FormData();
+    fd.append("nome", nome.value.trim());
+    fd.append("descricao", descricao.value.trim());
+    fd.append("preco", String(precoNum));
+    fd.append("categoria", JSON.stringify(cats));
+    fd.append("indisponivel", String(indisponivel.checked));
+    fd.append("novoItem", String(novoItem.checked));
+    if (imagem.files?.[0]) fd.append("imagem", imagem.files[0]);
+
     try {
-      const response = await fetch(
-        `${API_BASE}/buscar/hamburguers?t=${Date.now()}`,
-        { cache: "no-store" }
-      );
-      if (!response.ok) throw new Error("Falha ao buscar lanches.");
-
-      const lanches = await response.json();
-      // Limpa container
-      tabelaCorpo.innerHTML = "";
-
-      const grupos = {
-        space: { label: "Space Burguer", aliases: ["space"] },
-        smash: { label: "Smash Burguer", aliases: ["smash"] },
-        combo: { label: "Combo", aliases: ["combo"] },
-        bebidas: { label: "Bebidas", aliases: ["bebidas"] },
-        porcoes: { label: "Porções", aliases: ["porcoes"] },
-      };
-
-      // Criar seções (tabela) para cada grupo e uma seção "Outros"
-      const sectionTbodyMap = {};
-      Object.keys(grupos).forEach((key) => {
-        const section = document.createElement("section");
-        section.className = "categoria-section";
-        section.innerHTML = `
-        <div class="container-category">
-          <button ><img class="setaCima" src="../img/icons/setaCima.png" alt=""></button>
-            <h3>${grupos[key].label}</h3>
-        </div>
-          
-          <table class="tabela-categoria">
-            <thead>
-              <tr><th>Imagem</th><th>Nome</th><th>Preço</th><th>Categorias</th><th>Status</th><th>Ações</th></tr>
-            </thead>
-            <tbody data-categoria="${key}"></tbody>
-          </table>
-        `;
-        tabelaCorpo.appendChild(section);
-        sectionTbodyMap[key] = section.querySelector('tbody');
-       
+      const res = await apiFetch("/adicionar/hamburguers", {
+        method: "POST",
+        body: fd,
       });
 
-    
-
-      
-      function criarLinha(lanche) {
-        const tr = document.createElement("tr");
-        const precoFormatado = `R$ ${parseFloat(lanche.preco)
-          .toFixed(2)
-          .replace(".", ",")}`;
-        const categoriasTexto = Array.isArray(lanche.categoria)
-          ? lanche.categoria.join(", ")
-          : "";
-        const imgSrc = lanche.imagem_url
-          ? lanche.imagem_url.startsWith("/uploads") ||
-            lanche.imagem_url.startsWith("/img")
-            ? `${API_BASE}${lanche.imagem_url}`
-            : lanche.imagem_url
-          : "";
-        const statusHtml = `
-                    ${
-                      lanche.novoItem
-                        ? '<span class="badge badge-novo">Novo</span>'
-                        : ""
-                    }
-                    ${
-                      lanche.indisponivel
-                        ? '<span class="badge badge-indisponivel">Indisponível</span>'
-                        : '<span class="badge">Ativo</span>'
-                    }
-                `;
-
-        tr.innerHTML = `
-                    <td>${
-                      imgSrc
-                        ? `<img src="${imgSrc}" alt="${lanche.nome}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;"/>`
-                        : ""
-                    }</td>
-                    <td>${lanche.nome}</td>
-                    <td>${precoFormatado}</td>
-                    <td>${categoriasTexto}</td>
-                    <td>${statusHtml}</td>
-                    <td class="acoes">
-                        <button class="btn-editar" data-id="${
-                          lanche.id
-                        }">Editar</button>
-                        <button class="btn-deletar" data-id="${
-                          lanche.id
-                        }">Deletar</button>
-                    </td>
-                `;
-
-        return tr;
-      }
-
-      // Distribuir lanches entre as seções com base nas categorias
-      lanches.forEach((lanche) => {
-        const categorias = Array.isArray(lanche.categoria)
-          ? lanche.categoria
-          : [];
-        let colocado = false;
-
-        // Verifica cada grupo definido em `grupos` e usa as aliases para decidir
-        Object.keys(grupos).forEach((key) => {
-          const aliases = grupos[key].aliases || [];
-          const pertence = aliases.some((alias) => categorias.includes(alias));
-          if (pertence) {
-            const tr = criarLinha(lanche);
-            sectionTbodyMap[key].appendChild(tr);
-            colocado = true;
-          }
-        });
-
-        // Se não foi colocado em nenhuma seção específica, joga em 'outros'
-        if (!colocado) {
-          const tr = criarLinha(lanche);
-          sectionTbodyMap.outros.appendChild(tr);
-        }
-      });
-
-      
-      Object.keys(sectionTbodyMap).forEach((key) => {
-        const tbody = sectionTbodyMap[key];
-        if (!tbody.querySelector("tr")) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td colspan="6" style="opacity:0.7">Nenhum item nesta categoria.</td>`;
-          tbody.appendChild(tr);
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao carregar lanches:", error);
-      tabelaCorpo.innerHTML =
-        '<tr><td colspan="6">Erro ao carregar cardápio.</td></tr>';
-    }
-  }
-
-  function entrarNoModoEdicao(lanche) {
-    idEmEdicao = lanche.id;
-    tituloForm.textContent = `Editar Lanche: ${lanche.nome}`;
-    btnSubmit.textContent = "Salvar Alterações";
-    btnCancelarEdicao.style.display = "inline-block";
-
-    document.getElementById("nome").value = lanche.nome || "";
-    document.getElementById("descricao").value = lanche.descricao || "";
-    document.getElementById("preco").value =
-      String(lanche.preco).replace(".", ",") || ""; // Converte ponto para vírgula
-    document.getElementById("novoItem").checked = !!lanche.novoItem;
-    document.getElementById("indisponivel").checked = !!lanche.indisponivel;
-    document.getElementById("imagem_url").value = "";
-
-    formAdicionar.querySelectorAll('input[name="categoria"]').forEach((cb) => {
-      cb.checked =
-        Array.isArray(lanche.categoria) && lanche.categoria.includes(cb.value);
-    });
-
-    mostrarTela("tela-adicionar");
-  }
-
-  function sairDoModoEdicao() {
-    idEmEdicao = null;
-    tituloForm.textContent = "Adicionar Novo Lanche";
-    btnSubmit.textContent = "Adicionar Lanche ao Cardápio";
-    btnCancelarEdicao.style.display = "none";
-    if (formAdicionar) {
-      formAdicionar.reset();
-    }
-  }
-
-  function sairDoModoEdicaoAdicional() {
-    adicionalEmEdicao = null;
-    tituloFormAdicional.textContent = "Adicionar adicional";
-    btnCancelarAdicional.style.display = "none";
-    if (formAdicional) {
-      formAdicional.reset();
-    }
-  }
-
-  async function carregarAdicionais() {
-    if (!tabelaAdicionais) return;
-    try {
-      const response = await fetch(`${API_BASE}/adicionais?t=${Date.now()}`, {
-        cache: "no-store",
-      });
-      if (!response.ok) throw new Error("Falha ao buscar adicionais.");
-      const adicionais = await response.json();
-      tabelaAdicionais.innerHTML = "";
-
-      if (!adicionais.length) {
-        const tr = document.createElement("tr");
-        tr.innerHTML =
-          '<td colspan="3" style="opacity:0.7">Nenhum adicional cadastrado.</td>';
-        tabelaAdicionais.appendChild(tr);
+      if (!res.ok) {
+        const msg = await res.json().catch(() => ({}));
+        showToast(msg.message || "Erro ao adicionar item", "err");
         return;
       }
 
-      adicionais.forEach((adicional) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${adicional.nome}</td>
-          <td>R$ ${parseFloat(adicional.preco)
-            .toFixed(2)
-            .replace(".", ",")}</td>
-          <td class="acoes">
-            <button class="btn-editar" data-id="${adicional.id}">Editar</button>
-            <button class="btn-deletar" data-id="${adicional.id}">Deletar</button>
-          </td>
-        `;
-        tr.dataset.nome = adicional.nome;
-        tr.dataset.preco = adicional.preco;
-        tabelaAdicionais.appendChild(tr);
-      });
-    } catch (error) {
-      console.error("Erro ao carregar adicionais:", error);
-      tabelaAdicionais.innerHTML =
-        '<tr><td colspan="3">Erro ao carregar adicionais.</td></tr>';
+      showToast("Item adicionado!", "ok");
+      form.reset();
+      await carregarItensUI();
+    } catch (err) {
+      console.error(err);
+      showToast("Erro ao adicionar item", "err");
     }
-  }
-
-  btnLogout.addEventListener("click", fazerLogout);
-  btnAbrirLoja.addEventListener("click", () => alterarStatusLoja(true));
-  btnFecharLoja.addEventListener("click", () => alterarStatusLoja(false));
-
-  btnMostrarGerenciar.addEventListener("click", () => {
-    carregarLanches();
-    mostrarTela("tela-gerenciar");
   });
 
-  btnMostrarAdicionar.addEventListener("click", () => {
-    sairDoModoEdicao();
-    mostrarTela("tela-adicionar");
-  });
+  mount.appendChild(form);
+}
 
-  btnMostrarAdicionais.addEventListener("click", () => {
-    sairDoModoEdicaoAdicional();
-    carregarAdicionais();
-    mostrarTela("tela-adicionais");
-  });
+function renderItensList(itens) {
+  const mount = document.getElementById("sb-itens-list");
+  if (!mount) return;
 
-  if (btnAbrirAdicionar) {
-    btnAbrirAdicionar.addEventListener("click", () => {
-      sairDoModoEdicao();
-      mostrarTela("tela-adicionar");
-    });
+  mount.innerHTML = "";
+
+  if (!itens.length) {
+    mount.appendChild(
+      el("div", { class: "sb-empty", html: "Nenhum item cadastrado ainda." })
+    );
+    return;
   }
 
-  if (btnCancelarEdicao) {
-    btnCancelarEdicao.addEventListener("click", () => {
-      sairDoModoEdicao();
-      mostrarTela("tela-gerenciar");
+  const table = el("table", { class: "sb-table" });
+  table.appendChild(
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", { html: "Imagem" }),
+        el("th", { html: "Nome" }),
+        el("th", { html: "Preço" }),
+        el("th", { html: "Categorias" }),
+        el("th", { html: "Status" }),
+        el("th", { html: "Ações" }),
+      ]),
+    ])
+  );
+
+  const tbody = el("tbody");
+  for (const item of itens) {
+    const img = el("img", {
+      class: "sb-thumb",
+      src: resolveImagemUrl(item.imagem_url) || "",
+      alt: item.nome || "",
+      onerror: function () {
+        this.style.display = "none";
+      },
     });
-  }
 
-  if (btnNovoAdicional) {
-    btnNovoAdicional.addEventListener("click", () => {
-      sairDoModoEdicaoAdicional();
+    const inNome = el("input", { class: "sb-input sb-input-sm", value: item.nome || "" });
+    const inPreco = el("input", {
+      class: "sb-input sb-input-sm",
+      value: Number(item.preco ?? 0).toFixed(2),
+      inputmode: "decimal",
     });
-  }
-
-  if (btnCancelarAdicional) {
-    btnCancelarAdicional.addEventListener("click", () => {
-      sairDoModoEdicaoAdicional();
+    const inCat = el("input", {
+      class: "sb-input sb-input-sm",
+      value: Array.isArray(item.categoria) ? item.categoria.join(", ") : "",
+      placeholder: "space, smash...",
     });
-  }
 
-  if (formAdicionar) {
-    formAdicionar.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    const ckInd = el("input", { type: "checkbox" });
+    ckInd.checked = !!item.indisponivel;
 
-      const checkboxes = formAdicionar.querySelectorAll(
-        'input[name="categoria"]:checked'
-      );
-      const categorias = Array.from(checkboxes).map((cb) => cb.value);
+    const ckNovo = el("input", { type: "checkbox" });
+    ckNovo.checked = !!item.novoItem;
 
-      if (categorias.length === 0) {
-        alert("Por favor, selecione pelo menos uma categoria.");
+    const fileImg = el("input", {
+      class: "sb-input sb-input-sm",
+      type: "file",
+      accept: "image/*",
+    });
+
+    const btnSalvar = el("button", {
+      class: "sb-btn sb-btn-primary sb-btn-sm",
+      type: "button",
+      html: "Salvar",
+    });
+
+    const btnExcluir = el("button", {
+      class: "sb-btn sb-btn-danger sb-btn-sm",
+      type: "button",
+      html: "Excluir",
+    });
+
+    btnSalvar.addEventListener("click", async () => {
+      const precoNum = moneyToNumber(inPreco.value);
+      if (Number.isNaN(precoNum)) {
+        showToast("Preço inválido", "err");
         return;
       }
 
-      const formData = new FormData();
-      const precoValor = document
-        .getElementById("preco")
-        .value.replace(",", ".");
+      const cats = inCat.value
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
-      formData.append("nome", document.getElementById("nome").value);
-      formData.append("descricao", document.getElementById("descricao").value);
-      formData.append("preco", precoValor);
-      formData.append("categoria", JSON.stringify(categorias));
-      formData.append("novoItem", document.getElementById("novoItem").checked);
-      formData.append(
-        "indisponivel",
-        document.getElementById("indisponivel").checked
-      );
-
-      const arquivo = document.getElementById("imagem_url").files[0];
-      if (arquivo) {
-        formData.append("imagem", arquivo);
+      if (!cats.length) {
+        showToast("Categorias inválidas", "err");
+        return;
       }
 
-      const url = idEmEdicao
-        ? `${API_BASE}/editar/hamburguer/${idEmEdicao}`
-        : `${API_BASE}/adicionar/hamburguers`;
-      const method = idEmEdicao ? "PUT" : "POST";
+      const fd = new FormData();
+      fd.append("nome", inNome.value.trim());
+      fd.append("preco", String(precoNum));
+      fd.append("categoria", JSON.stringify(cats));
+      fd.append("indisponivel", String(ckInd.checked));
+      fd.append("novoItem", String(ckNovo.checked));
+      if (fileImg.files?.[0]) fd.append("imagem", fileImg.files[0]);
 
       try {
-        const response = await fetch(url, { method, body: formData });
-        if (response.ok) {
-          alert(
-            `Lanche ${idEmEdicao ? "atualizado" : "adicionado"} com sucesso!`
-          );
-          sairDoModoEdicao();
-          carregarLanches();
-          mostrarTela("tela-gerenciar");
-        } else {
-          const erro = await response.json();
-          throw new Error(
-            erro.message ||
-              `Erro ao ${idEmEdicao ? "atualizar" : "adicionar"} lanche.`
-          );
+        const res = await apiFetch(`/editar/hamburguer/${item.id}`, {
+          method: "PUT",
+          body: fd,
+        });
+
+        if (!res.ok) {
+          const msg = await res.json().catch(() => ({}));
+          showToast(msg.message || "Erro ao salvar item", "err");
+          return;
         }
-      } catch (error) {
-        console.error("Erro:", error);
-        alert(`Falha ao salvar lanche: ${error.message}`);
+
+        showToast("Item salvo!", "ok");
+        await carregarItensUI();
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao salvar item", "err");
       }
     });
-  }
 
-  if (formAdicional) {
-    formAdicional.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const nome = document.getElementById("adicional-nome").value.trim();
-      const preco = document
-        .getElementById("adicional-preco")
-        .value.replace(",", ".");
-
-      if (!nome) {
-        alert("Informe o nome do adicional.");
-        return;
-      }
-      if (!preco || Number.isNaN(Number(preco))) {
-        alert("Informe um preço válido.");
-        return;
-      }
-
-      const payload = { nome, preco: Number(preco) };
-      const url = adicionalEmEdicao
-        ? `${API_BASE}/adicionais/${adicionalEmEdicao}`
-        : `${API_BASE}/adicionais`;
-      const method = adicionalEmEdicao ? "PUT" : "POST";
+    btnExcluir.addEventListener("click", async () => {
+      if (!confirmDanger(`Excluir "${item.nome}"?`)) return;
 
       try {
-        const response = await fetch(url, {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        const res = await apiFetch(`/deletar/hamburguer/${item.id}`, {
+          method: "DELETE",
         });
-        if (!response.ok) {
-          const erro = await response.json();
-          throw new Error(erro.message || "Falha ao salvar adicional.");
+
+        if (!res.ok) {
+          const msg = await res.json().catch(() => ({}));
+          showToast(msg.message || "Erro ao excluir item", "err");
+          return;
         }
-        alert(
-          `Adicional ${adicionalEmEdicao ? "atualizado" : "adicionado"}!`
-        );
-        sairDoModoEdicaoAdicional();
-        carregarAdicionais();
-      } catch (error) {
-        alert(`Erro: ${error.message}`);
+
+        showToast("Item excluído!", "ok");
+        await carregarItensUI();
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao excluir item", "err");
       }
     });
+
+    const statusCell = el("div", { class: "sb-stack" }, [
+      el("label", { class: "sb-check" }, [ckInd, el("span", { html: "Indisponível" })]),
+      el("label", { class: "sb-check" }, [ckNovo, el("span", { html: "Novo" })]),
+      el("div", { class: "sb-muted sb-small", html: "Trocar imagem:" }),
+      fileImg,
+    ]);
+
+    const tr = el("tr", {}, [
+      el("td", {}, [img]),
+      el("td", {}, [inNome]),
+      el("td", {}, [inPreco]),
+      el("td", {}, [inCat]),
+      el("td", {}, [statusCell]),
+      el("td", {}, [
+        el("div", { class: "sb-actions" }, [btnSalvar, btnExcluir]),
+      ]),
+    ]);
+
+    tbody.appendChild(tr);
   }
 
-  if (tabelaCorpo) {
-    tabelaCorpo.addEventListener("click", async (event) => {
-      const target = event.target;
-      const id = target.dataset.id;
+  table.appendChild(tbody);
+  mount.appendChild(table);
+}
 
-      if (target.classList.contains("btn-deletar")) {
-        if (confirm("Você tem certeza que deseja deletar este lanche?")) {
-          try {
-            const response = await fetch(
-              `${API_BASE}/deletar/hamburguer/${id}`,
-              { method: "DELETE" }
-            );
-            if (response.ok) {
-              alert("Lanche deletado com sucesso!");
-              carregarLanches();
-            } else {
-              throw new Error("Falha ao deletar o lanche.");
-            }
-          } catch (error) {
-            alert(`Ocorreu um erro: ${error.message}`);
-          }
-        }
-      }
+async function carregarItensUI() {
+  const mount = document.getElementById("sb-itens-list");
+  if (mount) mount.innerHTML = `<div class="sb-loading">Carregando itens...</div>`;
 
-      if (target.classList.contains("btn-editar")) {
-        try {
-          const response = await fetch(
-            `${API_BASE}/buscar/hamburguer/${id}?t=${Date.now()}`
-          );
-          if (!response.ok) throw new Error("Falha ao buscar lanche");
-          const lanche = await response.json();
-          entrarNoModoEdicao(lanche);
-        } catch (error) {
-          alert("Erro ao carregar dados para edição.");
-        }
-      }
-    });
+  try {
+    itensCache = await listarItens();
+    renderItensList(itensCache);
+  } catch (err) {
+    console.error(err);
+    if (mount) mount.innerHTML = `<div class="sb-empty">Erro ao carregar itens.</div>`;
+    showToast("Erro ao carregar itens", "err");
   }
+}
 
-  if (tabelaAdicionais) {
-    tabelaAdicionais.addEventListener("click", async (event) => {
-      const target = event.target;
-      const id = target.dataset.id;
+// ----------------------------
+// ADICIONAIS (CRUD)
+// ----------------------------
+function renderFormNovoAdicional() {
+  const mount = document.getElementById("sb-form-adicional");
+  if (!mount) return;
 
-      if (target.classList.contains("btn-deletar")) {
-        if (confirm("Deseja deletar este adicional?")) {
-          try {
-            const response = await fetch(`${API_BASE}/adicionais/${id}`, {
-              method: "DELETE",
-            });
-            if (!response.ok) throw new Error("Falha ao deletar adicional.");
-            carregarAdicionais();
-          } catch (error) {
-            alert(`Erro: ${error.message}`);
-          }
-        }
-      }
+  mount.innerHTML = "";
 
-      if (target.classList.contains("btn-editar")) {
-        const row = target.closest("tr");
-        if (!row) return;
-        adicionalEmEdicao = id;
-        tituloFormAdicional.textContent = "Editar adicional";
-        btnCancelarAdicional.style.display = "inline-block";
-        document.getElementById("adicional-nome").value =
-          row.dataset.nome || "";
-        document.getElementById("adicional-preco").value =
-          row.dataset.preco || "";
-      }
-    });
-  }
+  const form = el("form", { class: "sb-form sb-form-inline" });
 
-  if (inputFiltro) {
-    inputFiltro.addEventListener("input", () => {
-      const termo = inputFiltro.value.trim().toLowerCase();
-      Array.from(tabelaCorpo.querySelectorAll("tr")).forEach((tr) => {
-        const texto = tr.innerText.toLowerCase();
-        tr.style.display = texto.includes(termo) ? "" : "none";
+  const nome = el("input", { class: "sb-input", placeholder: "Nome do adicional", required: "true" });
+  const preco = el("input", {
+    class: "sb-input",
+    placeholder: "Preço (ex: 5.00)",
+    required: "true",
+    inputmode: "decimal",
+  });
+  const ativo = el("input", { type: "checkbox" });
+  ativo.checked = true;
+
+  const btn = el("button", {
+    class: "sb-btn sb-btn-primary",
+    type: "submit",
+    html: "Adicionar",
+  });
+
+  form.appendChild(nome);
+  form.appendChild(preco);
+  form.appendChild(el("label", { class: "sb-check" }, [ativo, el("span", { html: "Ativo" })]));
+  form.appendChild(btn);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const precoNum = moneyToNumber(preco.value);
+    if (Number.isNaN(precoNum)) {
+      showToast("Preço inválido", "err");
+      return;
+    }
+
+    try {
+      const res = await apiFetch("/adicionais", {
+        method: "POST",
+        body: JSON.stringify({
+          nome: nome.value.trim(),
+          preco: precoNum,
+          ativo: !!ativo.checked,
+        }),
       });
-    });
+
+      if (!res.ok) {
+        const msg = await res.json().catch(() => ({}));
+        showToast(msg.message || "Erro ao adicionar adicional", "err");
+        return;
+      }
+
+      showToast("Adicional adicionado!", "ok");
+      form.reset();
+      ativo.checked = true;
+      await carregarAdicionaisUI();
+    } catch (err) {
+      console.error(err);
+      showToast("Erro ao adicionar adicional", "err");
+    }
+  });
+
+  mount.appendChild(form);
+}
+
+function renderAdicionaisList(adicionais) {
+  const mount = document.getElementById("sb-adicionais-list");
+  if (!mount) return;
+
+  mount.innerHTML = "";
+
+  if (!adicionais.length) {
+    mount.appendChild(
+      el("div", { class: "sb-empty", html: "Nenhum adicional cadastrado." })
+    );
+    return;
   }
 
-  // --- 4. INICIALIZAÇÃO DA PÁGINA ---
-  verificarStatusLoja();
- 
-  carregarLanches();
-  mostrarTela("tela-gerenciar");
+  const table = el("table", { class: "sb-table" });
+  table.appendChild(
+    el("thead", {}, [
+      el("tr", {}, [
+        el("th", { html: "Nome" }),
+        el("th", { html: "Preço" }),
+        el("th", { html: "Ativo" }),
+        el("th", { html: "Ações" }),
+      ]),
+    ])
+  );
+
+  const tbody = el("tbody");
+
+  for (const ad of adicionais) {
+    const inNome = el("input", { class: "sb-input sb-input-sm", value: ad.nome || "" });
+    const inPreco = el("input", {
+      class: "sb-input sb-input-sm",
+      value: Number(ad.preco ?? 0).toFixed(2),
+      inputmode: "decimal",
+    });
+    const ckAtivo = el("input", { type: "checkbox" });
+    ckAtivo.checked = ad.ativo !== false;
+
+    const btnSalvar = el("button", {
+      class: "sb-btn sb-btn-primary sb-btn-sm",
+      type: "button",
+      html: "Salvar",
+    });
+
+    const btnExcluir = el("button", {
+      class: "sb-btn sb-btn-danger sb-btn-sm",
+      type: "button",
+      html: "Excluir",
+    });
+
+    btnSalvar.addEventListener("click", async () => {
+      const precoNum = moneyToNumber(inPreco.value);
+      if (Number.isNaN(precoNum)) {
+        showToast("Preço inválido", "err");
+        return;
+      }
+
+      try {
+        const res = await apiFetch(`/adicionais/${ad.id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            nome: inNome.value.trim(),
+            preco: precoNum,
+            ativo: !!ckAtivo.checked,
+          }),
+        });
+
+        if (!res.ok) {
+          const msg = await res.json().catch(() => ({}));
+          showToast(msg.message || "Erro ao salvar adicional", "err");
+          return;
+        }
+
+        showToast("Adicional salvo!", "ok");
+        await carregarAdicionaisUI();
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao salvar adicional", "err");
+      }
+    });
+
+    btnExcluir.addEventListener("click", async () => {
+      if (!confirmDanger(`Excluir adicional "${ad.nome}"?`)) return;
+
+      try {
+        const res = await apiFetch(`/adicionais/${ad.id}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) {
+          const msg = await res.json().catch(() => ({}));
+          showToast(msg.message || "Erro ao excluir adicional", "err");
+          return;
+        }
+
+        showToast("Adicional excluído!", "ok");
+        await carregarAdicionaisUI();
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao excluir adicional", "err");
+      }
+    });
+
+    const tr = el("tr", {}, [
+      el("td", {}, [inNome]),
+      el("td", {}, [inPreco]),
+      el("td", {}, [
+        el("label", { class: "sb-check" }, [ckAtivo, el("span", { html: ckAtivo.checked ? "Sim" : "Não" })]),
+      ]),
+      el("td", {}, [el("div", { class: "sb-actions" }, [btnSalvar, btnExcluir])]),
+    ]);
+
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  mount.appendChild(table);
+}
+
+async function carregarAdicionaisUI() {
+  const mount = document.getElementById("sb-adicionais-list");
+  if (mount) mount.innerHTML = `<div class="sb-loading">Carregando adicionais...</div>`;
+
+  try {
+    adicionaisCache = await listarAdicionais();
+    // Aqui você decide: mostrar todos ou só ativos
+    // Para painel, é melhor mostrar TODOS:
+    renderAdicionaisList(adicionaisCache);
+  } catch (err) {
+    console.error(err);
+    if (mount) mount.innerHTML = `<div class="sb-empty">Erro ao carregar adicionais.</div>`;
+    showToast("Erro ao carregar adicionais", "err");
+  }
+}
+
+// ----------------------------
+// CSS (melhora a “estilização horrível”)
+// ----------------------------
+function injectBetterCss() {
+  if (document.getElementById("sb-admin-css")) return;
+
+  const css = `
+  .sb-root { margin-top: 18px; display: grid; gap: 16px; }
+  .sb-card { background:#0b0b0b33; border:1px solid #ffffff1a; border-radius:12px; padding:16px; }
+  .sb-card-header { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .sb-title { margin:0; font-size:18px; font-weight:800; }
+  .sb-muted { margin:6px 0 12px; opacity:.85; font-size:13px; }
+  .sb-divider { height:1px; background:#ffffff1a; margin:14px 0; }
+  .sb-grid { display:grid; grid-template-columns: 1fr 220px; gap:10px; }
+  .sb-form { display:flex; flex-direction:column; gap:10px; }
+  .sb-form-inline { display:flex; flex-direction:row; align-items:center; gap:10px; flex-wrap:wrap; }
+  .sb-label { display:block; font-size:12px; opacity:.85; margin-bottom:4px; }
+  .sb-input, .sb-textarea {
+    width:100%;
+    background:#0f0f0f;
+    border:1px solid #ffffff26;
+    color:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    outline:none;
+  }
+  .sb-input:focus, .sb-textarea:focus { border-color:#ff5722; box-shadow: 0 0 0 3px #ff572233; }
+  .sb-textarea { min-height: 70px; resize: vertical; }
+  .sb-input-sm { padding:8px 10px; border-radius:9px; }
+  .sb-inline { display:flex; gap:14px; align-items:center; justify-content:flex-end; flex-wrap:wrap; }
+  .sb-check { display:flex; gap:8px; align-items:center; font-size:13px; opacity:.95; }
+  .sb-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+  .sb-btn {
+    border:none;
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    font-weight:800;
+  }
+  .sb-btn-sm { padding:8px 10px; border-radius:9px; font-size:13px; }
+  .sb-btn-primary { background:#22c55e; color:#07130b; }
+  .sb-btn-danger { background:#ef4444; color:#160606; }
+  .sb-btn-secondary { background:#ffffff1a; color:#fff; border:1px solid #ffffff26; }
+  .sb-btn:hover { filter: brightness(1.05); }
+
+  .sb-table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px; border:1px solid #ffffff26; background:#0f0f0f; }
+  .sb-table th, .sb-table td { padding:10px; border-bottom:1px solid #ffffff14; vertical-align:top; }
+  .sb-table th { text-align:left; font-size:12px; letter-spacing:.3px; text-transform:uppercase; opacity:.85; background:#121212; }
+  .sb-table tr:last-child td { border-bottom:none; }
+
+  .sb-thumb { width:54px; height:54px; object-fit:cover; border-radius:10px; border:1px solid #ffffff26; background:#111; }
+  .sb-stack { display:flex; flex-direction:column; gap:8px; }
+  .sb-small { font-size:12px; }
+
+  .sb-loading, .sb-empty {
+    padding:12px;
+    border:1px dashed #ffffff26;
+    border-radius:12px;
+    opacity:.9;
+  }
+
+  .sb-toast-wrap { position:fixed; right:14px; bottom:14px; display:flex; flex-direction:column; gap:10px; z-index:9999; }
+  .sb-toast {
+    opacity:0;
+    transform: translateY(10px);
+    transition: all .2s ease;
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:800;
+    border:1px solid #ffffff26;
+    background:#111;
+    color:#fff;
+    max-width: 320px;
+  }
+  .sb-toast.show { opacity:1; transform: translateY(0); }
+  .sb-toast.ok { border-color:#22c55e55; }
+  .sb-toast.err { border-color:#ef444455; }
+  `;
+
+  const style = document.createElement("style");
+  style.id = "sb-admin-css";
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+// ----------------------------
+// INIT
+// ----------------------------
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!exigirLogin()) return;
+
+  injectBetterCss();
+  configurarLogout();
+  await carregarAdmin();
+
+  // status loja (se existir no HTML)
+  await carregarStatusLoja();
+
+  const btnAbrir = document.getElementById("btn-abrir");
+  const btnFechar = document.getElementById("btn-fechar");
+  if (btnAbrir) btnAbrir.addEventListener("click", () => alterarStatus(true));
+  if (btnFechar) btnFechar.addEventListener("click", () => alterarStatus(false));
+
+  // monta painel completo
+  ensurePanelStructure();
+  renderFormNovoItem();
+  renderFormNovoAdicional();
+
+  await carregarItensUI();
+  await carregarAdicionaisUI();
 });
-

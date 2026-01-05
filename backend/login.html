@@ -2,55 +2,54 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Painel Space Burguer</title>
     <link rel="stylesheet" href="styleAdm.css" />
   </head>
   <body>
-    <div class="painel-container" style="max-width: 400px">
-      <h1 style="text-align: center; color: #ff5722">Login do Painel</h1>
+    <div class="painel-container" style="max-width: 420px">
+      <h1 style="text-align:center;color:#ff5722">Login do Painel</h1>
+
       <form id="form-login">
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" id="email" required />
         </div>
+
         <div class="form-group">
           <label for="senha">Senha</label>
           <input type="password" id="senha" required />
         </div>
+
         <button type="submit" class="btn-submit">Entrar</button>
       </form>
     </div>
 
     <script>
-      document
-        .getElementById("form-login")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("email").value;
-          const senha = document.getElementById("senha").value;
+      const API_BASE = `http://${location.hostname}:3000`;
 
-          try {
-            const response = await fetch(
-              `http://${location.hostname}:3000/login`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, senha }),
-              }
-            );
+      document.getElementById("form-login").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-            if (response.ok) {
-              // **ETAPA 1: Salva a "chave" no navegador**
-              const data = await response.json();
-              sessionStorage.setItem("token", data.token);
-              window.location.href = "admin.html";
-            } else {
-              alert("Email ou senha incorretos!");
-            }
-          } catch (error) {
-            alert("Erro ao tentar fazer login.");
-          }
+        const email = document.getElementById("email").value.trim();
+        const senha = document.getElementById("senha").value;
+
+        const res = await fetch(`${API_BASE}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
         });
+
+        if (!res.ok) {
+          alert("Email ou senha incorretos!");
+          return;
+        }
+
+        const data = await res.json();
+        sessionStorage.setItem("token", data.token);
+
+        window.location.href = "admin.html";
+      });
     </script>
   </body>
 </html>
