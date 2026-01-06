@@ -195,8 +195,23 @@ tbody tr:nth-child(odd) {
 .setaCima{
   width: 20px;         /* Largura igual à altura */
   height: 20px;        /* Altura igual à largura */
-  
   border-radius: 50%;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-toggle-categoria {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-toggle-categoria:hover {
+  opacity: 0.7;
 }
 
 .container-category{

@@ -121,11 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
         section.className = "categoria-section";
         section.innerHTML = `
         <div class="container-category">
-          <button ><img class="setaCima" src="../img/icons/setaCima.png" alt=""></button>
-            <h3>${grupos[key].label}</h3>
+          <button class="btn-toggle-categoria" data-categoria="${key}" type="button">
+            <img class="setaCima" src="../img/icons/setaCima.png" alt="Toggle categoria">
+          </button>
+          <h3>${grupos[key].label}</h3>
         </div>
           
-          <table class="tabela-categoria">
+          <table class="tabela-categoria" data-tabela-categoria="${key}" style="display: none;">
             <thead>
               <tr><th>Imagem</th><th>Nome</th><th>Preço</th><th>Categorias</th><th>Status</th><th>Ações</th></tr>
             </thead>
@@ -223,6 +225,36 @@ document.addEventListener("DOMContentLoaded", () => {
           tr.innerHTML = `<td colspan="6" style="opacity:0.7">Nenhum item nesta categoria.</td>`;
           tbody.appendChild(tr);
         }
+      });
+
+      // Adicionar funcionalidade de toggle para esconder/mostrar categorias
+      document.querySelectorAll(".btn-toggle-categoria").forEach((btn) => {
+        btn.addEventListener("click", function() {
+          const categoriaKey = this.dataset.categoria;
+          const tabela = document.querySelector(
+            `table[data-tabela-categoria="${categoriaKey}"]`
+          );
+          const imgSeta = this.querySelector(".setaCima");
+          
+          if (tabela) {
+            // Alterna a visibilidade da tabela
+            if (tabela.style.display === "none") {
+              tabela.style.display = "table";
+              // Rotaciona a seta para baixo quando abre
+              if (imgSeta) {
+                imgSeta.style.transform = "rotate(180deg)";
+                imgSeta.style.transition = "transform 0.3s ease";
+              }
+            } else {
+              tabela.style.display = "none";
+              // Rotaciona a seta para cima quando fecha
+              if (imgSeta) {
+                imgSeta.style.transform = "rotate(0deg)";
+                imgSeta.style.transition = "transform 0.3s ease";
+              }
+            }
+          }
+        });
       });
     } catch (error) {
       console.error("Erro ao carregar lanches:", error);
