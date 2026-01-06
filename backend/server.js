@@ -7,6 +7,7 @@ import cors from "cors";
 import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 
 // 2. RECRIANDO __dirname E __filename
 // No "type": "module", estas variáveis não existem, por isso criamos:
@@ -15,15 +16,15 @@ const __dirname = path.dirname(__filename);
 
 // 3. CONFIGURAÇÃO DO DOTENV (Para ler o banco de dados)
 // Tenta achar o arquivo .env na pasta atual ou na pasta prisma
-const envPathBackend = path.join(__dirname, '.env');
-const envPathPrisma = path.join(__dirname, 'prisma', '.env');
+const envPathBackend = path.join(__dirname, ".env");
+const envPathPrisma = path.join(__dirname, "prisma", ".env");
 
 if (fs.existsSync(envPathBackend)) {
-    dotenv.config({ path: envPathBackend });
+  dotenv.config({ path: envPathBackend });
 } else if (fs.existsSync(envPathPrisma)) {
-    dotenv.config({ path: envPathPrisma });
+  dotenv.config({ path: envPathPrisma });
 } else {
-    dotenv.config(); // Tenta na raiz do projeto
+  dotenv.config(); // Tenta na raiz do projeto
 }
 
 // 4. INICIALIZAÇÃO
@@ -35,70 +36,75 @@ app.use(cors());
 
 // 5. CONFIGURAÇÃO DO MULTER
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadDir = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); 
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
 
 const upload = multer({ storage: storage });
 
 // 6. ARQUIVOS ESTÁTICOS
 // Ajuste o caminho se necessário. Aqui sobe 2 níveis para achar a pasta img.
-const pastaDasImagens = path.join(__dirname, '../../img');
-app.use('/img', express.static(pastaDasImagens));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const pastaDasImagens = path.join(__dirname, "../../img");
+app.use("/img", express.static(pastaDasImagens));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // --- ROTAS ---
 
 //! CRIAR ITEM
-app.post("/adicionar/hamburguers", upload.single('imagem'), async (request, response) => {
-  try {
-    const { nome, descricao, preco, indisponivel, novoItem } = request.body;
-
-    let { categoria } = request.body;
-    let categoriasArray = [];
-
+app.post(
+  "/adicionar/hamburguers",
+  upload.single("imagem"),
+  async (request, response) => {
     try {
-      if (typeof categoria === 'string') {
-        const parsed = JSON.parse(categoria);
-        if (Array.isArray(parsed)) categoriasArray = parsed;
-      }
-    } catch (_) {}
-    
-    // Fallback: se não foi parsed como array, mas veio array direto ou string simples
-    if (!Array.isArray(categoriasArray) && Array.isArray(categoria)) {
+      const { nome, descricao, preco, indisponivel, novoItem } = request.body;
+
+      let { categoria } = request.body;
+      let categoriasArray = [];
+
+      try {
+        if (typeof categoria === "string") {
+          const parsed = JSON.parse(categoria);
+          if (Array.isArray(parsed)) categoriasArray = parsed;
+        }
+      } catch (_) {}
+
+      // Fallback: se não foi parsed como array, mas veio array direto ou string simples
+      if (!Array.isArray(categoriasArray) && Array.isArray(categoria)) {
         categoriasArray = categoria;
+      }
+
+      const imagemUrl = request.file
+        ? `/uploads/${request.file.filename}`
+        : request.body.imagem_url || null;
+
+      const burguer = await prisma.item.create({
+        data: {
+          nome,
+          descricao,
+          preco: parseFloat(preco),
+          categoria: categoriasArray,
+          indisponivel:
+            String(indisponivel) === "true" || indisponivel === "on",
+          novoItem: String(novoItem) === "true" || novoItem === "on",
+          imagem_url: imagemUrl,
+        },
+      });
+
+      return response.status(200).send(burguer);
+    } catch (error) {
+      console.log(error);
+      return response.status(400).send({ message: "Erro ao adicionar item!" });
     }
-
-    const imagemUrl = request.file
-      ? `/uploads/${request.file.filename}`
-      : (request.body.imagem_url || null);
-
-    const burguer = await prisma.item.create({
-      data: {
-        nome,
-        descricao,
-        preco: parseFloat(preco),
-        categoria: categoriasArray,
-        indisponivel: String(indisponivel) === 'true' || indisponivel === 'on',
-        novoItem: String(novoItem) === 'true' || novoItem === 'on',
-        imagem_url: imagemUrl,
-      },
-    });
-
-    return response.status(200).send(burguer);
-  } catch (error) {
-    console.log(error);
-    return response.status(400).send({ message: "Erro ao adicionar item!" });
   }
-});
+);
 
 //! DELETAR ITEM
 app.delete("/deletar/hamburguer/:id", async (request, response) => {
@@ -121,7 +127,9 @@ app.get("/buscar/hamburguers", async (request, response) => {
     return response.status(200).send(hamburguers);
   } catch (error) {
     console.log(error);
-    return response.status(400).send({ message: "Erro ao buscar hamburgueres!!" });
+    return response
+      .status(400)
+      .send({ message: "Erro ao buscar hamburgueres!!" });
   }
 });
 
@@ -133,7 +141,9 @@ app.get("/buscar/hamburguer/:id", async (request, response) => {
       where: { id },
     });
     if (!hamburguerId) {
-      return response.status(400).send({ message: "Hambúrguer não encontrado!" });
+      return response
+        .status(400)
+        .send({ message: "Hambúrguer não encontrado!" });
     }
     return response.status(200).send(hamburguerId);
   } catch (error) {
@@ -143,45 +153,68 @@ app.get("/buscar/hamburguer/:id", async (request, response) => {
 });
 
 //! EDITAR ITEM
-app.put("/editar/hamburguer/:id", upload.single('imagem'), async (request, response) => {
-  try {
-    const id = request.params.id;
-    let { nome, descricao, preco, destaque, categoria, indisponivel, novoItem, imagem_url } = request.body;
-
-    let categoriasArray;
+app.put(
+  "/editar/hamburguer/:id",
+  upload.single("imagem"),
+  async (request, response) => {
     try {
-      if (typeof categoria === 'string') {
-        const parsed = JSON.parse(categoria);
-        if (Array.isArray(parsed)) categoriasArray = parsed;
-      } else if (Array.isArray(categoria)) {
-        categoriasArray = categoria;
+      const id = request.params.id;
+      let {
+        nome,
+        descricao,
+        preco,
+        destaque,
+        categoria,
+        indisponivel,
+        novoItem,
+        imagem_url,
+      } = request.body;
+
+      let categoriasArray;
+      try {
+        if (typeof categoria === "string") {
+          const parsed = JSON.parse(categoria);
+          if (Array.isArray(parsed)) categoriasArray = parsed;
+        } else if (Array.isArray(categoria)) {
+          categoriasArray = categoria;
+        }
+      } catch (_) {}
+
+      if (request.file) {
+        imagem_url = `/uploads/${request.file.filename}`;
       }
-    } catch (_) {}
-   
-    if (request.file) {
-      imagem_url = `/uploads/${request.file.filename}`;
+
+      const dataAtualizacao = {};
+      if (typeof nome !== "undefined") dataAtualizacao.nome = nome;
+      if (typeof descricao !== "undefined")
+        dataAtualizacao.descricao = descricao;
+      if (typeof preco !== "undefined")
+        dataAtualizacao.preco = parseFloat(preco);
+      if (typeof destaque !== "undefined")
+        dataAtualizacao.destaque =
+          String(destaque) === "true" || destaque === "on";
+      if (typeof indisponivel !== "undefined")
+        dataAtualizacao.indisponivel =
+          String(indisponivel) === "true" || indisponivel === "on";
+      if (typeof novoItem !== "undefined")
+        dataAtualizacao.novoItem =
+          String(novoItem) === "true" || novoItem === "on";
+      if (typeof imagem_url !== "undefined")
+        dataAtualizacao.imagem_url = imagem_url;
+      if (typeof categoriasArray !== "undefined")
+        dataAtualizacao.categoria = categoriasArray;
+
+      const hamburguerAtualizado = await prisma.item.update({
+        where: { id },
+        data: dataAtualizacao,
+      });
+      return response.status(200).send(hamburguerAtualizado);
+    } catch (error) {
+      console.log(error);
+      response.status(400).send({ message: "Erro ao editar hamburguer!" });
     }
-
-    const dataAtualizacao = {};
-    if (typeof nome !== 'undefined') dataAtualizacao.nome = nome;
-    if (typeof descricao !== 'undefined') dataAtualizacao.descricao = descricao;
-    if (typeof preco !== 'undefined') dataAtualizacao.preco = parseFloat(preco);
-    if (typeof destaque !== 'undefined') dataAtualizacao.destaque = String(destaque) === 'true' || destaque === 'on';
-    if (typeof indisponivel !== 'undefined') dataAtualizacao.indisponivel = String(indisponivel) === 'true' || indisponivel === 'on';
-    if (typeof novoItem !== 'undefined') dataAtualizacao.novoItem = String(novoItem) === 'true' || novoItem === 'on';
-    if (typeof imagem_url !== 'undefined') dataAtualizacao.imagem_url = imagem_url;
-    if (typeof categoriasArray !== 'undefined') dataAtualizacao.categoria = categoriasArray;
-
-    const hamburguerAtualizado = await prisma.item.update({
-      where: { id },
-      data: dataAtualizacao,
-    });
-    return response.status(200).send(hamburguerAtualizado);
-  } catch (error) {
-    console.log(error);
-    response.status(400).send({ message: "Erro ao editar hamburguer!" });
   }
-});
+);
 
 // --- ADICIONAIS ---
 app.get("/adicionais", async (req, res) => {
@@ -278,8 +311,8 @@ app.post("/alterar-status-loja", async (req, res) => {
   try {
     const config = await prisma.configuracao.findFirst();
     if (!config) {
-         await prisma.configuracao.create({ data: { lojaAberta: !!lojaAberta } });
-         return res.json({ lojaAberta: !!lojaAberta });
+      await prisma.configuracao.create({ data: { lojaAberta: !!lojaAberta } });
+      return res.json({ lojaAberta: !!lojaAberta });
     }
     const configAtualizada = await prisma.configuracao.update({
       where: { id: config.id },
@@ -293,12 +326,39 @@ app.post("/alterar-status-loja", async (req, res) => {
 
 // LOGIN
 app.post("/login", async (req, res) => {
+  try {
     const { email, senha } = req.body;
-    if (email === "admin@space.com" && senha === "senhaforte123") {
-        res.status(200).json({ message: "Login bem-sucedido!" });
-    } else {
-        res.status(401).json({ message: "Credenciais inválidas." });
+
+    // Validação básica
+    if (!email || !senha) {
+      return res
+        .status(400)
+        .json({ message: "Email e senha são obrigatórios." });
     }
+
+    // Busca o admin no banco de dados
+    const admin = await prisma.admin.findUnique({
+      where: { email: email.trim().toLowerCase() },
+    });
+
+    if (!admin) {
+      // Retorna mensagem genérica para não revelar se o email existe
+      return res.status(401).json({ message: "Email ou senha incorretos." });
+    }
+
+    // Compara a senha fornecida com o hash armazenado
+    const senhaValida = await bcrypt.compare(senha, admin.senha);
+
+    if (!senhaValida) {
+      return res.status(401).json({ message: "Email ou senha incorretos." });
+    }
+
+    // Login bem-sucedido
+    res.status(200).json({ message: "Login bem-sucedido!" });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    res.status(500).json({ message: "Erro interno do servidor." });
+  }
 });
 
 app.listen(3000, () => {

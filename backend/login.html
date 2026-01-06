@@ -2,8 +2,38 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Painel Space Burguer</title>
     <link rel="stylesheet" href="styleAdm.css" />
+    <style>
+      .senha-container {
+        position: relative;
+      }
+      .senha-container input {
+        padding-right: 45px;
+      }
+      .toggle-senha {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .toggle-senha:hover {
+        color: #ff5722;
+      }
+      .toggle-senha:focus {
+        outline: none;
+      }
+    </style>
   </head>
   <body>
     <div class="painel-container" style="max-width: 400px">
@@ -11,23 +41,65 @@
       <form id="form-login">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" required />
+          <input 
+            type="email" 
+            id="email" 
+            autocomplete="username"
+            required 
+          />
         </div>
         <div class="form-group">
           <label for="senha">Senha</label>
-          <input type="password" id="senha" required  />
+          <div class="senha-container">
+            <input 
+              type="password" 
+              id="senha" 
+              autocomplete="new-password"
+              required
+            />
+            <button 
+              type="button" 
+              class="toggle-senha" 
+              id="toggleSenha"
+              aria-label="Mostrar/ocultar senha"
+            >
+              👁️
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn-submit">Entrar</button>
       </form>
     </div>
 
     <script>
+      // Função para mostrar/ocultar senha
+      const toggleSenha = document.getElementById("toggleSenha");
+      const inputSenha = document.getElementById("senha");
+      
+      toggleSenha.addEventListener("click", () => {
+        const tipo = inputSenha.getAttribute("type") === "password" ? "text" : "password";
+        inputSenha.setAttribute("type", tipo);
+        toggleSenha.textContent = tipo === "password" ? "👁️" : "🙈";
+      });
+
+      // Limpar campos ao carregar a página (segurança adicional)
+      window.addEventListener("load", () => {
+        document.getElementById("email").value = "";
+        document.getElementById("senha").value = "";
+      });
+
       document
         .getElementById("form-login")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-          const email = document.getElementById("email").value;
+          const email = document.getElementById("email").value.trim();
           const senha = document.getElementById("senha").value;
+
+          // Validação básica
+          if (!email || !senha) {
+            alert("Por favor, preencha todos os campos!");
+            return;
+          }
 
           try {
             const response = await fetch(
@@ -40,16 +112,25 @@
             );
 
             if (response.ok) {
-              // **ETAPA 1: Salva a "chave" no navegador**
+              // Limpa os campos após login bem-sucedido
+              document.getElementById("email").value = "";
+              document.getElementById("senha").value = "";
+              
+              // Salva a "chave" no navegador
               sessionStorage.setItem('isLoggedIn', 'true');
               
-              // **ETAPA 2: Redireciona para o painel de admin**
+              // Redireciona para o painel de admin
               window.location.href = "admin.html";
             } else {
-              alert("Email ou senha incorretos!");
+              const data = await response.json();
+              alert(data.message || "Email ou senha incorretos!");
+              // Limpa apenas a senha em caso de erro
+              document.getElementById("senha").value = "";
+              document.getElementById("senha").focus();
             }
           } catch (error) {
-            alert("Erro ao tentar fazer login.");
+            console.error("Erro ao tentar fazer login:", error);
+            alert("Erro ao tentar fazer login. Verifique sua conexão.");
           }
         });
     </script>
