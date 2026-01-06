@@ -32,11 +32,97 @@ document.addEventListener("DOMContentLoaded", () => {
     "btn-cancelar-adicional"
   );
   const btnNovoAdicional = document.getElementById("btn-novo-adicional");
+  const listaCategorias = document.getElementById("lista-categorias");
+  const inputNovaCategoria = document.getElementById("nova-categoria");
+  const btnAddCategoria = document.getElementById("btn-add-categoria");
   let idEmEdicao = null;
   let adicionalEmEdicao = null;
 
-   
+  const STORAGE_CATEGORIAS = "categoriasExtras";
+  const categoriasFixas = ["space", "smash", "combo", "porcoes", "bebidas"];
+  
   // --- 2. FUNÇÕES ---
+
+  // Cria um slug seguro para usar como value do checkbox
+  function slugCategoria(nome) {
+    return nome
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      || nome.toLowerCase().trim();
+  }
+
+  // Cria o checkbox no DOM se não existir
+  function criarCheckboxCategoria(valor, label) {
+    if (!listaCategorias) return;
+    const existe = listaCategorias.querySelector(
+      `input[name="categoria"][value="${valor}"]`
+    );
+    if (existe) return;
+
+    const div = document.createElement("div");
+    div.className = "category-option";
+    div.innerHTML = `
+      <input type="checkbox" name="categoria" value="${valor}" />
+      <label>${label}</label>
+    `;
+    listaCategorias.appendChild(div);
+  }
+
+  function salvarCategoriasExtras(extras) {
+    localStorage.setItem(STORAGE_CATEGORIAS, JSON.stringify(extras));
+  }
+
+  function carregarCategoriasExtras() {
+    try {
+      const extras = JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
+      extras.forEach((cat) => {
+        if (!cat?.valor || !cat?.label) return;
+        if (categoriasFixas.includes(cat.valor)) return;
+        criarCheckboxCategoria(cat.valor, cat.label);
+      });
+    } catch (_) {}
+  }
+
+  function adicionarCategoriaExtra(nome) {
+    const label = nome.trim();
+    if (!label) {
+      alert("Informe um nome para a categoria.");
+      return;
+    }
+    const valor = slugCategoria(label);
+
+    // evita duplicados
+    if (listaCategorias.querySelector(`input[value="${valor}"]`)) {
+      alert("Essa categoria já existe.");
+      return;
+    }
+
+    criarCheckboxCategoria(valor, label);
+
+    // salva no localStorage
+    const extras =
+      JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
+    extras.push({ valor, label });
+    salvarCategoriasExtras(extras);
+
+    // limpa e foca
+    if (inputNovaCategoria) {
+      inputNovaCategoria.value = "";
+      inputNovaCategoria.focus();
+    }
+  }
+
+  // Garante que categorias de um lanche sejam exibidas nos checkboxes
+  function garantirCategoriasDoLanche(categorias = []) {
+    categorias.forEach((cat) => {
+      if (categoriasFixas.includes(cat)) return;
+      criarCheckboxCategoria(cat, cat);
+    });
+  }
 
 
   function fazerLogout() {
@@ -269,6 +355,8 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSubmit.textContent = "Salvar Alterações";
     btnCancelarEdicao.style.display = "inline-block";
 
+    // garante que categorias existentes do item apareçam como checkboxes
+    garantirCategoriasDoLanche(lanche.categoria || []);
     document.getElementById("nome").value = lanche.nome || "";
     document.getElementById("descricao").value = lanche.descricao || "";
     document.getElementById("preco").value =
@@ -382,6 +470,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnNovoAdicional) {
     btnNovoAdicional.addEventListener("click", () => {
       sairDoModoEdicaoAdicional();
+    });
+  }
+
+  // Adicionar nova categoria dinamicamente
+  if (btnAddCategoria) {
+    btnAddCategoria.addEventListener("click", () => {
+      if (!inputNovaCategoria) return;
+      adicionarCategoriaExtra(inputNovaCategoria.value);
+    });
+  }
+
+  if (inputNovaCategoria) {
+    inputNovaCategoria.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        adicionarCategoriaExtra(inputNovaCategoria.value);
+      }
     });
   }
 
@@ -582,6 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- 4. INICIALIZAÇÃO DA PÁGINA ---
   verificarStatusLoja();
  
+  carregarCategoriasExtras();
   carregarLanches();
   mostrarTela("tela-gerenciar");
 });
