@@ -218,6 +218,12 @@ document.addEventListener("DOMContentLoaded", function () {
   configurarCamposObservacao();
   adicionarBotoesObservacao();
 
+  // Carrega os lanches e adicionais do backend
+  carregarAdicionais();
+  if (window.carregarHamburguers) {
+    window.carregarHamburguers();
+  }
+
   const botoesAdicionar = document.querySelectorAll(".btn-increase");
   const botoesRemover = document.querySelectorAll(".btn-decrease");
 
@@ -1592,10 +1598,10 @@ async function enviarPedidoWhatsApp() {
   }
 
   //!Função para mostrar notificação quando hamburgueria estiver fechada
-  const isOpenNow = checkRestaurantOpen();
+  // Verifica o status via API para respeitar o controle do painel
+  const isOpenNow = await checkRestaurantOpenFromAPI();
   if (!isOpenNow) {
     mostrarNotificacao("Estamos fechados no Momento!😔");
-
     return;
   }
 
@@ -1825,39 +1831,45 @@ const observer = new IntersectionObserver((entries) => {
 });
 observer.observe(containerCarrinho);
 
-// !função para abirir a loja pelo painel
-// async function checkRestaurantOpen() {
-//   try {
-//     const API_BASE = `http://${location.hostname}:3000`;
-//     const response = await fetch(`${API_BASE}/status-loja`);
-//     if (!response.ok) {
-//       return false; // Se falhar a comunicação, assume que está fechada
-//     }
-//     const data = await response.json();
-//     return data.lojaAberta;
-//   } catch (error) {
-//     console.error("Erro ao verificar status da loja:", error);
-//     return false; // Em caso de erro, assume que está fechada
-//   }
-// }
+//função para verificar o status da loja via API
+async function checkRestaurantOpenFromAPI() {
+  try {
+    const API_BASE = `http://${location.hostname}:3000`;
+    const response = await fetch(`${API_BASE}/status-loja`);
+    if (!response.ok) {
+      return false; // Se falhar a comunicação, assume que está fechada
+    }
+    const data = await response.json();
+    return data.lojaAberta;
+  } catch (error) {
+    console.error("Erro ao verificar status da loja:", error);
+    return false; // Em caso de erro, assume que está fechada
+  }
+}
 
-// // MODIFIQUE a parte final do script para lidar com a função assíncrona
-// async function atualizarStatusVisivel() {
-//   const isOpen = await checkRestaurantOpen();
-//   const elementoStatus = document.querySelector("#estaAberta");
-//   const atendimentoInfo = document.querySelector(".atendimento-info");
+// Função para atualizar o status visível na página
+async function atualizarStatusVisivel() {
+  const isOpen = await checkRestaurantOpenFromAPI();
+  const elementoStatus = document.querySelector("#estaAberta");
+  const atendimentoInfo = document.querySelector(".atendimento-info");
 
-//   if (isOpen) {
-//     elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-//     atendimentoInfo.style.backgroundColor = "green";
-//   } else {
-//     elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-//     atendimentoInfo.style.backgroundColor = "#d32525ff";
-//   }
-// }
+  if (elementoStatus && atendimentoInfo) {
+    if (isOpen) {
+      elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+      atendimentoInfo.style.backgroundColor = "green";
+    } else {
+      elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+      atendimentoInfo.style.backgroundColor = "#d32525ff";
+    }
+  }
+}
 
-// // Chame a nova função quando o DOM carregar
-//  document.addEventListener("DOMContentLoaded", atualizarStatusVisivel);
+// Chame a função quando o DOM carregar
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarStatusVisivel();
+  // Atualiza o status a cada 5 segundos para refletir mudanças do painel
+  setInterval(atualizarStatusVisivel, 5000);
+});
 
 function checkRestaurantOpen() {
   const data = new Date();
@@ -1868,24 +1880,16 @@ function checkRestaurantOpen() {
   const abre = 18 * 60 + 30;
   let fecha = 23 * 60; //horário padrão de fechamento finais de semana
 
-  if (dia === 4) {
+  if (dia === 2) {
     return false;
   }
   if (dia === 1 || dia === 3 || dia === 4) {
-    fecha = 22 * 60; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
+    fecha = 22 * 60 + 30; // horário de fechamento de segunda, quarta e quinta(fecha mais cedo)
   }
   return totalMinutes >= abre && totalMinutes <= fecha;
 }
-const estaFechada = checkRestaurantOpen();
-const isOpen = document.querySelector("#estaAberta");
-const atendimentoInfo = document.querySelector(".atendimento-info");
-if (estaFechada) {
-  isOpen.innerHTML = "🟢Aberto - Aceitando pedidos";
-  atendimentoInfo.style.backgroundColor = "green";
-} else {
-  isOpen.innerHTML = "🔴FECHADOS NO MOMENTO";
-  atendimentoInfo.style.backgroundColor = "#d32525ff";
-}
+// O status agora é atualizado pela função atualizarStatusVisivel() que verifica a API
+// Este código foi removido para evitar conflito com o status do painel
 
 const trocoInput = document.querySelector("#troco-input");
 const trocoContainer = document.querySelector("#container-troco");
@@ -1951,25 +1955,25 @@ if (formaPagamentoSelect) {
     }
     return imagemUrl;
   }
-function itemHtml(burguer) {
-  const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
+  function itemHtml(burguer) {
+    const itemNovo = burguer.novoItem ? `<h4 class="item_novo">Novo</h4>` : "";
 
-  let tipoItem = "hamburguer";
-  if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
-  else if (burguer.categoria.includes("combo")) tipoItem = "combo";
-  else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
+    let tipoItem = "hamburguer";
+    if (burguer.categoria.includes("porcoes")) tipoItem = "porcao";
+    else if (burguer.categoria.includes("combo")) tipoItem = "combo";
+    else if (burguer.categoria.includes("bebidas")) tipoItem = "bebida";
 
-  // ✅ só mostra botão pra hamburguer e combo
-  const botaoPersonalizar =
-    (tipoItem === "hamburguer" || tipoItem === "combo")
-      ? `<button type="button" class="btn-perso btn-texto">Personalizar</button>`
-      : "";
-  let imagemHtml = "";
-   if (burguer.imagem_url) {
-     const url = resolveImagemUrl(burguer.imagem_url);
-       imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
-   }
-  return `
+    // ✅ só mostra botão pra hamburguer e combo
+    const botaoPersonalizar =
+      tipoItem === "hamburguer" || tipoItem === "combo"
+        ? `<button type="button" class="btn-perso btn-texto">Personalizar</button>`
+        : "";
+    let imagemHtml = "";
+    if (burguer.imagem_url) {
+      const url = resolveImagemUrl(burguer.imagem_url);
+      imagemHtml = `<img src="${url}" alt="${burguer.nome}" class="imgBebida">`;
+    }
+    return `
     <div class="item ${burguer.indisponivel ? "indisponivel" : ""}"
          data-id="${burguer.id}"
          data-nome="${burguer.nome}"
@@ -1978,7 +1982,9 @@ function itemHtml(burguer) {
       <div class="item-info">
        ${imagemHtml}
         <span class="item-name">${burguer.nome}</span>
-        <span class="item-price">R$ ${parseFloat(burguer.preco).toFixed(2).replace(".", ",")}</span>
+        <span class="item-price">R$ ${parseFloat(burguer.preco)
+          .toFixed(2)
+          .replace(".", ",")}</span>
       </div>
 
       ${itemNovo}
@@ -1991,8 +1997,7 @@ function itemHtml(burguer) {
         ${botaoPersonalizar}
       </div>
     </div>`;
-}
-
+  }
 
   async function carregarHamburguers() {
     try {
@@ -2051,28 +2056,25 @@ function itemHtml(burguer) {
         .querySelectorAll(".btn-decrease")
         .forEach((btn) => btn.addEventListener("click", removerItem));
       adicionarBotoesObservacao();
-     document.querySelectorAll(".btn-perso").forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    const itemDiv = event.target.closest(".item");
-    if (!itemDiv) return;
+      criarBotoesPersonalizarParaTodos();
+      document.querySelectorAll(".btn-perso").forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+          const itemDiv = event.target.closest(".item");
+          if (!itemDiv) return;
 
-    const { id, nome, valor, tipo } = itemDiv.dataset;
+          const { id, nome, valor, tipo } = itemDiv.dataset;
 
-    // ✅ trava extra
-    if (tipo !== "hamburguer" && tipo !== "combo") return;
+          // ✅ trava extra
+          if (tipo !== "hamburguer" && tipo !== "combo") return;
 
-    abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
-  });
-});
-
+          abrirModalAdicionais(itemDiv, id, nome, parseFloat(valor), tipo, "");
+        });
+      });
     } catch (error) {
       console.error("Erro ao carregar o cardápio:", error);
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    carregarHamburguers();
-    carregarAdicionais();
-  });
+  // Expõe a função para ser chamada externamente
+  window.carregarHamburguers = carregarHamburguers;
 })();
-
