@@ -1817,59 +1817,46 @@ function itemEmBreve(event) {
   }
 }
 
-//FUNÇÃO PARA QUANDO USUARIO ESTIVER NO CARRINHO, OS BOTÕES DESPAARECEM
-const containerBotoes = document.querySelector(".containerBotoes");
-const containerCarrinho = document.querySelector(".cart-container");
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      containerBotoes.style.display = "none";
-    } else {
-      containerBotoes.style.display = "flex";
-    }
-  });
-});
-observer.observe(containerCarrinho);
 
-//função para verificar o status da loja via API
-async function checkRestaurantOpenFromAPI() {
-  try {
-    const API_BASE = `http://${location.hostname}:3000`;
-    const response = await fetch(`${API_BASE}/status-loja`);
-    if (!response.ok) {
-      return false; // Se falhar a comunicação, assume que está fechada
-    }
-    const data = await response.json();
-    return data.lojaAberta;
-  } catch (error) {
-    console.error("Erro ao verificar status da loja:", error);
-    return false; // Em caso de erro, assume que está fechada
-  }
-}
+// //função para verificar o status da loja via API
+// async function checkRestaurantOpenFromAPI() {
+//   try {
+//     const API_BASE = `http://${location.hostname}:3000`;
+//     const response = await fetch(`${API_BASE}/status-loja`);
+//     if (!response.ok) {
+//       return false; // Se falhar a comunicação, assume que está fechada
+//     }
+//     const data = await response.json();
+//     return data.lojaAberta;
+//   } catch (error) {
+//     console.error("Erro ao verificar status da loja:", error);
+//     return false; // Em caso de erro, assume que está fechada
+//   }
+// }
 
-// Função para atualizar o status visível na página
-async function atualizarStatusVisivel() {
-  const isOpen = await checkRestaurantOpenFromAPI();
-  const elementoStatus = document.querySelector("#estaAberta");
-  const atendimentoInfo = document.querySelector(".atendimento-info");
+// // Função para atualizar o status visível na página
+// async function atualizarStatusVisivel() {
+//   const isOpen = await checkRestaurantOpenFromAPI();
+//   const elementoStatus = document.querySelector("#estaAberta");
+//   const atendimentoInfo = document.querySelector(".atendimento-info");
 
-  if (elementoStatus && atendimentoInfo) {
-    if (isOpen) {
-      elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-      atendimentoInfo.style.backgroundColor = "green";
-    } else {
-      elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-      atendimentoInfo.style.backgroundColor = "#d32525ff";
-    }
-  }
-}
+//   if (elementoStatus && atendimentoInfo) {
+//     if (isOpen) {
+//       elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+//       atendimentoInfo.style.backgroundColor = "green";
+//     } else {
+//       elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+//       atendimentoInfo.style.backgroundColor = "#d32525ff";
+//     }
+//   }
+// }
 
-// Chame a função quando o DOM carregar
-document.addEventListener("DOMContentLoaded", () => {
-  atualizarStatusVisivel();
-  // Atualiza o status a cada 5 segundos para refletir mudanças do painel
-  setInterval(atualizarStatusVisivel, 5000);
-});
+// // Chame a função quando o DOM carregar
+// document.addEventListener("DOMContentLoaded", () => {
+//   atualizarStatusVisivel();
+//   // Atualiza o status a cada 5 segundos para refletir mudanças do painel
+//   setInterval(atualizarStatusVisivel, 5000);
+// });
 
 function checkRestaurantOpen() {
   const data = new Date();
