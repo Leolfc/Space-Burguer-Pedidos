@@ -1818,7 +1818,7 @@ function itemEmBreve(event) {
 }
 
 
-// //função para verificar o status da loja via API
+//função para verificar o status da loja via API
 // async function checkRestaurantOpenFromAPI() {
 //   try {
 //     const API_BASE = `http://${location.hostname}:3000`;
@@ -1834,29 +1834,29 @@ function itemEmBreve(event) {
 //   }
 // }
 
-// // Função para atualizar o status visível na página
-// async function atualizarStatusVisivel() {
-//   const isOpen = await checkRestaurantOpenFromAPI();
-//   const elementoStatus = document.querySelector("#estaAberta");
-//   const atendimentoInfo = document.querySelector(".atendimento-info");
+// Função para atualizar o status visível na página
+async function atualizarStatusVisivel() {
+  const isOpen = await checkRestaurantOpenFromAPI();
+  const elementoStatus = document.querySelector("#estaAberta");
+  const atendimentoInfo = document.querySelector(".atendimento-info");
 
-//   if (elementoStatus && atendimentoInfo) {
-//     if (isOpen) {
-//       elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
-//       atendimentoInfo.style.backgroundColor = "green";
-//     } else {
-//       elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
-//       atendimentoInfo.style.backgroundColor = "#d32525ff";
-//     }
-//   }
-// }
+  if (elementoStatus && atendimentoInfo) {
+    if (isOpen) {
+      elementoStatus.innerHTML = "🟢 Aberto - Aceitando pedidos";
+      atendimentoInfo.style.backgroundColor = "green";
+    } else {
+      elementoStatus.innerHTML = "🔴 FECHADOS NO MOMENTO";
+      atendimentoInfo.style.backgroundColor = "#d32525ff";
+    }
+  }
+}
 
-// // Chame a função quando o DOM carregar
-// document.addEventListener("DOMContentLoaded", () => {
-//   atualizarStatusVisivel();
-//   // Atualiza o status a cada 5 segundos para refletir mudanças do painel
-//   setInterval(atualizarStatusVisivel, 5000);
-// });
+// Chame a função quando o DOM carregar
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarStatusVisivel();
+  // Atualiza o status a cada 5 segundos para refletir mudanças do painel
+  setInterval(atualizarStatusVisivel, 5000);
+});
 
 function checkRestaurantOpen() {
   const data = new Date();
