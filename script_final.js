@@ -1816,23 +1816,30 @@ function itemEmBreve(event) {
     div.classList.remove("embreve");
   }
 }
+// Função para verificar se a hamburgueria está aberta via API
+// Se o backend não funcionar, usa o horário local como fallback
+async function checkRestaurantOpenFromAPI() {
+  try {
+    const response = await fetch(`${API_BASE}/status-loja`, {
+      method: "GET",
+      cache: "no-store",
+    });
 
+    if (!response.ok) {
+      throw new Error("Falha ao buscar status da API");
+    }
 
-//função para verificar o status da loja via API
-// async function checkRestaurantOpenFromAPI() {
-//   try {
-//     const API_BASE = `http://${location.hostname}:3000`;
-//     const response = await fetch(`${API_BASE}/status-loja`);
-//     if (!response.ok) {
-//       return false; // Se falhar a comunicação, assume que está fechada
-//     }
-//     const data = await response.json();
-//     return data.lojaAberta;
-//   } catch (error) {
-//     console.error("Erro ao verificar status da loja:", error);
-//     return false; // Em caso de erro, assume que está fechada
-//   }
-// }
+    const data = await response.json();
+    return data.lojaAberta === true; // Retorna true se a loja está aberta na API
+  } catch (error) {
+    console.warn(
+      "Erro ao conectar com a API para verificar status da loja. Usando horário local como fallback.",
+      error
+    );
+    // Fallback: verifica o horário local
+    return checkRestaurantOpen();
+  }
+}
 
 // Função para atualizar o status visível na página
 async function atualizarStatusVisivel() {
