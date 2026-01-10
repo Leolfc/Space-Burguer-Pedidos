@@ -8,7 +8,10 @@ import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+const cors = require('cors');
 
+
+// ...existing code...
 // 2. RECRIANDO __dirname E __filename
 // No "type": "module", estas variáveis não existem, por isso criamos:
 const __filename = fileURLToPath(import.meta.url);
