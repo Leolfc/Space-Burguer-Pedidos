@@ -1760,8 +1760,8 @@ button {
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  background-color: #25d366;
-  color: white;
+  background-color: #FFCA40!important;
+  color: rgb(0, 0, 0);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1776,9 +1776,9 @@ button {
 }
 
 .btn-finalizar-whatsapp:hover {
-  background-color: #128c7e;
+ 
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+
 }
 
 /* Estilo para o botão de imprimir pedido */
@@ -2259,4 +2259,9 @@ button {
 .a {
   color: white;
   text-decoration: none;
+}
+
+.botaoPix{
+  margin-bottom: 12px;
+  padding: 8px 15px
 }
