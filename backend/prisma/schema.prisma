@@ -55,3 +55,10 @@ model Adicional {
   ativo    Boolean  @default(true)
   criadoEm DateTime @default(now())
 }
+
+model Categoria {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  valor    String   @unique
+  label    String
+  criadoEm DateTime @default(now())
+}

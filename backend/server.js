@@ -8,7 +8,7 @@ import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-const cors = require('cors');
+
 
 
 // ...existing code...
@@ -291,6 +291,48 @@ app.delete("/adicionais/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Erro ao deletar adicional." });
+  }
+});
+
+// --- CATEGORIAS (persistidas no banco) ---
+app.get("/categorias", async (req, res) => {
+  try {
+    const categorias = await prisma.categoria.findMany({ orderBy: { label: "asc" } });
+    res.status(200).json(categorias);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao buscar categorias." });
+  }
+});
+
+app.post("/categorias", async (req, res) => {
+  try {
+    const { valor, label } = req.body;
+    if (!valor || !label) return res.status(400).json({ message: "Valor e label são obrigatórios." });
+
+    // evita duplicados
+    const existente = await prisma.categoria.findUnique({ where: { valor } }).catch(() => null);
+    if (existente) return res.status(409).json({ message: "Categoria já existe." });
+
+    const nova = await prisma.categoria.create({ data: { valor, label } });
+    res.status(201).json(nova);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Erro ao criar categoria." });
+  }
+});
+
+app.delete("/categorias/:valor", async (req, res) => {
+  try {
+    const { valor } = req.params;
+    // busca por valor (único)
+    const cat = await prisma.categoria.findUnique({ where: { valor } });
+    if (!cat) return res.status(404).json({ message: "Categoria não encontrada." });
+    const deletada = await prisma.categoria.delete({ where: { id: cat.id } });
+    res.status(200).json(deletada);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Erro ao deletar categoria." });
   }
 });
 

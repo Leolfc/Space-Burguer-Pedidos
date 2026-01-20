@@ -3,12 +3,15 @@ body {
   background-color: #1a1918;
   color: #333;
   margin: 0;
+  background-image: url("../img/imgBackground/Padrão\ 3.png");
+  background-color: rgb(39, 36, 36);
 }
 .painel-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
 }
+
 header {
   background-color: rgb(0, 0, 0);
   padding: 1rem 2rem;
@@ -56,8 +59,6 @@ main {
 table {
   width: 100%;
   border-collapse: collapse;
-
- 
 }
 
 th,
@@ -65,7 +66,7 @@ td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  font-family: "Bungee", sans-serif
+  font-family: "Bungee", sans-serif;
 }
 th {
   background-color: #f7f7f7;
@@ -95,8 +96,14 @@ th {
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
-input{
-  padding:10px;
+input {
+  padding: 10px;
+}
+.form-group label[for="email"] {
+  color: white;
+}
+.form-group label[for="senha"] {
+  color: white;
 }
 .form-group input[type="text"],
 .form-group input[type="number"],
@@ -192,9 +199,9 @@ tbody tr:nth-child(odd) {
   gap: 0.75rem;
 }
 
-.setaCima{
-  width: 20px;         /* Largura igual à altura */
-  height: 20px;        /* Altura igual à largura */
+.setaCima {
+  width: 20px; /* Largura igual à altura */
+  height: 20px; /* Altura igual à largura */
   border-radius: 50%;
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -214,10 +221,10 @@ tbody tr:nth-child(odd) {
   opacity: 0.7;
 }
 
-.container-category{
-  display:flex;
+.container-category {
+  display: flex;
   flex-flow: row nowrap;
-  gap:5px;
+  gap: 5px;
   max-width: 100%;
 }
 
@@ -241,4 +248,185 @@ tbody tr:nth-child(odd) {
 
 .tabela-adicionais td:last-child {
   width: 160px;
+}
+
+/* =======================
+   Estilos responsivos para mobile (painel admin)
+   ======================= */
+@media (max-width: 768px) {
+  body {
+    padding: 0 8px;
+  }
+
+  .painel-container {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  header {
+    padding: 0.75rem 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  nav h1 {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .nav-btn,
+  .nav-btn-logout {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 0.98rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .search input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+  }
+
+  .btn-primario,
+  .btn-secundario,
+  .btn-submit,
+  .btn-editar,
+  .btn-deletar {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .category-option {
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .container-category {
+    gap: 10px;
+    align-items: center;
+  }
+
+  .setaCima {
+    width: 28px;
+    height: 28px;
+  }
+
+  .btn-toggle-categoria {
+    padding: 8px;
+  }
+
+  /* Tabelas: transformar em cards para facilitar leitura no mobile */
+  .tabela-categoria,
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .tabela-categoria thead {
+    display: none;
+  }
+
+  .tabela-categoria tbody tr,
+  table tbody tr {
+    display: block;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .tabela-categoria td,
+  table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: none;
+  }
+
+  .tabela-categoria td:first-child img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .tabela-categoria td:last-child {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Menor espaçamento nas seções para mobile */
+  .toolbar h2,
+  .painel-container h2 {
+    font-size: 1.05rem;
+  }
+
+  /* Formulário: inputs maiores e botões fáceis de tocar */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Adicionais layout ajustado */
+  .adicionais-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .adicionais-formulario {
+    margin-top: 1rem;
+  }
+
+  /* Pequenas melhorias de acessibilidade/touch targets */
+  .nav-btn,
+  .btn,
+  .btn-submit {
+    min-height: 44px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  nav h1 {
+    font-size: 1rem;
+  }
+  .setaCima {
+    width: 24px;
+    height: 24px;
+  }
+  .toolbar h2 {
+    font-size: 1rem;
+  }
 }

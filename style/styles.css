@@ -24,6 +24,7 @@
   --input-border: #ddd;
   --item-hover: #f9f9f9;
   --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-personalizada: "Bungee", sans-serif;
 }
 
 /*!Modo Escuro */
@@ -856,6 +857,7 @@ section h2 {
 .cart-buttons {
   display: flex;
   gap: 15px;
+  margin:20px ;
 }
 
 button#btnLimparCarrinho {
@@ -1769,6 +1771,7 @@ button {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-personalizada);
 }
 
 .btn-finalizar-whatsapp::before {

@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const listaCategorias = document.getElementById("lista-categorias");
   const inputNovaCategoria = document.getElementById("nova-categoria");
   const btnAddCategoria = document.getElementById("btn-add-categoria");
+   const btnRemoveCategoria = document.getElementById("btn-remove-categoria");
   let idEmEdicao = null;
   let adicionalEmEdicao = null;
 
@@ -75,19 +76,73 @@ document.addEventListener("DOMContentLoaded", () => {
   function salvarCategoriasExtras(extras) {
     localStorage.setItem(STORAGE_CATEGORIAS, JSON.stringify(extras));
   }
+  async function carregarCategoriasExtras() {
+    // tenta buscar no servidor primeiro
+    try {
+      const resp = await fetch(`${API_BASE}/categorias?t=${Date.now()}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        // salva em localStorage como cache
+        salvarCategoriasExtras(data.map((c) => ({ valor: c.valor, label: c.label })));
+        data.forEach((cat) => {
+          criarCheckboxCategoria(cat.valor, cat.label);
+        });
+        return;
+      }
+    } catch (error) {
+      // falha ao buscar no servidor, cai para o cache local
+    }
 
-  function carregarCategoriasExtras() {
+    // fallback: usar localStorage
     try {
       const extras = JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
       extras.forEach((cat) => {
-        if (!cat?.valor || !cat?.label) return;
-        if (categoriasFixas.includes(cat.valor)) return;
-        criarCheckboxCategoria(cat.valor, cat.label);
+        if (!cat) return;
+        if (typeof cat === "object") {
+          const valor = cat.valor || slugCategoria(String(cat.label || ""));
+          const label = cat.label || valor;
+          criarCheckboxCategoria(valor, label);
+        } else if (typeof cat === "string") {
+          const valor = slugCategoria(cat);
+          criarCheckboxCategoria(valor, cat);
+        }
       });
     } catch (_) {}
   }
 
-  function adicionarCategoriaExtra(nome) {
+  async function removerCategoriaPorValor(valor) {
+    if (!valor) return false;
+    // Não permite remover categorias fixas
+    if (categoriasFixas.includes(valor)) {
+      alert("Não é possível remover uma categoria fixa.");
+      return false;
+    }
+
+    try {
+      const resp = await fetch(`${API_BASE}/categorias/${encodeURIComponent(valor)}`, { method: "DELETE" });
+      if (!resp.ok) {
+        return false;
+      }
+      // remove do DOM se presente
+      const input = listaCategorias.querySelector(`input[name="categoria"][value="${valor}"]`);
+      const wrapper = input ? input.closest(".category-option") : null;
+      if (wrapper) wrapper.remove();
+
+      // Atualiza localStorage removendo a categoria
+      const extras = JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
+      const novos = extras.filter((e) => {
+        const v = e && typeof e === "object" ? e.valor : slugCategoria(String(e || ""));
+        return v !== valor;
+      });
+      salvarCategoriasExtras(novos);
+      return true;
+    } catch (error) {
+      console.error("Erro ao remover categoria:", error);
+      return false;
+    }
+  }
+
+  async function adicionarCategoriaExtra(nome) {
     const label = nome.trim();
     if (!label) {
       alert("Informe um nome para a categoria.");
@@ -101,13 +156,27 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    criarCheckboxCategoria(valor, label);
-
-    // salva no localStorage
-    const extras =
-      JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
-    extras.push({ valor, label });
-    salvarCategoriasExtras(extras);
+    // cria no servidor
+    try {
+      const resp = await fetch(`${API_BASE}/categorias`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor, label }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.message || "Falha ao salvar categoria");
+      }
+      const novo = await resp.json();
+      criarCheckboxCategoria(novo.valor, novo.label);
+      // atualiza cache local
+      const extras = JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
+      extras.push({ valor: novo.valor, label: novo.label });
+      salvarCategoriasExtras(extras);
+    } catch (error) {
+      alert(`Erro ao salvar categoria: ${error.message}`);
+      return;
+    }
 
     // limpa e foca
     if (inputNovaCategoria) {
@@ -200,6 +269,16 @@ document.addEventListener("DOMContentLoaded", () => {
         porcoes: { label: "Porções", aliases: ["porcoes"] },
       };
 
+      // Ler categorias extras salvas e acrescentar como grupos
+      const extrasSalvas = JSON.parse(localStorage.getItem(STORAGE_CATEGORIAS)) || [];
+      extrasSalvas.forEach((cat) => {
+        if (!cat) return;
+        const valor = typeof cat === "object" ? cat.valor : slugCategoria(String(cat));
+        const label = typeof cat === "object" ? cat.label : String(cat);
+        if (!valor || grupos[valor]) return; // evita sobrepor grupos fixos
+        grupos[valor] = { label, aliases: [valor] };
+      });
+
       // Criar seções (tabela) para cada grupo e uma seção "Outros"
       const sectionTbodyMap = {};
       Object.keys(grupos).forEach((key) => {
@@ -225,6 +304,8 @@ document.addEventListener("DOMContentLoaded", () => {
        
       });
 
+      // Garante seção 'outros' para itens sem categoria conhecida
+      
     
 
       
@@ -478,6 +559,43 @@ document.addEventListener("DOMContentLoaded", () => {
     btnAddCategoria.addEventListener("click", () => {
       if (!inputNovaCategoria) return;
       adicionarCategoriaExtra(inputNovaCategoria.value);
+    });
+  }
+
+  if (btnRemoveCategoria) {
+    btnRemoveCategoria.addEventListener("click", async () => {
+      if (!listaCategorias) return;
+      const nome = inputNovaCategoria ? inputNovaCategoria.value.trim() : "";
+      if (nome) {
+        const valor = slugCategoria(nome);
+        if (!confirm(`Confirma remoção da categoria "${nome}"?`)) return;
+        if (await removerCategoriaPorValor(valor)) {
+          alert("Categoria removida.");
+          inputNovaCategoria.value = "";
+        } else {
+          alert("Categoria não encontrada ou não pode ser removida.");
+        }
+        return;
+      }
+
+      // Se não informou nome, remove as categorias selecionadas (exceto fixas)
+      const checked = Array.from(
+        listaCategorias.querySelectorAll('input[name="categoria"]:checked')
+      );
+      if (checked.length === 0) {
+        alert("Informe o nome da categoria ou selecione uma categoria para remover.");
+        return;
+      }
+      if (!confirm(`Confirma remoção de ${checked.length} categoria(s)?`)) return;
+      let removed = 0;
+      for (const cb of checked) {
+        const val = cb.value;
+        if (categoriasFixas.includes(val)) continue;
+        if (await removerCategoriaPorValor(val)) {
+          removed++;
+        }
+      }
+      alert(`${removed} categoria(s) removida(s).`);
     });
   }
 
