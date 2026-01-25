@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node backend/server.js",
     "start": "node backend/server.js",
-    "criar-admin": "node backend/criarAdmin.js"
+    "criar-admin": "node backend/criarAdmin.js",
+    "postinstall": "prisma generate --schema backend/prisma/schema.prisma"
   },
   "repository": {
     "type": "git",
