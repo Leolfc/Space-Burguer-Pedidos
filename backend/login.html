@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Painel Space Burguer</title>
-    <link rel="stylesheet" href="styleAdm.css" />
+    <link rel="stylesheet" href="/painel/styleAdm.css" />
     <style>
       .senha-container {
         position: relative;
@@ -73,7 +73,7 @@
       </form>
     </div>
 
-    <script>
+    <script defer src="/painel/criarAdmin.js">
       // Função para mostrar/ocultar senha
       const toggleSenha = document.getElementById("toggleSenha");
       const inputSenha = document.getElementById("senha");
@@ -135,6 +135,7 @@
             alert("Erro ao tentar fazer login. Verifique sua conexão.");
           }
         });
+        
     </script>
   </body>
 </html>

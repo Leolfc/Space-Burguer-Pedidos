@@ -41,6 +41,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // --- ADICIONE ISTO AQUI (MÁGICA DO PLANO B) ---
 // Serve os arquivos do site (html, css, js) que estão na pasta anterior
 app.use(express.static(path.join(__dirname, "../")));
+// Arquivos estáticos do painel (CSS/JS/HTML que estão dentro de /backend)
+app.use("/painel", express.static(__dirname));
 
 // Garante que ao acessar a raiz, o index.html seja entregue
 app.get("/", (req, res) => {
