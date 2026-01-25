@@ -29,7 +29,20 @@ if (fs.existsSync(envPathBackend)) {
 } else {
   dotenv.config(); // Tenta na raiz do projeto
 }
+// 6. ARQUIVOS ESTÁTICOS
+const pastaDasImagens = path.join(__dirname, "../../img");
+app.use("/img", express.static(pastaDasImagens));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// --- ADICIONE ISTO AQUI (MÁGICA DO PLANO B) ---
+// Serve os arquivos do site (html, css, js) que estão na pasta anterior
+app.use(express.static(path.join(__dirname, "../")));
+
+// Garante que ao acessar a raiz, o index.html seja entregue
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../index.html"));
+});
+// ------------------------------------------------
 // 4. INICIALIZAÇÃO
 const app = express();
 const prisma = new PrismaClient(); // Agora ele já leu o .env acima
@@ -53,13 +66,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// 6. ARQUIVOS ESTÁTICOS
-// Ajuste o caminho se necessário. Aqui sobe 2 níveis para achar a pasta img.
-const pastaDasImagens = path.join(__dirname, "../../img");
-app.use("/img", express.static(pastaDasImagens));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// --- ROTAS ---
 
 //! CRIAR ITEM
 app.post(

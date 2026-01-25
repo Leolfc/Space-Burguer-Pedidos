@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return; // Interrompe a execução do script se não estiver logado
   }
 
-  const API_BASE = `http://${location.hostname}:3000`;
+  const API_BASE = "";
 
   // --- 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ---
   const btnMostrarGerenciar = document.getElementById("btn-mostrar-gerenciar");
