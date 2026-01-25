@@ -46,8 +46,15 @@ app.use(express.static(path.join(__dirname, "../")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../index.html"));
 });
-// ------------------------------------------------
-// 4. INICIALIZAÇÃO
+// Painel administrativo (arquivos dentro de /backend)
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "login.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "admin.html"));
+});
+
 
 
 // 5. CONFIGURAÇÃO DO MULTER
