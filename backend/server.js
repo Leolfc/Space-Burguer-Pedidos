@@ -9,7 +9,11 @@ import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 
+const app = express();
+const prisma = new PrismaClient(); // Agora ele já leu o .env acima
 
+app.use(express.json());
+app.use(cors());
 
 // ...existing code...
 // 2. RECRIANDO __dirname E __filename
@@ -44,11 +48,7 @@ app.get("/", (req, res) => {
 });
 // ------------------------------------------------
 // 4. INICIALIZAÇÃO
-const app = express();
-const prisma = new PrismaClient(); // Agora ele já leu o .env acima
 
-app.use(express.json());
-app.use(cors());
 
 // 5. CONFIGURAÇÃO DO MULTER
 const storage = multer.diskStorage({
