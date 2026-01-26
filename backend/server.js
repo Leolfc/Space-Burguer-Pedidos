@@ -13,6 +13,8 @@ const app = express();
 const prisma = new PrismaClient(); // Agora ele já leu o .env acima
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 
 // ...existing code...
@@ -385,41 +387,32 @@ app.post("/alterar-status-loja", async (req, res) => {
 });
 
 // LOGIN
+a// LOGIN
 app.post("/login", async (req, res) => {
   try {
     const { email, senha } = req.body;
 
-    // Validação básica
     if (!email || !senha) {
-      return res
-        .status(400)
-        .json({ message: "Email e senha são obrigatórios." });
+      return res.status(400).send("Email e senha são obrigatórios.");
     }
 
-    // Busca o admin no banco de dados
     const admin = await prisma.admin.findUnique({
       where: { email: email.trim().toLowerCase() },
     });
 
-    if (!admin) {
-      // Retorna mensagem genérica para não revelar se o email existe
-      return res.status(401).json({ message: "Email ou senha incorretos." });
-    }
+    if (!admin) return res.status(401).send("Email ou senha incorretos.");
 
-    // Compara a senha fornecida com o hash armazenado
     const senhaValida = await bcrypt.compare(senha, admin.senha);
+    if (!senhaValida) return res.status(401).send("Email ou senha incorretos.");
 
-    if (!senhaValida) {
-      return res.status(401).json({ message: "Email ou senha incorretos." });
-    }
-
-    // Login bem-sucedido
-    res.status(200).json({ message: "Login bem-sucedido!" });
+    // ✅ Se veio de formulário, redireciona pro painel
+    return res.redirect("/admin");
   } catch (error) {
     console.error("Erro no login:", error);
-    res.status(500).json({ message: "Erro interno do servidor." });
+    return res.status(500).send("Erro interno do servidor.");
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));
