@@ -122,7 +122,7 @@
               sessionStorage.setItem('isLoggedIn', 'true');
               
               // Redireciona para o painel de admin
-              window.location.href = "admin.html";
+              window.location.href = "admin";
             } else {
               const data = await response.json();
               alert(data.message || "Email ou senha incorretos!");
