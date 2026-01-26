@@ -386,8 +386,8 @@ app.post("/alterar-status-loja", async (req, res) => {
   }
 });
 
+
 // LOGIN
-a// LOGIN
 app.post("/login", async (req, res) => {
   try {
     const { email, senha } = req.body;
