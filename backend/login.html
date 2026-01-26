@@ -105,7 +105,7 @@
 
           try {
             const response = await fetch(
-              "",
+              "/login",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -122,13 +122,14 @@
               sessionStorage.setItem('isLoggedIn', 'true');
               
               // Redireciona para o painel de admin
-              window.location.href = "admin";
+              window.location.href = "/admin";
             } else {
-              const data = await response.json();
-              alert(data.message || "Email ou senha incorretos!");
-              // Limpa apenas a senha em caso de erro
+              const text = await response.text();
+              let data = null;
+               try { data = JSON.parse(text); } catch {}
+              alert((data && data.message) ? data.message : "Email ou senha incorretos!");
               document.getElementById("senha").value = "";
-              document.getElementById("senha").focus();
+               document.getElementById("senha").focus();
             }
           } catch (error) {
             console.error("Erro ao tentar fazer login:", error);
