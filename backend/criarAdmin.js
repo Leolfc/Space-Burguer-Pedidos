@@ -25,8 +25,8 @@ const prisma = new PrismaClient();
 
 async function criarAdmin() {
     try {
-        const email = process.argv[2] || "admin@space.com";
-        const senha = process.argv[3] || "senhaforte123";
+        const email = process.argv[2] || "rodrigopereirasilva68@gmail.com";
+        const senha = process.argv[3] || "Julia2023#";
 
         console.log(`Criando admin com email: ${email}`);
 
