@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // **Verificação de segurança inicial**
   if (sessionStorage.getItem("isLoggedIn") !== "true") {
-    window.location.href = "login.html";
+    window.location.href = "login";
     return; // Interrompe a execução do script se não estiver logado
   }
 
