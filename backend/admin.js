@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function fazerLogout() {
     sessionStorage.removeItem("isLoggedIn");
-    window.location.href = "/login";
+    window.location.href = "login";
   }
 
   async function verificarStatusLoja() {
