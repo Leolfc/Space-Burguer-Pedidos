@@ -6,8 +6,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import express from "express";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 import cors from "cors";
 import multer from "multer";
 import session from "express-session";
@@ -48,8 +46,6 @@ const app = express();
 // Se estiver atrás de proxy (EasyPanel/NGINX), ajuda cookies "secure"
 app.set("trust proxy", 1);
 
-app.use(helmet());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -82,14 +78,9 @@ app.use(
    5) Sessão (login REAL)
 ========================= */
 const SESSION_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET;
-
-if (process.env.NODE_ENV === "production" && !SESSION_SECRET) {
-  throw new Error("SESSION_SECRET/JWT_SECRET não definido em produção. Configure no ambiente.");
-}
-
 if (!SESSION_SECRET) {
   console.warn(
-    "[WARN] JWT_SECRET/SESSION_SECRET não definido. Em produção, defina no ambiente para sessão funcionar com segurança."
+    "[WARN] JWT_SECRET/SESSION_SECRET não definido. Defina no EasyPanel para sessão funcionar com segurança."
   );
 }
 
@@ -123,7 +114,7 @@ function requireAdmin(req, res, next) {
 ========================= */
 
 // 6.1 Imagens públicas do site (pasta /img está na raiz do projeto)
-const pastaDasImagens = path.join(__dirname, "../img");
+const pastaDasImagens = path.join(__dirname, "../img"); // ✅ corrigido
 if (fs.existsSync(pastaDasImagens)) {
   app.use("/img", express.static(pastaDasImagens));
 }
@@ -131,28 +122,10 @@ if (fs.existsSync(pastaDasImagens)) {
 // 6.2 Uploads (backend/uploads)
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-
-// Bloqueia SVG por segurança (pode carregar scripts em alguns cenários)
-app.use("/uploads", (req, res, next) => {
-  if (req.path.toLowerCase().endswith(".svg")) return res.status(403).send("Forbidden");
-  return next();
-});
 app.use("/uploads", express.static(uploadsDir));
 
-// 6.3 Site público (sirva APENAS o que o usuário precisa; NÃO exponha a raiz inteira do projeto)
-const siteRoot = path.join(__dirname, "..");
-
-// CSS/JS do site (pasta /style)
-const styleDir = path.join(siteRoot, "style");
-if (fs.existsSync(styleDir)) app.use("/style", express.static(styleDir));
-
-// Arquivos extras (se existirem)
-const videoDir = path.join(siteRoot, "video");
-if (fs.existsSync(videoDir)) app.use("/video", express.static(videoDir));
-
-// JS principal na raiz (script_final.js)
-const scriptFinalPath = path.join(siteRoot, "script_final.js");
-app.get("/script_final.js", (req, res) => res.sendFile(scriptFinalPath));
+// 6.3 Site público (index.html, css/js na raiz)
+app.use(express.static(path.join(__dirname, "../")));
 
 // 6.4 Painel: sirva APENAS a pasta pública do painel (se existir).
 // Recomendado: mover login.html, admin.html, admin.js, styleAdm.css para backend/public/
@@ -194,30 +167,14 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
-  fileFilter: (_req, file, cb) => {
-    const ok = ["image/jpeg", "image/png", "image/webp"].includes(file.mimetype);
-    if (!ok) return cb(new Error("Tipo de arquivo não permitido (use JPG/PNG/WEBP)."));
-    return cb(null, true);
-  },
-});
+const upload = multer({ storage });
 
 /* =========================
    9) Auth API (login/logout)
 ========================= */
 
-const loginLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 min
-  max: 20, // 20 tentativas por IP
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 // Login via JSON (para seu fetch no login.html)
-app.post("/login", loginLimiter, async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email, senha } = req.body;
 
@@ -238,18 +195,10 @@ app.post("/login", loginLimiter, async (req, res) => {
       return res.status(401).json({ message: "Email ou senha incorretos." });
     }
 
-    // ✅ Evita "session fixation"
-    return req.session.regenerate((err) => {
-      if (err) {
-        console.error("Erro ao regenerar sessão:", err);
-        return res.status(500).json({ message: "Erro interno do servidor." });
-      }
+    req.session.adminLoggedIn = true;
+    req.session.adminEmail = admin.email;
 
-      req.session.adminLoggedIn = true;
-      req.session.adminEmail = admin.email;
-
-      return res.status(200).json({ ok: true, message: "Login bem-sucedido!" });
-    });
+    return res.status(200).json({ ok: true, message: "Login bem-sucedido!" });
   } catch (error) {
     console.error("Erro no login:", error);
     return res.status(500).json({ message: "Erro interno do servidor." });
@@ -263,17 +212,12 @@ app.post("/logout", (req, res) => {
   });
 });
 
-// Checagem de sessão (para o painel)
-app.get("/auth/check", requireAdmin, (req, res) => {
-  return res.status(200).json({ ok: true, email: req.session.adminEmail || null });
-});
-
 /* =========================
    10) API do sistema
 ========================= */
 
-// CRIAR ITEM (PROTEGIDO)
-app.post("/adicionar/hamburguers", requireAdmin, upload.single("imagem"), async (req, res) => {
+// CRIAR ITEM
+app.post("/adicionar/hamburguers", upload.single("imagem"), async (req, res) => {
   try {
     const { nome, descricao, preco, indisponivel, novoItem } = req.body;
 
@@ -291,7 +235,9 @@ app.post("/adicionar/hamburguers", requireAdmin, upload.single("imagem"), async 
       categoriasArray = categoria;
     }
 
-    const imagemUrl = req.file ? `/uploads/${req.file.filename}` : req.body.imagem_url || null;
+    const imagemUrl = req.file
+      ? `/uploads/${req.file.filename}`
+      : req.body.imagem_url || null;
 
     const burguer = await prisma.item.create({
       data: {
@@ -312,8 +258,8 @@ app.post("/adicionar/hamburguers", requireAdmin, upload.single("imagem"), async 
   }
 });
 
-// DELETAR ITEM (PROTEGIDO)
-app.delete("/deletar/hamburguer/:id", requireAdmin, async (req, res) => {
+// DELETAR ITEM
+app.delete("/deletar/hamburguer/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const burguerDeletado = await prisma.item.delete({ where: { id } });
@@ -324,7 +270,7 @@ app.delete("/deletar/hamburguer/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// BUSCAR TODOS (PÚBLICO)
+// BUSCAR TODOS
 app.get("/buscar/hamburguers", async (_req, res) => {
   try {
     const hamburguers = await prisma.item.findMany();
@@ -335,7 +281,7 @@ app.get("/buscar/hamburguers", async (_req, res) => {
   }
 });
 
-// BUSCAR POR ID (PÚBLICO)
+// BUSCAR POR ID
 app.get("/buscar/hamburguer/:id", async (req, res) => {
   try {
     const id = req.params.id;
@@ -352,8 +298,8 @@ app.get("/buscar/hamburguer/:id", async (req, res) => {
   }
 });
 
-// EDITAR ITEM (PROTEGIDO)
-app.put("/editar/hamburguer/:id", requireAdmin, upload.single("imagem"), async (req, res) => {
+// EDITAR ITEM
+app.put("/editar/hamburguer/:id", upload.single("imagem"), async (req, res) => {
   try {
     const id = req.params.id;
     let {
@@ -393,7 +339,8 @@ app.put("/editar/hamburguer/:id", requireAdmin, upload.single("imagem"), async (
     if (typeof novoItem !== "undefined")
       dataAtualizacao.novoItem = String(novoItem) === "true" || novoItem === "on";
     if (typeof imagem_url !== "undefined") dataAtualizacao.imagem_url = imagem_url;
-    if (typeof categoriasArray !== "undefined") dataAtualizacao.categoria = categoriasArray;
+    if (typeof categoriasArray !== "undefined")
+      dataAtualizacao.categoria = categoriasArray;
 
     const hamburguerAtualizado = await prisma.item.update({
       where: { id },
@@ -407,7 +354,7 @@ app.put("/editar/hamburguer/:id", requireAdmin, upload.single("imagem"), async (
   }
 });
 
-// ADICIONAIS (GET público)
+// ADICIONAIS
 app.get("/adicionais", async (_req, res) => {
   try {
     const adicionais = await prisma.adicional.findMany({ orderBy: { nome: "asc" } });
@@ -418,8 +365,7 @@ app.get("/adicionais", async (_req, res) => {
   }
 });
 
-// ADICIONAIS (CRUD protegido)
-app.post("/adicionais", requireAdmin, async (req, res) => {
+app.post("/adicionais", async (req, res) => {
   try {
     const { nome, preco, ativo } = req.body;
     if (!nome || typeof nome !== "string")
@@ -443,7 +389,7 @@ app.post("/adicionais", requireAdmin, async (req, res) => {
   }
 });
 
-app.put("/adicionais/:id", requireAdmin, async (req, res) => {
+app.put("/adicionais/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { nome, preco, ativo } = req.body;
@@ -465,7 +411,7 @@ app.put("/adicionais/:id", requireAdmin, async (req, res) => {
   }
 });
 
-app.delete("/adicionais/:id", requireAdmin, async (req, res) => {
+app.delete("/adicionais/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const adicionalDeletado = await prisma.adicional.delete({ where: { id } });
@@ -476,7 +422,7 @@ app.delete("/adicionais/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// CATEGORIAS (persistidas) - GET público
+// CATEGORIAS (persistidas)
 app.get("/categorias", async (_req, res) => {
   try {
     const categorias = await prisma.categoria.findMany({ orderBy: { label: "asc" } });
@@ -487,8 +433,7 @@ app.get("/categorias", async (_req, res) => {
   }
 });
 
-// CATEGORIAS (escrita protegida)
-app.post("/categorias", requireAdmin, async (req, res) => {
+app.post("/categorias", async (req, res) => {
   try {
     const { valor, label } = req.body;
     if (!valor || !label)
@@ -508,7 +453,7 @@ app.post("/categorias", requireAdmin, async (req, res) => {
   }
 });
 
-app.delete("/categorias/:valor", requireAdmin, async (req, res) => {
+app.delete("/categorias/:valor", async (req, res) => {
   try {
     const { valor } = req.params;
     const cat = await prisma.categoria.findUnique({ where: { valor } });
@@ -522,7 +467,7 @@ app.delete("/categorias/:valor", requireAdmin, async (req, res) => {
   }
 });
 
-// STATUS LOJA (GET público)
+// STATUS LOJA
 app.get("/status-loja", async (_req, res) => {
   try {
     let config = await prisma.configuracao.findFirst();
@@ -535,8 +480,7 @@ app.get("/status-loja", async (_req, res) => {
   }
 });
 
-// STATUS LOJA (alteração protegida)
-app.post("/alterar-status-loja", requireAdmin, async (req, res) => {
+app.post("/alterar-status-loja", async (req, res) => {
   const { lojaAberta } = req.body;
   try {
     const config = await prisma.configuracao.findFirst();
