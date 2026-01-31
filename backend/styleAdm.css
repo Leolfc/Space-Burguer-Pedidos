@@ -371,6 +371,7 @@ tbody tr:nth-child(odd) {
     justify-content: space-between;
     padding: 6px 0;
     border-bottom: none;
+    font-weight: 600;
   }
 
   .tabela-categoria td:first-child img {
