@@ -28,13 +28,11 @@
         justify-content: center;
       }
       .toggle-senha:hover {
-        color: #ff5722;
-      }
-      .toggle-senha:focus {
-        outline: none;
+        color: #333;
       }
     </style>
   </head>
+
   <body>
     <div class="painel-container" style="max-width: 400px">
       <h1 style="text-align: center; color: #ff5722">Loginn do Painel</h1>
@@ -69,15 +67,16 @@
             </button>
           </div>
         </div>
-        <button type="submit" class="btn-submit">Entrar</button>
+
+        <button type="submit">Entrar</button>
       </form>
     </div>
 
-    <script >
+    <script>
       // Função para mostrar/ocultar senha
       const toggleSenha = document.getElementById("toggleSenha");
       const inputSenha = document.getElementById("senha");
-      
+
       toggleSenha.addEventListener("click", () => {
         const tipo = inputSenha.getAttribute("type") === "password" ? "text" : "password";
         inputSenha.setAttribute("type", tipo);
@@ -90,53 +89,47 @@
         document.getElementById("senha").value = "";
       });
 
-      document
-        .getElementById("form-login")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("email").value.trim();
-          const senha = document.getElementById("senha").value;
+      document.getElementById("form-login").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const senha = document.getElementById("senha").value;
 
-          // Validação básica
-          if (!email || !senha) {
-            alert("Por favor, preencha todos os campos!");
-            return;
+        // Validação básica
+        if (!email || !senha) {
+          alert("Por favor, preencha todos os campos!");
+          return;
+        }
+
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, senha }),
+          });
+
+          if (response.ok) {
+            // Limpa os campos após login bem-sucedido
+            document.getElementById("email").value = "";
+            document.getElementById("senha").value = "";
+
+            // Redireciona para o painel de admin
+            window.location.href = "/admin";
+          } else {
+            const text = await response.text();
+            let data = null;
+            try {
+              data = JSON.parse(text);
+            } catch {}
+            alert((data && data.message) ? data.message : "Email ou senha incorretos!");
+            document.getElementById("senha").value = "";
+            document.getElementById("senha").focus();
           }
-
-          try {
-            const response = await fetch(
-              "/login",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, senha }),
-              }
-            );
-
-            if (response.ok) {
-              // Limpa os campos após login bem-sucedido
-              document.getElementById("email").value = "";
-              document.getElementById("senha").value = "";
-              
-              // Salva a "chave" no navegador
-              sessionStorage.setItem('isLoggedIn', 'true');
-              
-              // Redireciona para o painel de admin
-              window.location.href = "/admin";
-            } else {
-              const text = await response.text();
-              let data = null;
-               try { data = JSON.parse(text); } catch {}
-              alert((data && data.message) ? data.message : "Email ou senha incorretos!");
-              document.getElementById("senha").value = "";
-               document.getElementById("senha").focus();
-            }
-          } catch (error) {
-            console.error("Erro ao tentar fazer login:", error);
-            alert("Erro ao tentar fazer login. Verifique sua conexão.");
-          }
-        });
-        
+        } catch (error) {
+          console.error("Erro ao fazer login:", error);
+          alert("Erro ao conectar com o servidor.");
+        }
+      });
     </script>
   </body>
 </html>

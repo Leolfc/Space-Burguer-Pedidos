@@ -67,6 +67,7 @@ td {
   text-align: left;
   border-bottom: 1px solid #ddd;
   font-family: "Bungee", sans-serif;
+  font-weight:bold;
 }
 th {
   background-color: #f7f7f7;
