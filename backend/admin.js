@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await fetch("/logout", { method: "POST", credentials: "include" });
     } catch (_) {}
-    window.location.href = "/login";
+    window.location.href = "/admin";
   }
 
   // --- 5. STATUS LOJA ---
