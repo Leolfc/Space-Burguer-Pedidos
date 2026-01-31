@@ -148,7 +148,7 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
   // Se já logado, vai direto
   if (req.session?.adminLoggedIn) return res.redirect("/admin");
-  return res.sendFile(path.join(painelPublicDir, "login.html"));
+  return res.sendFile(path.join(painelPublicDir, "login"));
 });
 
 // Admin page (protegida)
