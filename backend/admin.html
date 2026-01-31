@@ -42,7 +42,8 @@
   <body>
     <script>
       if (sessionStorage.getItem("isLoggedIn") !== "true") {
-        window.location.href = "login.html";
+        // redireciona para rota absoluta que o servidor fornece
+        window.location.href = "/login";
       }
     </script>
 

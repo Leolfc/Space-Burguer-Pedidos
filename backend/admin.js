@@ -195,8 +195,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function fazerLogout() {
+    // Tenta encerrar a sessão no servidor e, em seguida, redireciona
+    try {
+      fetch("/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    } catch (_) {}
+
     sessionStorage.removeItem("isLoggedIn");
-    window.location.href = "login";
+    // usar rota absoluta para evitar navegar para /painel/login
+    window.location.href = "/login";
   }
 
   async function verificarStatusLoja() {
