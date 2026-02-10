@@ -1,8 +1,16 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // **Verificação de segurança inicial**
-  if (sessionStorage.getItem("isLoggedIn") !== "true") {
-    window.location.href = "login";
-    return; // Interrompe a execução do script se não estiver logado
+document.addEventListener("DOMContentLoaded", async () => {
+  // **Verificação de segurança inicial - validar sessão no servidor**
+  try {
+    const resp = await fetch("/check-auth", { credentials: "include" });
+    if (!resp.ok) {
+      // Sessão inválida no servidor, redireciona para login
+      window.location.href = "/login";
+      return;
+    }
+  } catch (error) {
+    console.error("Erro ao verificar autenticação:", error);
+    window.location.href = "/login";
+    return;
   }
 
   const API_BASE = "";
