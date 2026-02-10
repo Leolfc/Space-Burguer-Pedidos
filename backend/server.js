@@ -212,6 +212,14 @@ app.post("/logout", (req, res) => {
   });
 });
 
+// Verificar autenticação (para admin.js)
+app.get("/check-auth", (req, res) => {
+  if (req.session?.adminLoggedIn) {
+    return res.status(200).json({ ok: true });
+  }
+  return res.status(401).json({ message: "Não autorizado" });
+});
+
 /* =========================
    10) API do sistema
 ========================= */
