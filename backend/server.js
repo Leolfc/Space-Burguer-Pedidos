@@ -93,9 +93,10 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      // Se estiver em HTTPS via proxy (EasyPanel), isso pode ficar true.
-      // Se você estiver testando em http local, deixe false.
-      secure: process.env.NODE_ENV === "production",
+      // IMPORTANTE: EasyPanel/Hostinger usa proxy NGINX com HTTPS.
+      // Mesmo em desenvolvimento, os cookies precisam de secure: true para HTTPS.
+      // Se estiver testando em localhost:3000 (HTTP), mude para false.
+      secure: true,
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
   })
@@ -225,7 +226,7 @@ app.get("/check-auth", (req, res) => {
 ========================= */
 
 // CRIAR ITEM
-app.post("/adicionar/hamburguers", upload.single("imagem"), async (req, res) => {
+app.post("/adicionar/hamburguers", requireAdmin, upload.single("imagem"), async (req, res) => {
   try {
     const { nome, descricao, preco, indisponivel, novoItem } = req.body;
 
@@ -267,7 +268,7 @@ app.post("/adicionar/hamburguers", upload.single("imagem"), async (req, res) => 
 });
 
 // DELETAR ITEM
-app.delete("/deletar/hamburguer/:id", async (req, res) => {
+app.delete("/deletar/hamburguer/:id", requireAdmin, async (req, res) => {
   const id = req.params.id;
   try {
     const burguerDeletado = await prisma.item.delete({ where: { id } });
@@ -307,7 +308,7 @@ app.get("/buscar/hamburguer/:id", async (req, res) => {
 });
 
 // EDITAR ITEM
-app.put("/editar/hamburguer/:id", upload.single("imagem"), async (req, res) => {
+app.put("/editar/hamburguer/:id", requireAdmin, upload.single("imagem"), async (req, res) => {
   try {
     const id = req.params.id;
     let {
@@ -373,7 +374,7 @@ app.get("/adicionais", async (_req, res) => {
   }
 });
 
-app.post("/adicionais", async (req, res) => {
+app.post("/adicionais", requireAdmin, async (req, res) => {
   try {
     const { nome, preco, ativo } = req.body;
     if (!nome || typeof nome !== "string")
@@ -397,7 +398,7 @@ app.post("/adicionais", async (req, res) => {
   }
 });
 
-app.put("/adicionais/:id", async (req, res) => {
+app.put("/adicionais/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { nome, preco, ativo } = req.body;
@@ -419,7 +420,7 @@ app.put("/adicionais/:id", async (req, res) => {
   }
 });
 
-app.delete("/adicionais/:id", async (req, res) => {
+app.delete("/adicionais/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const adicionalDeletado = await prisma.adicional.delete({ where: { id } });
@@ -441,7 +442,7 @@ app.get("/categorias", async (_req, res) => {
   }
 });
 
-app.post("/categorias", async (req, res) => {
+app.post("/categorias", requireAdmin, async (req, res) => {
   try {
     const { valor, label } = req.body;
     if (!valor || !label)
@@ -461,7 +462,7 @@ app.post("/categorias", async (req, res) => {
   }
 });
 
-app.delete("/categorias/:valor", async (req, res) => {
+app.delete("/categorias/:valor", requireAdmin, async (req, res) => {
   try {
     const { valor } = req.params;
     const cat = await prisma.categoria.findUnique({ where: { valor } });
@@ -488,7 +489,7 @@ app.get("/status-loja", async (_req, res) => {
   }
 });
 
-app.post("/alterar-status-loja", async (req, res) => {
+app.post("/alterar-status-loja", requireAdmin, async (req, res) => {
   const { lojaAberta } = req.body;
   try {
     const config = await prisma.configuracao.findFirst();
