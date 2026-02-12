@@ -3,13 +3,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const resp = await fetch("/check-auth", { credentials: "include" });
     if (!resp.ok) {
+      // Limpa sessionStorage se existir (pode estar desatualizado)
+      sessionStorage.removeItem("isLoggedIn");
       // Sessão inválida no servidor, redireciona para login
-      window.location.href = "/login";
+      window.location.replace("/login");
       return;
     }
   } catch (error) {
     console.error("Erro ao verificar autenticação:", error);
-    window.location.href = "/login";
+    // Limpa sessionStorage em caso de erro
+    sessionStorage.removeItem("isLoggedIn");
+    window.location.replace("/login");
     return;
   }
 

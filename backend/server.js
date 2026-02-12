@@ -33,9 +33,7 @@ else if (fs.existsSync(envPathPrisma)) dotenv.config({ path: envPathPrisma });
 else if (fs.existsSync(envPathRoot)) dotenv.config({ path: envPathRoot });
 else dotenv.config();
 
-/* =========================
-   3) Prisma (depois do env)
-========================= */
+
 const prisma = new PrismaClient();
 
 /* =========================
@@ -114,7 +112,7 @@ function requireAdmin(req, res, next) {
    6) Arquivos estáticos
 ========================= */
 
-// 6.1 Imagens públicas do site (pasta /img está na raiz do projeto)
+
 const pastaDasImagens = path.join(__dirname, "../img"); // ✅ corrigido
 if (fs.existsSync(pastaDasImagens)) {
   app.use("/img", express.static(pastaDasImagens));
@@ -147,8 +145,15 @@ app.get("/", (req, res) => {
 
 // Login page
 app.get("/login", (req, res) => {
-  // Se já logado, vai direto
-  if (req.session?.adminLoggedIn) return res.redirect("/admin");
+  // Se já logado e sessão válida, vai direto para admin
+  // Mas só redireciona se a sessão realmente existir e estiver válida
+  if (req.session?.adminLoggedIn === true) {
+    return res.redirect("/admin");
+  }
+  // Limpa qualquer sessão inválida
+  if (req.session) {
+    req.session.destroy(() => {});
+  }
   return res.sendFile(path.join(painelPublicDir, "login.html"));
 });
 
@@ -215,8 +220,13 @@ app.post("/logout", (req, res) => {
 
 // Verificar autenticação (para admin.js)
 app.get("/check-auth", (req, res) => {
-  if (req.session?.adminLoggedIn) {
+  // Verifica se a sessão existe e está realmente logada
+  if (req.session?.adminLoggedIn === true) {
     return res.status(200).json({ ok: true });
+  }
+  // Se não estiver autenticado, limpa qualquer sessão residual
+  if (req.session) {
+    req.session.destroy(() => {});
   }
   return res.status(401).json({ message: "Não autorizado" });
 });

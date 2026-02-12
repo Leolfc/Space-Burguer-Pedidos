@@ -118,11 +118,11 @@
               document.getElementById("email").value = "";
               document.getElementById("senha").value = "";
               
-              // Salva a "chave" no navegador
+              // Salva a "chave" no navegador (apenas para referência, não é usado para autenticação)
               sessionStorage.setItem('isLoggedIn', 'true');
               
-              // Redireciona para o painel de admin
-              window.location.href = "/admin";
+              // Redireciona para o painel de admin usando replace para evitar histórico
+              window.location.replace("/admin");
             } else {
               const text = await response.text();
               let data = null;

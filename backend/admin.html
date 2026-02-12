@@ -40,12 +40,7 @@
     </style>
   </head>
   <body>
-    <script>
-      if (sessionStorage.getItem("isLoggedIn") !== "true") {
-        // redireciona para rota absoluta que o servidor fornece
-        window.location.href = "/login";
-      }
-    </script>
+    <!-- Verificação de autenticação será feita pelo admin.js via servidor -->
 
     <div class="painel-container">
       <header>
