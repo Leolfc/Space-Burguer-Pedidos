@@ -433,3 +433,21 @@ tbody tr:nth-child(odd) {
     font-size: 1rem;
   }
 }
+
+.notificacao{
+    position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  font-weight: 600;
+  text-align: center;
+  transition: bottom 0.5s ease;
+  min-width: 200px;
+  max-width: 90%;
+}
