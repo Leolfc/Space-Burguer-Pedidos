@@ -434,8 +434,8 @@ tbody tr:nth-child(odd) {
   }
 }
 
-.notificacao{
-    position: fixed;
+.notificacao {
+  position: fixed;
   bottom: -100px;
   left: 50%;
   transform: translateX(-50%);
@@ -450,4 +450,8 @@ tbody tr:nth-child(odd) {
   transition: bottom 0.5s ease;
   min-width: 200px;
   max-width: 90%;
+}
+
+.notificacao.mostrar {
+  bottom: 20px;
 }

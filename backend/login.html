@@ -114,7 +114,16 @@
                 body: JSON.stringify({ email, senha }),
               }
             );
-          
+          const div  = document.querySelector('.welcome')
+          div.textContent = "Seja Bem Vindo Rodrigo"
+          document.body.appendChild(div)
+          setTimeout(() => {
+            div.classList.add('mostrar')
+          }, 3000);
+
+          setTimeout(()=>{
+            div.classList.remove('mostrar')
+          }, 500)
             if (response.ok) {
               // Limpa os campos após login bem-sucedido
               document.getElementById("email").value = "";
@@ -124,14 +133,7 @@
               sessionStorage.setItem('isLoggedIn', 'true');
              document.getElementById("email").value = "";
               document.getElementById("senha").value = "";
-              const div = document.createElement("div")
-              div.className = "notificacao"
-              div.textContent = "Seja bem vindo Rodrigo🚀"
-              
-              document.body.appendChild(div)
-              setTimeout(() => {
-                div.remove()
-              }, 3000)
+            
               // Redireciona para o painel de admin usando replace para evitar histórico
               window.location.replace("/admin");
             } else {
