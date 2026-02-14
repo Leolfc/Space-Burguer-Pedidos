@@ -33,6 +33,10 @@
       .toggle-senha:focus {
         outline: none;
       }
+      .notificacao{
+  position:fixed;
+  top:20px;
+}
     </style>
   </head>
   <body>
@@ -116,7 +120,7 @@
             );
        
             if (response.ok) {
-              
+
               const divNotification =document.createElement("div");
               divNotification.textContent="Seja bem vindo";
               divNotification.classList.add('notificacao')
