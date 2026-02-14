@@ -114,13 +114,18 @@
                 body: JSON.stringify({ email, senha }),
               }
             );
-
+              
             if (response.ok) {
               // Limpa os campos após login bem-sucedido
               document.getElementById("email").value = "";
               document.getElementById("senha").value = "";
-              alert("Seja bem vindo Rodrigo🚀")
-              
+              const div = document.createElement("div")
+              div.className = "notificacao"
+              div.textContent = "Seja bem vindo Rodrigo🚀"
+              document.body.appendChild(div)
+              setTimeout(() => {
+                div.remove()
+              }, 3000)
               // Salva a "chave" no navegador (apenas para referência, não é usado para autenticação)
               sessionStorage.setItem('isLoggedIn', 'true');
               
