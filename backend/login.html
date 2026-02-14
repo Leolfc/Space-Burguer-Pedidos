@@ -49,6 +49,7 @@ position: sticky;
   transition: bottom 0.5s ease;
   min-width: 200px;
   max-width: 90%;
+  display: none;
 }
     </style>
   </head>
@@ -137,13 +138,13 @@ position: sticky;
 
               const divNotification =document.createElement("div");
               divNotification.textContent="Seja bem vindo";
-              divNotification.classList.add('notificacao')
+              
               document.body.appendChild(divNotification)
               setTimeout(() => {
-                divNotification.classList.add("mostrar")
+                divNotification.classList.add("notificacao")
               }, 5000);
                setTimeout(() => {
-                divNotification.classList.remove("mostrar")
+                divNotification.classList.remove("notificacao")
               }, 5000);
 
 
