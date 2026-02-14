@@ -116,6 +116,19 @@
             );
        
             if (response.ok) {
+              
+              const divNotification =document.createElement("div");
+              divNotification.textContent="Seja bem vindo";
+              divNotification.classList.add('notificacao')
+              document.body.appendChild(divNotification)
+              setTimeout(() => {
+                divNotification.classList.add("mostrar")
+              }, 5000);
+               setTimeout(() => {
+                divNotification.classList.remove("mostrar")
+              }, 5000);
+
+
               // Limpa os campos após login bem-sucedido
               document.getElementById("email").value = "";
               document.getElementById("senha").value = "";
