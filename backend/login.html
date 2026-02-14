@@ -49,7 +49,7 @@ position: sticky;
   transition: bottom 0.5s ease;
   min-width: 200px;
   max-width: 90%;
-  display: none;
+
 }
     </style>
   </head>
@@ -136,7 +136,7 @@ position: sticky;
        
             if (response.ok) {
 
-              const divNotification =document.createElement("div");
+              const divNotification =document.querySelector("notificacao");
               divNotification.textContent="Seja bem vindo";
               
               document.body.appendChild(divNotification)
