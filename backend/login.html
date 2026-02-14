@@ -90,7 +90,7 @@ position: sticky;
           </div>
         </div>
         <button type="submit" class="btn-submit">Entrar</button>
-        <div class="notificacao"></div>
+        
       </form>
     </div>
 
@@ -135,19 +135,7 @@ position: sticky;
             );
        
             if (response.ok) {
-
-              const divNotification =document.querySelector("notificacao");
-              divNotification.textContent="Seja bem vindo";
-              
-              document.body.appendChild(divNotification)
-              setTimeout(() => {
-                divNotification.classList.add("notificacao")
-              }, 5000);
-               setTimeout(() => {
-                divNotification.classList.remove("notificacao")
-              }, 5000);
-
-
+              alert("Seja bem vindo Rodrigo🚀")
               // Limpa os campos após login bem-sucedido
               document.getElementById("email").value = "";
               document.getElementById("senha").value = "";
