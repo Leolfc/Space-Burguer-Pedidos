@@ -249,6 +249,8 @@ section h2 {
   font-family: "Bungee", sans-serif;
   flex: 1;
   margin-right: 10px;
+  min-width: 0;            /* permite o texto encolher dentro do flex */
+  word-break: break-word;  /* quebra nomes/descrições muito longos */
 }
 
 .item-price {
