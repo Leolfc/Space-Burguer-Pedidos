@@ -238,9 +238,11 @@ section h2 {
 
 .item-info {
   display: flex;
-  justify-content: space-between;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
   align-items: center;
-  margin-bottom: 8px;
+  margin:4px auto;
 }
 
 .item-name {
@@ -248,7 +250,7 @@ section h2 {
   font-size: 1.2rem;
   font-family: "Bungee", sans-serif;
   flex: 1;
-  margin-right: 10px;
+  margin: 5px 0;
   min-width: 0;            /* permite o texto encolher dentro do flex */
   word-break: break-word;  /* quebra nomes/descrições muito longos */
 }
