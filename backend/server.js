@@ -112,16 +112,25 @@ function requireAdmin(req, res, next) {
    6) Arquivos estáticos
 ========================= */
 
+// Resolve caminhos de forma robusta
+const raizDoProjeto = path.resolve(__dirname, "..");
+const pastaDasImagens = path.join(raizDoProjeto, "img");
+const uploadsDir = path.join(raizDoProjeto, "backend", "uploads");
 
-const pastaDasImagens = path.join(__dirname, "../img"); // ✅ corrigido
+// Garante que a pasta de uploads existe
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Serve imagens estáticas
 if (fs.existsSync(pastaDasImagens)) {
   app.use("/img", express.static(pastaDasImagens));
 }
 
-// 6.2 Uploads (backend/uploads)
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-app.use("/uploads", express.static(uploadsDir));
+// Serve uploads
+if (fs.existsSync(uploadsDir)) {
+  app.use("/uploads", express.static(uploadsDir));
+}
 
 // 6.3 Site público (index.html, css/js na raiz)
 app.use(express.static(path.join(__dirname, "../")));
