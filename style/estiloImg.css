@@ -1,7 +1,7 @@
 
 
 .imgBebida{
- max-width: 40%;
+ max-width: 80%;
  object-fit:cover;
 border-radius: 10px;
 background-position: center;
@@ -10,7 +10,7 @@ box-shadow: 2px 2px 10px rgb(90, 86, 86);
 }
 
 .imgBurguer{
- max-width: 40%;
+ width: 80%;
  object-fit:cover;
 border-radius: 10px;
 background-position: center;

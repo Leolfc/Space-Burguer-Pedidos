@@ -46,6 +46,7 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
   --red-dark: #8b0000;
   --red-dark-hover: #a00000;
+  --price-color: #FF9A3C 
 }
 html {
   scroll-behavior: smooth; /*escrolagem suave*/
@@ -256,9 +257,9 @@ section h2 {
 }
 
 .item-price {
-  color: #ff5722;
+  color: var(--price-color);
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
 .preco-promocional {
@@ -276,7 +277,7 @@ section h2 {
 }
 
 .preco-promocional .item-price {
-  color: #ff5722;
+  color: var(--price-color);
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -286,7 +287,7 @@ section h2 {
 }
 
 .dark-mode .preco-promocional .item-price {
-  color: #ff7043;
+  color: var(--price-color);
 }
 
 /* Botões de adicionar/remover */
@@ -817,7 +818,7 @@ section h2 {
 }
 
 .cart-item-price {
-  color: #ff5722;
+  color: var(--price-color);
   font-weight: 600;
   margin-right: 8px;
 }
@@ -2178,7 +2179,7 @@ button {
 }
 
 .dark-mode .item-price {
-  color: #ff7043;
+  color: var(--price-color);
 }
 
 /* !----Estilos para o adicional de maionese verde no carrinho --- */
