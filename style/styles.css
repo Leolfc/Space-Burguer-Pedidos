@@ -46,7 +46,8 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
   --red-dark: #8b0000;
   --red-dark-hover: #a00000;
-  --price-color: #FF9A3C 
+  --price-color: #FF9A3C;
+  --price-color-adicional: red;
 }
 html {
   scroll-behavior: smooth; /*escrolagem suave*/
@@ -588,7 +589,7 @@ section h2 {
 /* Preço do adicional */
 .adicional-preco {
   font-weight: bold !important;
-  color: #ff5722 !important;
+  color: var(--price-color-adicional) !important; 
   font-size: 18px !important;
 }
 
@@ -1541,7 +1542,7 @@ button {
 
 .adicional-preco {
   margin-left: auto;
-  color: #ff5722;
+  color: var(--price-color);
   font-weight: 500;
 }
 
@@ -1956,7 +1957,7 @@ button {
 }
 
 .dark-mode .adicional-preco {
-  color: #ff5722;
+  color: var(--price-color);
   font-weight: normal;
 }
 
