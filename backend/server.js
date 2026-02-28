@@ -124,7 +124,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Serve imagens estáticas
 if (fs.existsSync(pastaDasImagens)) {
-  app.use("/img", express.static(pastaDasImagens));
+  app.use("/uploads", express.static(pastaDasImagens));
 }
 
 // Serve uploads
