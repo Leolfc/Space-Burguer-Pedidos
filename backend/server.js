@@ -145,9 +145,6 @@ const painelPublicDir = fs.existsSync(path.join(__dirname, "public"))
 // assets do painel: /painel/styleAdm.css, /painel/admin.js, etc
 app.use("/painel", express.static(painelPublicDir));
 
-/* =========================
-   7) Rotas de páginas
-========================= */
 app.get("/", (req, res) => {
   return res.sendFile(path.join(__dirname, "../index.html"));
 });
