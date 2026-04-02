@@ -1,11 +1,11 @@
-.item_novo {
+/* .item_novo {
   color: #d92517;
   border: 2px solid #ff6b01;
   border-radius: 8px;
   width: 50%;
   text-align: center;
   animation: pulse 1.5s infinite;
-}
+} */
 .item_em_dobro {
   color: #d92517;
   animation: pulseTexto 1s infinite;
@@ -89,7 +89,7 @@
 }
 
 /*!Item maior da casa */
-.item__maiorDaCasa {
+.item__maiorDaCasa, .item_novo  {
   background: linear-gradient(45deg, #ff6b01, #ff8c00, #ffa500, #ff6b01);
   background-size: 300% 300%;
   color: white;
@@ -111,12 +111,12 @@
   transition: all 0.3s ease;
 }
 
-.item__maiorDaCasa:hover {
+.item__maiorDaCasa:hover, .item_novo:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(255, 107, 1, 0.6);
 }
 
-.item__maiorDaCasa::before {
+.item__maiorDaCasa::before, .item_novo::before {
   content: "";
   position: absolute;
   top: 0;
