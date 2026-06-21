@@ -18,3 +18,45 @@ background-size: cover;
 box-shadow: 2px 2px 10px rgb(90, 86, 86);
 }
 
+.flagBrasil{
+  width: 3.75rem;
+  height: 3.75rem;
+  position: absolute;
+  /* right: 80px; */
+  margin: 20px auto;
+  animation: flag 1s ease ;
+  transition: 400ms transform ease-in-out ;
+}
+
+@keyframes flag {
+  0%{
+    transform: translateX(400px);
+  }
+
+  100%{
+    transform: translateX(0);
+  }
+}
+
+.bola{
+  max-width: 35px;
+  height: 35px;
+  position: absolute;
+  border-radius: 50%;
+  margin-left: auto;
+  object-fit: cover;
+  animation: bola 2s  both ease-in-out;
+  transition: transform 200ms ease-in-out;
+}
+
+@keyframes bola {
+  0%{
+    transform: translateX(400px);
+
+  }
+
+  100%{
+    transform: translateX(10px);
+    left: 0;
+  }
+}
