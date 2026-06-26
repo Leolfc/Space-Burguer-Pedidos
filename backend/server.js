@@ -33,7 +33,6 @@ else if (fs.existsSync(envPathPrisma)) dotenv.config({ path: envPathPrisma });
 else if (fs.existsSync(envPathRoot)) dotenv.config({ path: envPathRoot });
 else dotenv.config();
 
-
 const prisma = new PrismaClient();
 
 /* =========================
@@ -69,7 +68,7 @@ app.use(
       return cb(new Error("CORS bloqueado para esta origem."));
     },
     credentials: true,
-  })
+  }),
 );
 
 /* =========================
@@ -78,7 +77,7 @@ app.use(
 const SESSION_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET;
 if (!SESSION_SECRET) {
   console.warn(
-    "[WARN] JWT_SECRET/SESSION_SECRET não definido. Defina no EasyPanel para sessão funcionar com segurança."
+    "[WARN] JWT_SECRET/SESSION_SECRET não definido. Defina no EasyPanel para sessão funcionar com segurança.",
   );
 }
 
@@ -97,7 +96,7 @@ app.use(
       secure: true,
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
-  })
+  }),
 );
 
 function requireAdmin(req, res, next) {
@@ -135,9 +134,7 @@ if (fs.existsSync(uploadsDir)) {
 // 6.3 Site público (index.html, css/js na raiz)
 app.use(express.static(path.join(__dirname, "../")));
 
-// 6.4 Painel: sirva APENAS a pasta pública do painel (se existir).
-// Recomendado: mover login.html, admin.html, admin.js, styleAdm.css para backend/public/
-// Mas para não quebrar seu projeto atual, fazemos fallback para backend/.
+
 const painelPublicDir = fs.existsSync(path.join(__dirname, "public"))
   ? path.join(__dirname, "public")
   : __dirname;
@@ -191,7 +188,9 @@ app.post("/login", async (req, res) => {
     const { email, senha } = req.body;
 
     if (!email || !senha) {
-      return res.status(400).json({ message: "Email e senha são obrigatórios." });
+      return res
+        .status(400)
+        .json({ message: "Email e senha são obrigatórios." });
     }
 
     const admin = await prisma.admin.findUnique({
@@ -242,46 +241,52 @@ app.get("/check-auth", (req, res) => {
 ========================= */
 
 // CRIAR ITEM
-app.post("/adicionar/hamburguers", requireAdmin, upload.single("imagem"), async (req, res) => {
-  try {
-    const { nome, descricao, preco, indisponivel, novoItem } = req.body;
-
-    let { categoria } = req.body;
-    let categoriasArray = [];
-
+app.post(
+  "/adicionar/hamburguers",
+  requireAdmin,
+  upload.single("imagem"),
+  async (req, res) => {
     try {
-      if (typeof categoria === "string") {
-        const parsed = JSON.parse(categoria);
-        if (Array.isArray(parsed)) categoriasArray = parsed;
+      const { nome, descricao, preco, indisponivel, novoItem } = req.body;
+
+      let { categoria } = req.body;
+      let categoriasArray = [];
+
+      try {
+        if (typeof categoria === "string") {
+          const parsed = JSON.parse(categoria);
+          if (Array.isArray(parsed)) categoriasArray = parsed;
+        }
+      } catch (_) {}
+
+      if (!Array.isArray(categoriasArray) && Array.isArray(categoria)) {
+        categoriasArray = categoria;
       }
-    } catch (_) {}
 
-    if (!Array.isArray(categoriasArray) && Array.isArray(categoria)) {
-      categoriasArray = categoria;
+      const imagemUrl = req.file
+        ? `/uploads/${req.file.filename}`
+        : req.body.imagem_url || null;
+
+      const burguer = await prisma.item.create({
+        data: {
+          nome,
+          descricao,
+          preco: parseFloat(preco),
+          categoria: categoriasArray,
+          indisponivel:
+            String(indisponivel) === "true" || indisponivel === "on",
+          novoItem: String(novoItem) === "true" || novoItem === "on",
+          imagem_url: imagemUrl,
+        },
+      });
+
+      return res.status(200).json(burguer);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: "Erro ao adicionar item!" });
     }
-
-    const imagemUrl = req.file
-      ? `/uploads/${req.file.filename}`
-      : req.body.imagem_url || null;
-
-    const burguer = await prisma.item.create({
-      data: {
-        nome,
-        descricao,
-        preco: parseFloat(preco),
-        categoria: categoriasArray,
-        indisponivel: String(indisponivel) === "true" || indisponivel === "on",
-        novoItem: String(novoItem) === "true" || novoItem === "on",
-        imagem_url: imagemUrl,
-      },
-    });
-
-    return res.status(200).json(burguer);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({ message: "Erro ao adicionar item!" });
-  }
-});
+  },
+);
 
 // DELETAR ITEM
 app.delete("/deletar/hamburguer/:id", requireAdmin, async (req, res) => {
@@ -324,65 +329,77 @@ app.get("/buscar/hamburguer/:id", async (req, res) => {
 });
 
 // EDITAR ITEM
-app.put("/editar/hamburguer/:id", requireAdmin, upload.single("imagem"), async (req, res) => {
-  try {
-    const id = req.params.id;
-    let {
-      nome,
-      descricao,
-      preco,
-      destaque,
-      categoria,
-      indisponivel,
-      novoItem,
-      imagem_url,
-    } = req.body;
-
-    let categoriasArray;
+app.put(
+  "/editar/hamburguer/:id",
+  requireAdmin,
+  upload.single("imagem"),
+  async (req, res) => {
     try {
-      if (typeof categoria === "string") {
-        const parsed = JSON.parse(categoria);
-        if (Array.isArray(parsed)) categoriasArray = parsed;
-      } else if (Array.isArray(categoria)) {
-        categoriasArray = categoria;
+      const id = req.params.id;
+      let {
+        nome,
+        descricao,
+        preco,
+        destaque,
+        categoria,
+        indisponivel,
+        novoItem,
+        imagem_url,
+      } = req.body;
+
+      let categoriasArray;
+      try {
+        if (typeof categoria === "string") {
+          const parsed = JSON.parse(categoria);
+          if (Array.isArray(parsed)) categoriasArray = parsed;
+        } else if (Array.isArray(categoria)) {
+          categoriasArray = categoria;
+        }
+      } catch (_) {}
+
+      if (req.file) {
+        imagem_url = `/uploads/${req.file.filename}`;
       }
-    } catch (_) {}
 
-    if (req.file) {
-      imagem_url = `/uploads/${req.file.filename}`;
+      const dataAtualizacao = {};
+      if (typeof nome !== "undefined") dataAtualizacao.nome = nome;
+      if (typeof descricao !== "undefined")
+        dataAtualizacao.descricao = descricao;
+      if (typeof preco !== "undefined")
+        dataAtualizacao.preco = parseFloat(preco);
+      if (typeof destaque !== "undefined")
+        dataAtualizacao.destaque =
+          String(destaque) === "true" || destaque === "on";
+      if (typeof indisponivel !== "undefined")
+        dataAtualizacao.indisponivel =
+          String(indisponivel) === "true" || indisponivel === "on";
+      if (typeof novoItem !== "undefined")
+        dataAtualizacao.novoItem =
+          String(novoItem) === "true" || novoItem === "on";
+      if (typeof imagem_url !== "undefined")
+        dataAtualizacao.imagem_url = imagem_url;
+      if (typeof categoriasArray !== "undefined")
+        dataAtualizacao.categoria = categoriasArray;
+
+      const hamburguerAtualizado = await prisma.item.update({
+        where: { id },
+        data: dataAtualizacao,
+      });
+
+      return res.status(200).json(hamburguerAtualizado);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: "Erro ao editar hamburguer!" });
     }
-
-    const dataAtualizacao = {};
-    if (typeof nome !== "undefined") dataAtualizacao.nome = nome;
-    if (typeof descricao !== "undefined") dataAtualizacao.descricao = descricao;
-    if (typeof preco !== "undefined") dataAtualizacao.preco = parseFloat(preco);
-    if (typeof destaque !== "undefined")
-      dataAtualizacao.destaque = String(destaque) === "true" || destaque === "on";
-    if (typeof indisponivel !== "undefined")
-      dataAtualizacao.indisponivel =
-        String(indisponivel) === "true" || indisponivel === "on";
-    if (typeof novoItem !== "undefined")
-      dataAtualizacao.novoItem = String(novoItem) === "true" || novoItem === "on";
-    if (typeof imagem_url !== "undefined") dataAtualizacao.imagem_url = imagem_url;
-    if (typeof categoriasArray !== "undefined")
-      dataAtualizacao.categoria = categoriasArray;
-
-    const hamburguerAtualizado = await prisma.item.update({
-      where: { id },
-      data: dataAtualizacao,
-    });
-
-    return res.status(200).json(hamburguerAtualizado);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({ message: "Erro ao editar hamburguer!" });
-  }
-});
+  },
+);
 
 // ADICIONAIS
 app.get("/adicionais", async (_req, res) => {
   try {
-    const adicionais = await prisma.adicional.findMany({ orderBy: { nome: "asc" } });
+    const adicionais = await prisma.adicional.findMany({
+      orderBy: { nome: "asc" },
+    });
     return res.status(200).json(adicionais);
   } catch (error) {
     console.log(error);
@@ -428,7 +445,10 @@ app.put("/adicionais/:id", requireAdmin, async (req, res) => {
       return res.status(400).json({ message: "Nenhuma alteração enviada." });
     }
 
-    const adicionalAtualizado = await prisma.adicional.update({ where: { id }, data });
+    const adicionalAtualizado = await prisma.adicional.update({
+      where: { id },
+      data,
+    });
     return res.status(200).json(adicionalAtualizado);
   } catch (error) {
     console.log(error);
@@ -450,7 +470,9 @@ app.delete("/adicionais/:id", requireAdmin, async (req, res) => {
 // CATEGORIAS (persistidas)
 app.get("/categorias", async (_req, res) => {
   try {
-    const categorias = await prisma.categoria.findMany({ orderBy: { label: "asc" } });
+    const categorias = await prisma.categoria.findMany({
+      orderBy: { label: "asc" },
+    });
     return res.status(200).json(categorias);
   } catch (error) {
     console.error(error);
@@ -462,13 +484,16 @@ app.post("/categorias", requireAdmin, async (req, res) => {
   try {
     const { valor, label } = req.body;
     if (!valor || !label)
-      return res.status(400).json({ message: "Valor e label são obrigatórios." });
+      return res
+        .status(400)
+        .json({ message: "Valor e label são obrigatórios." });
 
     const existente = await prisma.categoria
       .findUnique({ where: { valor } })
       .catch(() => null);
 
-    if (existente) return res.status(409).json({ message: "Categoria já existe." });
+    if (existente)
+      return res.status(409).json({ message: "Categoria já existe." });
 
     const nova = await prisma.categoria.create({ data: { valor, label } });
     return res.status(201).json(nova);
@@ -482,7 +507,8 @@ app.delete("/categorias/:valor", requireAdmin, async (req, res) => {
   try {
     const { valor } = req.params;
     const cat = await prisma.categoria.findUnique({ where: { valor } });
-    if (!cat) return res.status(404).json({ message: "Categoria não encontrada." });
+    if (!cat)
+      return res.status(404).json({ message: "Categoria não encontrada." });
 
     const deletada = await prisma.categoria.delete({ where: { id: cat.id } });
     return res.status(200).json(deletada);
@@ -497,7 +523,9 @@ app.get("/status-loja", async (_req, res) => {
   try {
     let config = await prisma.configuracao.findFirst();
     if (!config) {
-      config = await prisma.configuracao.create({ data: { lojaAberta: false } });
+      config = await prisma.configuracao.create({
+        data: { lojaAberta: false },
+      });
     }
     return res.json({ lojaAberta: config.lojaAberta });
   } catch (error) {
