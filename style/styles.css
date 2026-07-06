@@ -1709,7 +1709,7 @@ button {
 
 /* Versão para modo escuro */
 .dark-mode .btn-flutuante {
-  background-color: #8b0000; /* Vermelho escuro igual ao botão de aumento */
+  background-color:#F97316; /* Vermelho escuro igual ao botão de aumento */
 }
 
 .dark-mode .btn-flutuante:hover {
