@@ -72,3 +72,17 @@
 .corPicles{
   color:#45a049
 }
+
+.container_aviso{
+  background-color: white;
+  color: black;
+  margin: 10px;
+  border-radius: 10px;
+  text-align: center;
+transition: transform 1s ease-in;
+
+a{
+  text-decoration: none;
+
+}
+}
