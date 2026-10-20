@@ -80,9 +80,27 @@
   border-radius: 10px;
   text-align: center;
 transition: transform 1s ease-in;
+animation: pulse 2s infinite ease-in-out;
+max-width: 100%;
+font-size: 12px;
+a:nth-child(1){
+  color: black;
+}
 
 a{
   text-decoration: none;
 
 }
+}
+
+@keyframes pulse {
+  0%{
+  transform: scale(1);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
+  }
 }
