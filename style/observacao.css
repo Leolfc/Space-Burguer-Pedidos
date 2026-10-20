@@ -74,6 +74,9 @@
 }
 
 .container_aviso{
+  display: flex;
+  justify-content: center;
+  
   background-color: white;
   color: black;
   margin: 10px;
@@ -82,6 +85,8 @@
 transition: transform 1s ease-in;
 animation: pulse 2s infinite ease-in-out;
 max-width: 100%;
+width: 400px;
+margin: 0 auto;
 font-size: 12px;
 a:nth-child(1){
   color: black;
@@ -102,5 +107,12 @@ a{
   }
   100%{
     transform: scale(1);
+  }
+}
+
+@media(width >1024px) {
+  .container_aviso{
+    width: 400px;
+    margin: 0 auto;
   }
 }

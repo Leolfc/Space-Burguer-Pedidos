@@ -357,7 +357,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         tr.innerHTML = `
                     <td>${
                       imgSrc
-                        ? `<img src="${imgSrc}" alt="${lanche.nome}" style="max-width:100%;max-height:100%;object-fit:cover;border-radius:6px;"/>`
+                        ? `<img class="imgItemAdm" src="${imgSrc}" alt="${lanche.nome}" style="max-width:50%;max-height:50%;
+                        object-fit:cover;border-radius:8px;"/>`
                         : ""
                     }</td>
                     <td>${lanche.nome}</td>
