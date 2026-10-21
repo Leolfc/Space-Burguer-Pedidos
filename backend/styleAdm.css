@@ -68,6 +68,11 @@ td {
   border-bottom: 1px solid #ddd;
   font-family: "Bungee", sans-serif;
   font-weight:bold;
+  img{
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+  }
 }
 th {
   background-color: #f7f7f7;
@@ -374,6 +379,7 @@ tbody tr:nth-child(odd) {
     padding: 6px 0;
     border-bottom: none;
     font-weight: 600;
+
   }
 
   .tabela-categoria td:first-child img {
@@ -382,6 +388,7 @@ tbody tr:nth-child(odd) {
     object-fit: cover;
     margin-right: 10px;
   }
+
 
   .tabela-categoria td:last-child {
     display: flex;
