@@ -63,56 +63,71 @@
   background-color: #da190b;
 }
 
-
-.cebolaRoxa{
- color: #9b30ff;
-
+.cebolaRoxa {
+  color: #9b30ff;
 }
 
-.corPicles{
-  color:#45a049
+.corPicles {
+  color: #45a049;
 }
 
-.container_aviso{
+.container_aviso {
   display: flex;
   justify-content: center;
-  
   background-color: white;
   color: black;
   margin: 10px;
   border-radius: 10px;
   text-align: center;
-transition: transform 1s ease-in;
-animation: pulse 2s infinite ease-in-out;
-max-width: 100%;
-width: 400px;
-margin: 0 auto;
-font-size: 12px;
-a:nth-child(1){
-  color: black;
+  transition: transform 1s ease-in;
+  animation: pulse 3s infinite ease-in-out;
+  max-width: 100%;
+  width: 300px;
+  margin: 0 auto;
+.button-box{
+  border-radius: 10px;
 }
+  font-size: 12px;
+  a:nth-child(1) {
+    color: black;
+  }
 
-a{
-  text-decoration: none;
-
-}
+  a {
+    text-decoration: none;
+  }
 }
 
 @keyframes pulse {
-  0%{
-  transform: scale(1);
+  0% {
+    transform: scale(1);
   }
-  50%{
+  50% {
     transform: scale(1.1);
   }
-  100%{
+  100% {
     transform: scale(1);
   }
 }
 
-@media(width >1024px) {
-  .container_aviso{
+@media (width >1024px) {
+  .container_aviso {
     width: 400px;
     margin: 0 auto;
   }
+}
+
+/*Estilo para o aviso de reserva do item BOX Mini Burguer*/
+.span-box {
+  margin-right: auto;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+
+  border: 2px solid gray;
+  border-radius: 8px;
+  background-color: #ffa500;
+  color: black;
+  padding: 6px;
+  animation: pulse 2s ease-in-out infinite;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
