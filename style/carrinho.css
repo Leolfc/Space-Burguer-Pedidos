@@ -1,38 +1,972 @@
-.chavePix{
-    display: flex;
-    flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   gap: 10px;
-   font-size: 10px;
-   margin-bottom: 8px;
+/* ==========================================================================
+   Carrinho: itens, dados de entrega, pagamento, PIX e finalização
+   (importado no topo de styles.css)
+   ========================================================================== */
+.cart-container {
+  position: sticky;
+  top: 16px;
+  align-self: start;
+  height: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease;
 }
 
-.botao-pix{
-    padding:5px 10px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-}
-.botao-pix:hover{
-    background: linear-gradient(to left, rgb(216, 76, 76), rgb(255, 187, 0));
+#resumoPedido {
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 6px;
 }
 
-.containerNotification{
-  display:flex;
-  justify-content: center;
+/* Ordem visual: itens primeiro, depois dados, total e botões */
+#resumoPedido h2 {
+  order: -2;
+}
+
+#itens-carrinho,
+.add-molho-verde {
+  order: -1;
+}
+
+.cart-total {
+  order: 1;
+}
+
+.cart-buttons {
+  order: 2;
+}
+
+/* Cabeçalho do carrinho */
+#resumoPedido h2 {
+  position: relative;
+  display: flex;
   align-items: center;
-  position:fixed;
-  right:20px;
-  top:20px;
-  z-index:9999;
-
+  gap: 12px;
+  margin: 0 -18px 14px;
+  padding: 18px;
+  border: 0;
+  background: var(--stars), var(--grad-space);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
 }
-.cardNotification{
-text-align: center;
-background-color: green;
-padding:12px 8px;
-border-radius: 8px;
-color:white;
-font-weight: 600;
+
+#resumoPedido h2::before {
+  content: "🛒";
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 1.3rem;
+  line-height: 1;
+  text-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Itens do carrinho (estilo comanda)
+   -------------------------------------------------------------------------- */
+#itens-carrinho {
+  max-height: none;
+  margin: 0 0 12px;
+  overflow: visible;
+}
+
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1.5px dashed var(--border-strong);
+  animation: fadeIn 0.3s ease;
+}
+
+.cart-item:first-child {
+  padding-top: 4px;
+}
+
+.cart-item-name {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  color: var(--text);
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.cart-item-price {
+  margin: 0 2px;
+  color: var(--price-color);
+  font-family: var(--font-title);
+  font-size: 1.02rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.btn-editar-item {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-editar-item svg {
+  width: 15px;
+  height: 15px;
+}
+
+.btn-editar-item:hover {
+  background: rgba(255, 107, 1, 0.14);
+  color: var(--brand-deep);
+}
+
+.btn-remove-item {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(229, 56, 59, 0.12);
+  color: var(--danger);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-remove-item:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Adicionais e observações listados no item */
+.adicionais-list,
+.observacoes-list {
+  margin-top: 6px;
+}
+
+.adicionais-list .adicional-item {
+  display: block;
+  margin-top: 4px;
+  padding: 1px 0 1px 8px;
+  border-left: 2px solid var(--brand);
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.adicional-badge {
+  display: inline-block;
+  min-width: 26px;
+  margin: 0 2px 0 0;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 107, 1, 0.14);
+  color: var(--brand-deep);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.adicionais-list .adicional-preco {
+  margin-left: 2px;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.observacoes-list .observacao {
+  display: block;
+  margin-top: 4px;
+  padding: 2px 0 2px 8px;
+  border-left: 2px solid #3b82f6;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.observacao-badge {
+  margin-right: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.14);
+  color: #2563eb;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.dark-mode .observacao-badge {
+  color: #93c5fd;
+}
+
+/* Carrinho vazio */
+.empty-cart {
+  padding: 18px 8px 16px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 500;
+  text-align: center;
+}
+
+.empty-cart::before {
+  content: "🛸";
+  display: block;
+  margin-bottom: 6px;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+/* Maionese verde */
+.add-molho-verde {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-areas:
+    "nome menos qtd mais"
+    "preco menos qtd mais";
+  align-items: center;
+  column-gap: 8px;
+  margin: 0 0 18px;
+  padding: 10px 10px 10px 14px;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(34, 197, 94, 0.04));
+}
+
+.add-molho-verde > span:first-child {
+  grid-area: nome;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.add-molho-verde > span:first-child::before {
+  content: "🥗 ";
+}
+
+.add-molho-verde .preco-maionese {
+  grid-area: preco;
+  color: #15803d;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.dark-mode .add-molho-verde .preco-maionese {
+  color: #86efac;
+}
+
+#btnMenosMaionese {
+  grid-area: menos;
+}
+
+#qtdMaioneseVerde {
+  grid-area: qtd;
+  min-width: 24px;
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+#btnMaisMaionese {
+  grid-area: mais;
+}
+
+#btnMenosMaionese,
+#btnMaisMaionese {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-family: var(--font-ui);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.2s ease;
+}
+
+#btnMenosMaionese {
+  background: var(--surface);
+  color: #15803d;
+  box-shadow: var(--shadow-sm);
+}
+
+#btnMaisMaionese {
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  color: #fff;
+  box-shadow: 0 6px 14px -6px rgba(21, 128, 61, 0.8);
+}
+
+.dark-mode #btnMenosMaionese {
+  color: #86efac;
+}
+
+#btnMenosMaionese:active,
+#btnMaisMaionese:active {
+  transform: scale(0.88);
+}
+
+/* --------------------------------------------------------------------------
+   Dados do cliente
+   -------------------------------------------------------------------------- */
+.cliente-info {
+  margin-bottom: 14px;
+}
+
+/* Título "Seus dados" separando itens do formulário */
+#resumoPedido > div.cliente-info:first-of-type {
+  padding-top: 4px;
+}
+
+#resumoPedido > div.cliente-info:first-of-type::before {
+  content: "Seus dados";
+  display: block;
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cart-container label {
+  display: block;
+  margin: 14px 0 6px;
+  color: var(--text-soft);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+#nomeCliente,
+#enderecoCliente,
+#numeroResidencia,
+#troco-input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+  background-color: var(--field-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px: evita zoom automático no iPhone */
+  line-height: 1.4;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+#nomeCliente:focus,
+#enderecoCliente:focus,
+#numeroResidencia:focus,
+#troco-input:focus {
+  outline: none;
+  border-color: var(--brand);
+  background-color: var(--surface);
+  box-shadow: var(--ring);
+}
+
+#nomeCliente::placeholder,
+#enderecoCliente::placeholder,
+#numeroResidencia::placeholder,
+#troco-input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+#enderecoCliente {
+  min-height: 84px;
+  font-family: var(--font-body);
+  resize: none;
+}
+
+#numeroResidencia {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+#numeroResidencia::-webkit-outer-spin-button,
+#numeroResidencia::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+/* Selects (pagamento, bairro e ponto da carne) */
+.forma-pagamento {
+  display: block;
+  width: 100%;
+  padding: 12px 44px 12px 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+  background-color: var(--field-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ff6b01' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  background-size: 14px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.forma-pagamento:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--ring);
+}
+
+/* Opções da lista aberta: cores explícitas. Sem isso, no modo escuro as
+   opções herdam o texto claro do select, mas o navegador desenha a lista
+   com fundo claro — e o texto some. */
+.forma-pagamento option,
+.forma-pagamento optgroup {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+#bairroSelect.forma-pagamento {
+  margin-top: 0;
+}
+
+/* Entrega x Retirada em blocos selecionáveis */
+.tipo-servico-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.tipo-servico-container > label {
+  grid-column: 1 / -1;
+  margin: 0 0 2px;
+  color: var(--text);
+}
+
+.tipo-servico-container > div {
+  position: relative;
+  display: flex;
+  margin: 0;
+}
+
+.tipo-servico-container input[type="radio"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tipo-servico-container label[for*="tipoServico"] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 74px;
+  margin: 0;
+  padding: 10px 8px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--field-bg);
+  color: var(--text-soft);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.tipo-servico-container label[for="tipoServicoEntrega"]::before,
+.tipo-servico-container label[for="tipoServicoRetirada"]::before {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.tipo-servico-container label[for="tipoServicoEntrega"]::before {
+  content: "🛵";
+}
+
+.tipo-servico-container label[for="tipoServicoRetirada"]::before {
+  content: "🛍️";
+}
+
+.tipo-servico-container label[for*="tipoServico"]:hover {
+  border-color: rgba(255, 107, 1, 0.5);
+}
+
+.tipo-servico-container label[for*="tipoServico"]:active {
+  transform: scale(0.97);
+}
+
+.tipo-servico-container input:checked + label {
+  border-color: var(--brand);
+  background: linear-gradient(180deg, rgba(255, 140, 40, 0.16), rgba(255, 107, 1, 0.06));
+  color: var(--brand-deep);
+  box-shadow: 0 10px 22px -14px rgba(255, 107, 1, 0.9);
+}
+
+/* Marcador ✓ no bloco escolhido */
+.tipo-servico-container input:checked + label::after {
+  content: "✓";
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  animation: pop 0.35s var(--ease-spring);
+}
+
+.tipo-servico-container input:focus-visible + label {
+  box-shadow: var(--ring);
+}
+
+/* Endereço de entrega */
+#camposEntrega {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-2);
+  animation: fadeIn 0.3s ease;
+}
+
+#camposEntrega > label:first-child {
+  margin-top: 0 !important;
+}
+
+#camposEntrega textarea,
+#camposEntrega select {
+  margin-bottom: 0;
+}
+
+/* Taxa de entrega (texto preenchido pelo JS) */
+#taxaEntregaInfo {
+  min-height: 0;
+}
+
+#taxaEntregaInfo:not(:empty) {
+  display: inline-block;
+  margin-top: 12px !important;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 107, 1, 0.12);
+  color: var(--brand-deep) !important;
+  font-family: var(--font-ui);
+  font-size: 0.88rem !important;
+  font-weight: 600;
+}
+
+#taxaEntregaInfo:not(:empty)::before {
+  content: "🛵 ";
+}
+
+/* Troco */
+.container--troco {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  margin-top: 12px;
+}
+
+.container--troco label {
+  margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+   PIX
+   -------------------------------------------------------------------------- */
+.chavePix,
+.containerChavePix {
+  display: flex; /* o JS alterna entre flex/none conforme o pagamento */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 16px 14px;
+  border: 1.5px dashed rgba(50, 188, 173, 0.6);
+  border-radius: 18px;
+  background: rgba(50, 188, 173, 0.08);
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.containerChavePix p {
+  color: #0f766e;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.containerChavePix p::before {
+  content: "💠 ";
+}
+
+.dark-mode .containerChavePix p {
+  color: #5eead4;
+}
+
+.chavepix {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", Menlo, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.botaoPix,
+.botao-pix {
+  margin: 2px 0 0;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #32bcad, #0f8f83);
+  color: #fff;
+  box-shadow: 0 10px 20px -10px rgba(15, 143, 131, 0.9);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.2s ease;
+}
+
+.botaoPix::before {
+  content: "📋 ";
+}
+
+.botao-pix:hover {
+  background: linear-gradient(135deg, #3fd0c0, #119a8d);
+  filter: brightness(1.05);
+}
+
+.botao-pix:active {
+  transform: scale(0.95);
+}
+
+/* --------------------------------------------------------------------------
+   Total e botões finais
+   -------------------------------------------------------------------------- */
+.cart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 0;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--stars), var(--grad-space);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: 0 14px 28px -16px rgba(35, 18, 90, 0.8);
+}
+
+#valorTotal {
+  color: var(--cheese);
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 18px rgba(255, 180, 40, 0.45);
+}
+
+.cart-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.btn-finalizar-whatsapp {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--grad-whats);
+  color: #fff;
+  box-shadow:
+    0 16px 30px -14px rgba(15, 122, 61, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  font-family: var(--font-personalizada);
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+/* Ícone do WhatsApp (Font Awesome já carregado no index.html) */
+.btn-finalizar-whatsapp::before {
+  content: "\f232";
+  font-family: "Font Awesome 6 Brands";
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Reflexo passando pelo botão */
+.btn-finalizar-whatsapp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.3) 50%, transparent 65%);
+  transform: translateX(-110%);
+  animation: brilho 3.6s ease-in-out infinite;
+}
+
+.btn-finalizar-whatsapp:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.btn-finalizar-whatsapp:active {
+  transform: scale(0.98);
+}
+
+button#btnLimparCarrinho {
+  flex: 1;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 1.5px solid rgba(229, 56, 59, 0.35);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--danger);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+button#btnLimparCarrinho::before {
+  content: "🗑️ ";
+}
+
+button#btnLimparCarrinho:hover {
+  border-color: var(--danger);
+  background: rgba(229, 56, 59, 0.08);
+}
+
+.dark-mode button#btnLimparCarrinho {
+  color: #ff8a8c;
+}
+
+.avisoFnalizacao {
+  margin: 0;
+  padding: 4px 18px 18px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.avisoFnalizacao::before {
+  content: "\f232";
+  margin-right: 6px;
+  color: #16a34a;
+  font-family: "Font Awesome 6 Brands";
+  font-weight: 400;
+}
+
+/* --------------------------------------------------------------------------
+   Aviso "chave PIX copiada" (canto superior)
+   -------------------------------------------------------------------------- */
+.containerNotification {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  left: 16px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.cardNotification {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  color: #fff;
+  box-shadow: 0 18px 36px -12px rgba(15, 118, 110, 0.7);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: auto;
+  animation: toastLateral 0.45s var(--ease-spring) both;
+}
+
+@keyframes toastLateral {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsivo
+   -------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  /* Carrinho rola por dentro e o cabeçalho dele fica preso no topo */
+  .cart-container {
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  #resumoPedido h2 {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .cart-container {
+    position: static;
+    max-height: none;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .cart-container {
+    border-radius: 24px;
+  }
+
+  #resumoPedido {
+    padding: 0 14px 4px;
+  }
+
+  #resumoPedido h2 {
+    margin: 0 -14px 14px;
+    padding: 16px 14px;
+    font-size: 1.15rem;
+  }
+
+  .avisoFnalizacao {
+    padding: 4px 14px 16px;
+  }
+
+  #valorTotal {
+    font-size: 1.45rem;
+  }
 }

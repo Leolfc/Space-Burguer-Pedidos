@@ -1,39 +1,112 @@
-.rodape{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    background-color: #582814;
-    color: #fff;
-    text-align: center;
-    font-size: 10px;
-    bottom: 0;
-    left: 0;
-    gap: 8px;
-    margin: 40px auto;
-    border-radius: 8px;
-    width: 80%;
-    height:100%;
+/* ==========================================================================
+   Rodapé — "céu noturno" com foguete
+   ========================================================================== */
+.rodape {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+  margin: 64px 0 0;
+  padding: 44px 20px calc(40px + env(safe-area-inset-bottom));
+  border-radius: 32px 32px 0 0;
+  background:
+    var(--stars),
+    radial-gradient(700px 260px at 50% 0%, rgba(255, 107, 1, 0.22), transparent 70%),
+    linear-gradient(180deg, #170f36 0%, #0b0820 100%);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.88rem;
+  text-align: center;
 }
-@media (max-width: 600px) {
-    .rodape {
-       margin-top: 100px;
-     
-    }
+
+.rodape::before {
+  content: "🚀";
+  margin-bottom: 4px;
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 14px rgba(255, 107, 1, 0.55));
+  animation: foguete 3.5s ease-in-out infinite;
 }
-.rodape a{
-    text-decoration: none;
-    color: rgb(237, 237, 241);
+
+.rodape .rd {
+  margin: 0;
+  line-height: 1.6;
 }
-.rodape a:hover{
-    color:rgb(68, 173, 221);
+
+.rodape p.rd:nth-of-type(2) {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.82rem;
 }
-i{
-    margin: 3px;
+
+.rodape p.rd:nth-of-type(2)::before {
+  content: "📍 ";
+}
+
+.rodape a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.rodape a:hover {
+  color: #7cc4ff;
+}
+
+.rodape .linkInsta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 8px 16px 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .rodape .linkInsta:hover {
-    color:#9943B7;
+  border-color: transparent;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #fff;
 }
 
+.rodape i {
+  margin: 0 4px 0 0;
+}
+
+.rodape-texto {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.76rem;
+}
+
+.rodape-texto a {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+@keyframes foguete {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-2deg);
+  }
+}
+
+/* Espaço extra para os botões flutuantes não cobrirem o texto */
+@media (max-width: 900px) {
+  .rodape {
+    margin-top: 48px;
+    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+    border-radius: 28px 28px 0 0;
+  }
+}

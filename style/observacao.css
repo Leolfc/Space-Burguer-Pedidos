@@ -1,133 +1,266 @@
+/* ==========================================================================
+   Observações do item, cores de ingredientes, banner da Box Mini Burguer
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Campo de observação dentro do card
+   -------------------------------------------------------------------------- */
 .btn-observacao {
+  padding: 8px 12px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 12px;
   background: none;
-  border: none;
+  color: var(--text-soft);
+  font-family: var(--font-ui);
+  font-weight: 600;
   cursor: pointer;
-  padding: 5px;
-  color: #666;
-  transition: color 0.3s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn-observacao:hover {
-  color: #ff6b01;
+  border-color: var(--brand);
+  color: var(--brand-deep);
 }
 
 .item-observacao {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-2);
 }
 
-.observacao-texto {
+.observacao-texto,
+.item-observacao textarea {
+  display: block;
   width: 100%;
-  min-height: 60px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: vertical;
-  font-family: inherit;
+  min-height: 64px;
   margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--field-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.observacao-texto:focus,
+.item-observacao textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--ring);
 }
 
 .observacao-botoes {
   display: flex;
-  gap: 10px;
   justify-content: flex-end;
+  gap: 8px;
 }
 
 .btn-confirmar-obs,
 .btn-cancelar-obs {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 12px;
+  font-family: var(--font-ui);
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: filter 0.2s ease;
 }
 
 .btn-confirmar-obs {
-  background-color: #4caf50;
-  color: white;
-}
-
-.btn-confirmar-obs:hover {
-  background-color: #45a049;
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  color: #fff;
 }
 
 .btn-cancelar-obs {
-  background-color: #f44336;
-  color: white;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-soft);
 }
 
+.btn-confirmar-obs:hover,
 .btn-cancelar-obs:hover {
-  background-color: #da190b;
+  filter: brightness(1.06);
 }
 
+/* Cores de ingredientes nas descrições */
 .cebolaRoxa {
-  color: #9b30ff;
+  color: #8b2fc9;
+  font-weight: 600;
 }
 
 .corPicles {
-  color: #45a049;
+  color: #2f8f3a;
+  font-weight: 600;
 }
 
+.dark-mode .cebolaRoxa {
+  color: #d0a3ff;
+}
+
+.dark-mode .corPicles {
+  color: #7ee38a;
+}
+
+/* --------------------------------------------------------------------------
+   Banner "NOVO! Reserve sua Box Mini Burguer"
+   -------------------------------------------------------------------------- */
 .container_aviso {
   display: flex;
   justify-content: center;
-  background-color: white;
-  color: black;
-  margin: 10px;
-  border-radius: 10px;
-  text-align: center;
-  transition: transform 1s ease-in;
-  animation: pulse 3s infinite ease-in-out;
-  max-width: 100%;
-  width: 300px;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
-.button-box{
-  border-radius: 10px;
-}
-  font-size: 12px;
-  a:nth-child(1) {
-    color: black;
-  }
-
-  a {
-    text-decoration: none;
-  }
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  animation: none;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
+.button-box {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 820px;
+  min-height: 66px;
+  padding: 14px 66px 14px 20px;
+  border: 0;
+  border-radius: 20px;
+  background:
+    var(--stars),
+    linear-gradient(115deg, #2a1663 0%, #6d28d9 36%, #ff5a14 78%, #ffa41b 100%);
+  color: #fff;
+  box-shadow:
+    0 18px 34px -16px rgba(109, 40, 217, 0.75),
+    0 10px 24px -14px rgba(255, 90, 20, 0.7);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s ease;
+}
+
+.button-box h3 {
+  font-family: var(--font-ui);
+  font-size: clamp(0.94rem, 0.86rem + 0.3vw, 1.08rem);
+  font-weight: 600;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Reflexo passando */
+.button-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.3) 50%, transparent 65%);
+  transform: translateX(-110%);
+  animation: brilho 4.2s ease-in-out infinite;
+}
+
+/* Seta indicando para ver a Box no cardápio */
+.button-box::after {
+  content: "↓";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  animation: setaPula 1.6s ease-in-out infinite;
+}
+
+.button-box:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 40px -16px rgba(109, 40, 217, 0.85),
+    0 14px 28px -14px rgba(255, 90, 20, 0.8);
+}
+
+.button-box:active {
+  transform: scale(0.98);
+}
+
+@keyframes setaPula {
+  0%,
+  100% {
+    transform: translateY(0);
   }
   50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
+    transform: translateY(4px);
   }
 }
 
-@media (width >1024px) {
-  .container_aviso {
-    width: 400px;
-    margin: 0 auto;
-  }
-}
-
-/*Estilo para o aviso de reserva do item BOX Mini Burguer*/
+/* --------------------------------------------------------------------------
+   Card da Box Mini Burguer (reserva fora do horário)
+   -------------------------------------------------------------------------- */
 .span-box {
-  margin-right: auto;
-  margin-bottom: 20px;
-  font-weight: 500;
-  font-family: Arial, Helvetica, sans-serif;
+  grid-area: box;
+  display: block;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border: 1.5px dashed rgba(124, 58, 237, 0.5);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(255, 107, 1, 0.1));
+  color: #5b21b6;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  animation: none;
+}
 
-  border: 2px solid gray;
-  border-radius: 8px;
-  background-color: #ffa500;
-  color: black;
-  padding: 6px;
-  animation: pulse 2s ease-in-out infinite;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+.dark-mode .span-box {
+  border-color: rgba(192, 132, 252, 0.5);
+  color: #d8b4fe;
+}
+
+/* Borda em degradê destacando o card */
+.item:has(.span-box) {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(135deg, #7c3aed, #ff6b01, #ffb020) border-box;
+  box-shadow: 0 18px 40px -18px rgba(124, 58, 237, 0.7);
+}
+
+@media (max-width: 576px) {
+  .button-box {
+    min-height: 60px;
+    padding: 12px 58px 12px 16px;
+    border-radius: 18px;
+  }
+
+  .button-box::after {
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+  }
+
+  .span-box {
+    margin: 10px 0 0;
+  }
 }

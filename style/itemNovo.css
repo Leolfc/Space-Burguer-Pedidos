@@ -1,192 +1,272 @@
-/* .item_novo {
-  color: #d92517;
-  border: 2px solid #ff6b01;
-  border-radius: 8px;
-  width: 50%;
-  text-align: center;
-  animation: pulse 1.5s infinite;
-} */
-.item_em_dobro {
-  color: #d92517;
-  animation: pulseTexto 1s infinite;
-  font-weight: bold;
-  display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
-}
-.item_em_dobro_queijo {
-  color: #e67514;
-  animation: pulseTexto 1s infinite;
-  font-weight: bold;
-  display: inline-block; /**Para permitir a animação , porque spans nao conseguem animar*/
-}
+/* ==========================================================================
+   Selos dos produtos, destaques de ingredientes e estados especiais
+   ========================================================================== */
 
-@keyframes pulse {
-  0% {
-    transform: scale(1); /* Tamanho inicial */
-  }
-  50% {
-    transform: scale(1.1); /* Aumenta o tamanho */
-  }
-  100% {
-    transform: scale(1); /* Retorna ao tamanho original */
-  }
-}
-
-@keyframes pulseTexto {
-  0% {
-    transform: scale(1); /* Tamanho inicial */
-  }
-  50% {
-    transform: scale(1.1); /* Aumenta o tamanho */
-  }
-  100% {
-    transform: scale(1); /* Retorna ao tamanho original */
-  }
-}
-
-.indisponivel {
-  pointer-events: none;
-  opacity: 0.5;
-  position: relative;
-}
-
-.indisponivel::after {
-  content: "Item Indisponível";
+/* --------------------------------------------------------------------------
+   Selos "Novo" / "Mais salada" / "Maior da casa" — adesivo sobre a foto
+   -------------------------------------------------------------------------- */
+.item_novo,
+.item__maiorDaCasa {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-.embreve {
-  pointer-events: none;
-  opacity: 0.6;
-  position: relative;
-}
-.embreve::after {
-  content: "Em Breve";
-  color: rgb(19, 19, 19) !important;
-  position: absolute;
-  font-weight: bold;
-  top: 30%;
-  left: 30%;
-
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 209, 6, 0.918);
-  color: white;
-  padding: 10px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  animation: pulseTexto 1s infinite;
-  width: max-content;
-  display: flex;
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+  grid-column: auto; /* posição relativa às bordas do card, não à grade */
+  grid-row: auto;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-/*!Item maior da casa */
-.item__maiorDaCasa, .item_novo  {
-  background: linear-gradient(45deg, #ff6b01, #ff8c00, #ffa500, #ff6b01);
-  background-size: 300% 300%;
-  color: white;
-  font-weight: bold;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 6px 12px;
-  border-radius: 20px;
-  margin: 8px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  animation: gradientShift 3s ease-in-out infinite,
-    bounce 2s ease-in-out infinite;
-  box-shadow: 0 4px 15px rgba(255, 107, 1, 0.4);
-  position: relative;
+  gap: 5px;
+  max-width: calc(100% - 40px);
+  margin: 0;
+  padding: 6px 12px 6px 9px;
   overflow: hidden;
-  display: inline-block;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff9500 0%, #ff4d1c 60%, #e3262f 100%);
+  color: #fff;
+  box-shadow:
+    0 8px 18px -4px rgba(227, 38, 47, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: default;
+  animation: seloFlutua 3.2s ease-in-out infinite;
 }
 
-.item__maiorDaCasa:hover, .item_novo:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 107, 1, 0.6);
+.item_novo::before,
+.item__maiorDaCasa::before {
+  content: "✨";
+  font-size: 0.9rem;
+  letter-spacing: 0;
 }
 
-.item__maiorDaCasa::before, .item_novo::before {
+.item__maiorDaCasa {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 45%, #db2777 100%);
+  box-shadow:
+    0 8px 18px -4px rgba(124, 58, 237, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.item__maiorDaCasa::before {
+  content: "👑";
+}
+
+/* Reflexo passando pelo selo */
+.item_novo::after,
+.item__maiorDaCasa::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  animation: shimmer 2s infinite;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-110%);
+  animation: brilho 3.2s ease-in-out infinite;
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes bounce {
+@keyframes seloFlutua {
   0%,
-  20%,
-  50%,
-  80%,
   100% {
     transform: translateY(0);
   }
-  40% {
-    transform: translateY(-5px);
-  }
-  60% {
+  50% {
     transform: translateY(-3px);
   }
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
+/* --------------------------------------------------------------------------
+   Destaques dentro da descrição
+   -------------------------------------------------------------------------- */
+.item_em_dobro,
+.item_em_dobro_queijo {
+  display: inline-block; /* necessário para animar */
+  padding: 1px 7px;
+  border-radius: 6px;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  animation: pulseTexto 1.8s ease-in-out infinite;
 }
 
-/* Versão para modo escuro */
-.dark-mode .item__maiorDaCasa {
-  background: linear-gradient(45deg, #ff6b01, #ff8c00, #ffa500, #ff6b01);
-  box-shadow: 0 4px 15px rgba(255, 107, 1, 0.6);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+.item_em_dobro {
+  background: linear-gradient(135deg, #ef3b24, #c81d25);
+  color: #fff;
+  box-shadow: 0 4px 10px -4px rgba(200, 29, 37, 0.7);
 }
 
-.dark-mode .item__maiorDaCasa:hover {
-  box-shadow: 0 6px 20px rgba(255, 107, 1, 0.8);
+.item_em_dobro_queijo {
+  background: linear-gradient(135deg, #ffd25a, #ffab1f);
+  color: #4a2a00;
+  box-shadow: 0 4px 10px -4px rgba(255, 171, 31, 0.8);
 }
 
 .corDoshamburguerMaiores {
-  color: red;
+  color: #d62828;
+  font-weight: 700;
 }
 
-/* Estilo para o molho cheese */
+.dark-mode .corDoshamburguerMaiores {
+  color: #ff7b7b;
+}
+
+/* Molho especial (ex.: MOLHO AMERICAN CHEESE) */
 .molhoPersonalizado {
-  box-shadow: 2px 6px 20px rgba(255, 107, 1, 0.8);
-  border-radius: 8px;
-  padding: 2px 10px;
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: #fff3c4;
+  color: #8a5a00;
+  box-shadow:
+    0 0 0 1px rgba(255, 170, 0, 0.45),
+    0 4px 14px -2px rgba(255, 170, 0, 0.45);
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.dark-mode .molhoPersonalizado {
+  background: rgba(255, 200, 60, 0.16);
+  color: #ffd76a;
+}
+
+@keyframes pulseTexto {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Item indisponível / Em breve — carimbo sobre o card
+   -------------------------------------------------------------------------- */
+.indisponivel,
+.embreve {
+  position: relative;
+  pointer-events: none;
+}
+
+/* Fora dos cards (ex.: um adicional) */
+.indisponivel:not(.item) {
+  opacity: 0.5;
+}
+
+.indisponivel:not(.item)::after {
+  content: "Indisponível";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(200, 29, 37, 0.9);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+}
+
+.embreve:not(.item) {
+  opacity: 0.6;
+}
+
+/* Dentro dos cards: conteúdo apagado e carimbo nítido */
+.item.indisponivel > :not(.item-info),
+.item.indisponivel .item-info > *,
+.item.indisponivel .item-info::before,
+.item.embreve > :not(.item-info),
+.item.embreve .item-info > *,
+.item.embreve .item-info::before {
+  filter: grayscale(0.9);
+  opacity: 0.5;
+}
+
+.item.indisponivel::after,
+.item.embreve::after {
+  position: absolute;
+  top: 42%;
+  top: calc(12px + 40cqw); /* centro da foto (proporção 5:4) */
+  left: 50%;
+  z-index: 5;
+  padding: 9px 16px;
+  border: 2px solid currentColor;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 26px -8px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(-7deg);
+}
+
+.item.indisponivel::after {
+  content: "Indisponível";
+  color: #c81d25;
+}
+
+.item.embreve::after {
+  content: "⏳ Em breve";
+  background: #fff7d6;
+  color: #a15c00;
+  animation: carimbo 1.8s ease-in-out infinite;
+}
+
+.dark-mode .item.indisponivel::after {
+  background: rgba(30, 10, 14, 0.92);
+  color: #ff7b7b;
+}
+
+.dark-mode .item.embreve::after {
+  background: rgba(40, 28, 6, 0.92);
+  color: #ffd76a;
+}
+
+@keyframes carimbo {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-7deg) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(-7deg) scale(1.06);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Celular: selo vira etiqueta acima do nome (a foto é pequena)
+   -------------------------------------------------------------------------- */
+@media (max-width: 576px) {
+  .item_novo,
+  .item__maiorDaCasa {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-area: badge;
+    justify-self: start;
+    align-self: start;
+    max-width: 100%;
+    margin: 0 0 6px;
+    padding: 4px 9px 4px 7px;
+    font-size: 0.62rem;
+    animation: none;
+  }
+
+  .item_novo::before,
+  .item__maiorDaCasa::before {
+    font-size: 0.75rem;
+  }
+
+  .item.indisponivel::after,
+  .item.embreve::after {
+    top: 50%;
+    font-size: 0.78rem;
+  }
 }

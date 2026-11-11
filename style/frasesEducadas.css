@@ -1,14 +1,14 @@
-
-/* Frase de horário de atendimento */
-
-.frasebAbencoada{
-  font-size: 10px;
+/* Frase de horário de atendimento (decoração opcional no cabeçalho) */
+.frasebAbencoada {
   position: absolute;
-  right:20px;
-  top:80%;
-
-  
+  top: 80%;
+  right: 20px;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  transition: color 0.2s ease;
 }
-.frasebAbencoada:hover{
-color: rgb(151, 151, 236);
+
+.frasebAbencoada:hover {
+  color: #c4b5fd;
 }
