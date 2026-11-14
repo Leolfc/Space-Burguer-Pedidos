@@ -68,24 +68,40 @@ td {
   border-bottom: 1px solid #ddd;
   font-family: "Bungee", sans-serif;
   font-weight:bold;
+  font-size: 18px;
+ 
+}
+td:nth-child(2){
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+ 
+  
 }
 th {
   background-color: #f7f7f7;
 }
 .acoes button {
-  margin-right: 5px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ cursor: pointer;
+ border:none;
+ color:white;
+ padding: 10px 10px;
+ border-radius: 8px;
+ max-width: 100%;
+ width: 100px;
+margin: 10px auto;
+
+
 }
 .btn-editar {
-  background-color: #2196f3;
-  padding: 10px;
+  background-color: #4d832b;
+ 
 }
 .btn-deletar {
-  background-color: #f44336;
+  background-color: #ff1100;
 }
 
 /* Estilos do Formulário (do antigo admin.html) */
@@ -365,6 +381,8 @@ tbody tr:nth-child(odd) {
     padding: 10px;
     border-radius: 8px;
     background: #fff;
+    
+    
   }
 
   .tabela-categoria td,
@@ -374,6 +392,7 @@ tbody tr:nth-child(odd) {
     padding: 6px 0;
     border-bottom: none;
     font-weight: 600;
+   
   }
 
   .tabela-categoria td:first-child img {
