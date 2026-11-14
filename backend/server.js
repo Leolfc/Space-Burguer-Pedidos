@@ -93,7 +93,7 @@ app.use(
       // IMPORTANTE: EasyPanel/Hostinger usa proxy NGINX com HTTPS.
       // Mesmo em desenvolvimento, os cookies precisam de secure: true para HTTPS.
       // Se estiver testando em localhost:3000 (HTTP), mude para false.
-      secure: true,
+      secure: "auto",
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
   }),
