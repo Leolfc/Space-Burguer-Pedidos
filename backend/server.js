@@ -90,10 +90,12 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      // IMPORTANTE: EasyPanel/Hostinger usa proxy NGINX com HTTPS.
-      // Mesmo em desenvolvimento, os cookies precisam de secure: true para HTTPS.
-      // Se estiver testando em localhost:3000 (HTTP), mude para false.
-      secure: true,
+      // "auto" = o express-session decide sozinho a cada requisição:
+      // - Produção (EasyPanel, HTTPS via proxy): cookie com flag Secure.
+      //   Funciona porque "trust proxy" está ligado e o proxy envia X-Forwarded-Proto: https.
+      // - Desenvolvimento (http://localhost:3000): cookie sem Secure.
+      // Com secure: true, o navegador nunca recebia o cookie em HTTP e o login não funcionava no localhost.
+      secure: "auto",
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
   }),
